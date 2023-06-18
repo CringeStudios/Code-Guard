@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 
 import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentFirstBinding;
@@ -28,6 +31,10 @@ public class DynamicFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDynamicBinding.inflate(inflater, container, false);
         binding.buttonSecond.setText(requireArguments().getString("sus"));
+        binding.buttonSecond.setOnClickListener(view -> {
+            NavigationUtil.navigate(this, SecondFragment.class, null);
+        });
         return binding.getRoot();
     }
+
 }

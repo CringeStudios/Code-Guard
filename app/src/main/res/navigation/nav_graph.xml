@@ -10,19 +10,23 @@
         android:name="com.cringe_studios.cringe_authenticator.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
-
-        <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
         android:name="com.cringe_studios.cringe_authenticator.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
-
-        <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="com.cringe_studios.cringe_authenticator.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+    </fragment>
+    <fragment
+        android:id="@+id/DynamicFragment"
+        android:name="com.cringe_studios.cringe_authenticator.DynamicFragment"
+        android:label="Dynamic"
+        tools:layout="@layout/fragment_dynamic">
     </fragment>
 </navigation>

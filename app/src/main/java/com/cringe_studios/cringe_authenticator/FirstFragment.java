@@ -9,9 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.FragmentFirstBinding;
@@ -36,41 +40,13 @@ public class FirstFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);*/
+        binding.buttonFirst.setOnClickListener(view1 -> {
+            /*NavHostFragment.findNavController(FirstFragment.this)
+                    .navigate(R.id.action_FirstFragment_to_SecondFragment);*/
 
-                Executor executor = ContextCompat.getMainExecutor(FirstFragment.this.getContext());
-                BiometricPrompt prompt = new BiometricPrompt(FirstFragment.this, executor, new BiometricPrompt.AuthenticationCallback() {
-                    @Override
-                    public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                        super.onAuthenticationError(errorCode, errString);
-                    }
-
-                    @Override
-                    public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                        Bundle b = new Bundle();
-                        b.putString("sus", "Impostor");
-
-                        getParentFragment().getChildFragmentManager().beginTransaction()
-                                .setReorderingAllowed(true)
-                                .replace(R.id.nav_host_fragment_content_main, DynamicFragment.class, b)
-                                .addToBackStack(null)
-                                .commit();
-
-                    }
-                });
-
-                BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("Biometric login for my app")
-                        .setSubtitle("Log in using your biometric credential")
-                        .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                        .build();
-
-                prompt.authenticate(info);
-            }
+            Bundle b = new Bundle();
+            b.putString("sus", "Impostor");
+            NavigationUtil.navigate(this, DynamicFragment.class, b);
         });
     }
 
