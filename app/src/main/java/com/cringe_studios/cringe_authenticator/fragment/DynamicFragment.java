@@ -1,7 +1,6 @@
-package com.cringe_studios.cringe_authenticator;
+package com.cringe_studios.cringe_authenticator.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
 
+import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.databinding.AuthenticateTotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
-import com.cringe_studios.cringe_authenticator.databinding.FragmentFirstBinding;
+import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 
 public class DynamicFragment extends Fragment {
 
@@ -23,17 +21,26 @@ public class DynamicFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("AMOGUS", requireArguments().getString("sus"));
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDynamicBinding.inflate(inflater, container, false);
-        binding.buttonSecond.setText(requireArguments().getString("sus"));
+        /*binding.buttonSecond.setText(requireArguments().getString("tab"));
         binding.buttonSecond.setOnClickListener(view -> {
             NavigationUtil.navigate(this, SecondFragment.class, null);
-        });
+        });*/
+
+        String tab = requireArguments().getString("tab");
+
+        String[] totps = new String[]{"Code 1", "Code 2", tab};
+        for(String totp : totps) {
+            AuthenticateTotpBinding itemBinding = AuthenticateTotpBinding.inflate(inflater);
+            itemBinding.displayName.setText(totp);
+            binding.itemList.addView(itemBinding.getRoot());
+        }
+
         return binding.getRoot();
     }
 

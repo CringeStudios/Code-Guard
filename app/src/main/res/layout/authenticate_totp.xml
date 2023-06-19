@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rectangle"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/displayName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My TOTP"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/totpCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:textAlignment="center" />
+</LinearLayout>

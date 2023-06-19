@@ -1,7 +1,4 @@
-package com.cringe_studios.cringe_authenticator;
-
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+package com.cringe_studios.cringe_authenticator.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,18 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavOptions;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.FragmentFirstBinding;
-
-import java.util.concurrent.Executor;
+import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 
 public class FirstFragment extends Fragment {
 

@@ -1,4 +1,4 @@
-package com.cringe_studios.cringe_authenticator;
+package com.cringe_studios.cringe_authenticator.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
 
 public class SettingsFragment extends Fragment {

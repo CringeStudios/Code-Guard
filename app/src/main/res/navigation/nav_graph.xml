@@ -7,25 +7,25 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.cringe_studios.cringe_authenticator.FirstFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="com.cringe_studios.cringe_authenticator.SecondFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.SecondFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_second">
     </fragment>
     <fragment
         android:id="@+id/SettingsFragment"
-        android:name="com.cringe_studios.cringe_authenticator.SettingsFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings">
     </fragment>
     <fragment
         android:id="@+id/DynamicFragment"
-        android:name="com.cringe_studios.cringe_authenticator.DynamicFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.DynamicFragment"
         android:label="Dynamic"
         tools:layout="@layout/fragment_dynamic">
     </fragment>

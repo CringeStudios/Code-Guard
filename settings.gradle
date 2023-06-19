@@ -10,6 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url "https://maven.graphite-official.com/releases"
+        }
     }
 }
 rootProject.name = "Cringe Authenticator"

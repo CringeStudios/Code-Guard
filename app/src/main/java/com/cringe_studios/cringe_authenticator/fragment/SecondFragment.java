@@ -1,16 +1,15 @@
-package com.cringe_studios.cringe_authenticator;
+package com.cringe_studios.cringe_authenticator.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSecondBinding;
+import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 
 public class SecondFragment extends Fragment {
 
