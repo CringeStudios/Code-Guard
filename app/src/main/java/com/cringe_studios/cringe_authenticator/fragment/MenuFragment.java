@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
+import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 
 public class MenuFragment extends Fragment {
@@ -46,7 +47,15 @@ public class MenuFragment extends Fragment {
             // TODO: edit mode
         });
 
+        FabUtil.hideFabs(getActivity());
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
     }
 
 }

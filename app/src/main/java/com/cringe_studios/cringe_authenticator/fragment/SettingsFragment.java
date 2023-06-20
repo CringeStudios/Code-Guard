@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
+import com.cringe_studios.cringe_authenticator.util.FabUtil;
 
 public class SettingsFragment extends Fragment {
 
@@ -29,7 +30,15 @@ public class SettingsFragment extends Fragment {
             controller.navigate(R.id.FirstFragment);
         });
 
+        FabUtil.hideFabs(getActivity());
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
     }
 
 }

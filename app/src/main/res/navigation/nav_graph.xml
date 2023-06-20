@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.cringe_studios.cringe_authenticator.fragment.FirstFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.HomeFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_home">
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"

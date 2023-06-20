@@ -12,7 +12,9 @@ import androidx.fragment.app.Fragment;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.AuthenticateTotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
+import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DynamicFragment extends Fragment {
 
@@ -27,10 +29,6 @@ public class DynamicFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDynamicBinding.inflate(inflater, container, false);
-        /*binding.buttonSecond.setText(requireArguments().getString("tab"));
-        binding.buttonSecond.setOnClickListener(view -> {
-            NavigationUtil.navigate(this, SecondFragment.class, null);
-        });*/
 
         String tab = requireArguments().getString("tab");
 
@@ -41,7 +39,14 @@ public class DynamicFragment extends Fragment {
             binding.itemList.addView(itemBinding.getRoot());
         }
 
+        FabUtil.showFabs(getActivity());
+
         return binding.getRoot();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.binding = null;
+    }
 }

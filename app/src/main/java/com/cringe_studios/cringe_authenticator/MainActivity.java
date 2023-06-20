@@ -1,6 +1,7 @@
 package com.cringe_studios.cringe_authenticator;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +15,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
+import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
+import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
@@ -69,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
+        if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) {
+            //getMenuInflater().inflate(R.menu.menu_dynamic, menu);
+            getMenuInflater().inflate(R.menu.menu_dynamic, menu);
+            return true;
+        }
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -89,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Log.i("AMOGUS", "navigateUp");
+        if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) {
+            NavigationUtil.navigate(this, HomeFragment.class, null);
+        }
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
@@ -97,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSettings(MenuItem item) {
         NavigationUtil.navigate(this, SettingsFragment.class, null);
+    }
+
+    public void addCode(MenuItem item) {
+        // TODO: add code
     }
 
 }
