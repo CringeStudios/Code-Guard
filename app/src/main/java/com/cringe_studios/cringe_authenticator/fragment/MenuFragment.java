@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.R;
@@ -40,7 +41,18 @@ public class MenuFragment extends Fragment {
                 bundle.putString("tab", item);
                 NavigationUtil.navigate(this, DynamicFragment.class, bundle);
             });
-            binding.menuItems.addView(itemBinding.getRoot(), 0);
+            itemBinding.button.setOnLongClickListener(view -> {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete?")
+                        .setMessage("Delete this?")
+                        .setPositiveButton("Yes", (dialog, which) -> itemBinding.button.setVisibility(View.GONE))
+                        .setNegativeButton("No", (dialog, which) -> {})
+                        .show();
+                // TODO: better method?
+                // TODO: actually delete
+                return true;
+            });
+            binding.menuItems.addView(itemBinding.getRoot());
         }
 
         binding.editSwitch.setOnCheckedChangeListener((view, checked) -> {

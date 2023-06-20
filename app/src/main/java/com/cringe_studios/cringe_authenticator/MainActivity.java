@@ -73,11 +73,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-        if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) {
+        /*if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) { TODO: vs. fabs?
             //getMenuInflater().inflate(R.menu.menu_dynamic, menu);
             getMenuInflater().inflate(R.menu.menu_dynamic, menu);
             return true;
-        }
+        }*/
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
