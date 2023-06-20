@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Log.i("AMOGUS", "navigateUp");
-        if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) {
+        if(!(NavigationUtil.getCurrentFragment(this) instanceof HomeFragment)) {
             NavigationUtil.navigate(this, HomeFragment.class, null);
         }
     }
