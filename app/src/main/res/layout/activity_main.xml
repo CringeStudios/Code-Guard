@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:srcCompat="@android:drawable/ic_menu_edit"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +38,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_menu_edit"
+        android:onClick="scanCode"
+        app:srcCompat="@android:drawable/ic_menu_camera"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

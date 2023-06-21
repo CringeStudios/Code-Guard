@@ -1,25 +1,40 @@
 package com.cringe_studios.cringe_authenticator;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
+import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
 import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator_library.OTPType;
+import com.google.android.material.color.utilities.DynamicColor;
 
 import java.util.concurrent.Executor;
 
@@ -27,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    private ActivityResultLauncher<Void> startQRCodeScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +71,15 @@ public class MainActivity extends AppCompatActivity {
         prompt.authenticate(info);*/
 
         launchApp();
+
+        startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
+            Fragment fragment = NavigationUtil.getCurrentFragment(this);
+            if(fragment instanceof DynamicFragment) {
+                DynamicFragment frag = (DynamicFragment) fragment;
+                SettingsUtil.addOTP(getSharedPreferences("groups", MODE_PRIVATE), frag.getGroupName(), obj);
+            }
+            Log.i("AMOGUS", "Actually got something bruh" + obj);
+        });
     }
 
     private void launchApp() {
@@ -74,10 +100,14 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         /*if(NavigationUtil.getCurrentFragment(this) instanceof DynamicFragment) { TODO: vs. fabs?
-            //getMenuInflater().inflate(R.menu.menu_dynamic, menu);
             getMenuInflater().inflate(R.menu.menu_dynamic, menu);
             return true;
         }*/
+
+        if(NavigationUtil.getCurrentFragment(this) instanceof MenuFragment) {
+            getMenuInflater().inflate(R.menu.menu_groups, menu);
+            return true;
+        }
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -119,6 +149,22 @@ public class MainActivity extends AppCompatActivity {
 
     public void addCode(MenuItem item) {
         // TODO: add code
+    }
+
+    public void scanCode(View view) {
+        Log.i("AMOGUS", "Scan");
+        Intent intent = new Intent(this, QRScannerActivity.class);
+        startQRCodeScan.launch(null);
+    }
+
+    public void addGroup(MenuItem item) {
+        EditText t = new EditText(this);
+        new AlertDialog.Builder(this)
+                .setTitle("New Group")
+                .setView(t)
+                .setPositiveButton("Add", (view, which) -> {})
+                .setNegativeButton("Cancel", (view, which) -> {})
+                .show();
     }
 
 }
