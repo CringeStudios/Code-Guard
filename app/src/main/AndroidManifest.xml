@@ -16,6 +16,20 @@
         android:theme="@style/Theme.CringeAuthenticator"
         tools:targetApi="31">
         <activity
+            android:screenOrientation="sensorPortrait"
+            android:resizeableActivity="false"
+            android:name=".IntroActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CringeAuthenticator"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
