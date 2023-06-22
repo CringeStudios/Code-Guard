@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,6 +58,7 @@ public class DynamicFragment extends Fragment {
 
         FabUtil.showFabs(getActivity());
 
+        handler = new Handler(Looper.getMainLooper());
         refreshCodes = () -> {
             for(int i = 0; i < binding.itemList.getChildCount(); i++) {
                 View v = binding.itemList.getChildAt(i);
