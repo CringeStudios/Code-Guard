@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
             if(fragment instanceof DynamicFragment) {
                 DynamicFragment frag = (DynamicFragment) fragment;
-                SettingsUtil.addOTP(getSharedPreferences(DynamicFragment.GROUPS_PREFS_NAME, MODE_PRIVATE), frag.getGroupName(), obj);
+                SettingsUtil.addOTP(getSharedPreferences(SettingsUtil.GROUPS_PREFS_NAME, MODE_PRIVATE), frag.getGroupName(), obj);
                 frag.loadOTPs();
             }
             Log.i("AMOGUS", "Actually got something bruh" + obj);

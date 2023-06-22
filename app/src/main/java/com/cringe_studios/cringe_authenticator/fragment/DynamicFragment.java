@@ -24,9 +24,7 @@ import java.util.List;
 
 public class DynamicFragment extends Fragment {
 
-    public static final String
-            GROUPS_PREFS_NAME = "groups",
-            BUNDLE_GROUP = "group";
+    public static final String BUNDLE_GROUP = "group";
 
     private String groupName;
 
@@ -74,7 +72,7 @@ public class DynamicFragment extends Fragment {
     }
 
     public void loadOTPs() {
-        SharedPreferences prefs = getActivity().getSharedPreferences(DynamicFragment.GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences prefs = getActivity().getSharedPreferences(SettingsUtil.GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
         List<OTPData> data = SettingsUtil.getOTPs(prefs, groupName);
         Log.i("AMOGUS", "OTPS: " + data);
 

@@ -13,6 +13,10 @@ import java.util.List;
 
 public class SettingsUtil {
 
+    public static String
+            GROUPS_PREFS_NAME = "groups",
+            GENERAL_PREFS_NAME = "general";
+
     private static final Gson GSON = new Gson();
 
     public static List<OTPData> getOTPs(SharedPreferences prefs, String group) {
