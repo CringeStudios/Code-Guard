@@ -1,7 +1,5 @@
 package com.cringe_studios.cringe_authenticator;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,12 +7,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
@@ -26,15 +22,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
-import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
 import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
+import com.cringe_studios.cringe_authenticator.scanner.QRScannerActivity;
+import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.cringe_studios.cringe_authenticator_library.OTPType;
-import com.google.android.material.color.utilities.DynamicColor;
 
 import java.util.concurrent.Executor;
 
@@ -73,10 +68,16 @@ public class MainActivity extends AppCompatActivity {
         launchApp();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
+            if(obj == null) { // Got some error TODO: show error message
+                Toast.makeText(this, "Failed to scan code", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
             if(fragment instanceof DynamicFragment) {
                 DynamicFragment frag = (DynamicFragment) fragment;
-                SettingsUtil.addOTP(getSharedPreferences("groups", MODE_PRIVATE), frag.getGroupName(), obj);
+                SettingsUtil.addOTP(getSharedPreferences(DynamicFragment.GROUPS_PREFS_NAME, MODE_PRIVATE), frag.getGroupName(), obj);
+                frag.loadOTPs();
             }
             Log.i("AMOGUS", "Actually got something bruh" + obj);
         });

@@ -1,4 +1,4 @@
-package com.cringe_studios.cringe_authenticator;
+package com.cringe_studios.cringe_authenticator.scanner;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,6 +24,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
+import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
@@ -120,6 +121,8 @@ public class QRScannerActivity extends AppCompatActivity {
                             }
                         }
 
+                        if(code == null) return;
+
                         Uri uri = Uri.parse(code.getRawValue());
                         Log.i("AMOGUS", code.getRawValue());
                         Log.i("AMOGUS", uri.getHost());
@@ -180,7 +183,7 @@ public class QRScannerActivity extends AppCompatActivity {
         }
     }
 
-    private void success(OTPData data) {
+    private void success(@NonNull OTPData data) {
         Intent result = new Intent();
         result.putExtra("data", data);
         setResult(Activity.RESULT_OK, result);
@@ -188,8 +191,7 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
     private void error(String errorMessage) {
-        Intent result = new Intent();
-        setResult(Activity.RESULT_CANCELED, result);
+        setResult(Activity.RESULT_CANCELED, null);
         finish();
     }
 

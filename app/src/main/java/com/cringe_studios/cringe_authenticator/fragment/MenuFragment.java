@@ -29,16 +29,16 @@ public class MenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMenuBinding.inflate(inflater);
 
-        String[] items = {"a", "b"};
-
         SharedPreferences pr = getContext().getSharedPreferences("menu", Context.MODE_PRIVATE);
+
+        String[] items = {"a", "b"};
 
         for(String item : items) {
             MenuItemBinding itemBinding = MenuItemBinding.inflate(inflater);
             itemBinding.button.setText(item);
             itemBinding.button.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
-                bundle.putString("tab", item);
+                bundle.putString(DynamicFragment.BUNDLE_GROUP, item);
                 NavigationUtil.navigate(this, DynamicFragment.class, bundle);
             });
             itemBinding.button.setOnLongClickListener(view -> {
