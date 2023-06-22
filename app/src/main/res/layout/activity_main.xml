@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_menu_edit"
+        app:srcCompat="@drawable/baseline_edit_24"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,7 +39,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         android:onClick="scanCode"
-        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:srcCompat="@drawable/baseline_qr_code_scanner_24"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,6 +49,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/ic_hamburger" />
+        app:srcCompat="@drawable/baseline_menu_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
