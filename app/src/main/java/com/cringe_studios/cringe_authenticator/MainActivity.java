@@ -2,11 +2,16 @@ package com.cringe_studios.cringe_authenticator;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,6 +27,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
 import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
@@ -29,6 +36,8 @@ import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerActivity;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
+import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.concurrent.Executor;
 
@@ -91,7 +100,9 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-        binding.fab.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
+        binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
+        binding.fabScan.setOnClickListener(view -> scanCode());
+        binding.fabInput.setOnClickListener(view -> inputCode());
     }
 
     @Override
@@ -146,10 +157,61 @@ public class MainActivity extends AppCompatActivity {
         NavigationUtil.navigate(this, SettingsFragment.class, null);
     }
 
-    public void scanCode(View view) {
-        Log.i("AMOGUS", "Scan");
-        Intent intent = new Intent(this, QRScannerActivity.class);
+    public void scanCode() {
         startQRCodeScan.launch(null);
+    }
+
+    public void inputCode() {
+        DialogInputCodeChoiceBinding binding = DialogInputCodeChoiceBinding.inflate(getLayoutInflater());
+
+        String[] options = new String[2];
+        options[0] = OTPType.TOTP.getFriendlyName() + " (TOTP)";
+        options[1] = OTPType.HOTP.getFriendlyName() + " (HOTP)";
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("Select Code Type")
+                .setView(binding.getRoot())
+                .setNegativeButton("Cancel", (view, which) -> {})
+                .create();
+
+        binding.codeTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
+        binding.codeTypes.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            switch(position) {
+                case 0:
+                    showTOTPDialog();
+                    break;
+                case 1:
+                    showHOTPDialog();
+                    break;
+            }
+            showTOTPDialog();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void showTOTPDialog() {
+        DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
+        binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
+        binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
+        showCodeDialog(binding.getRoot(), () -> {
+            // TODO: handle input
+        });
+    }
+
+    private void showHOTPDialog() {
+        DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
+        showCodeDialog(binding.getRoot(), () -> {});
+    }
+
+    private void showCodeDialog(View view, Runnable ok) {
+        new AlertDialog.Builder(this)
+                .setTitle("Input Code")
+                .setView(view)
+                .setPositiveButton("Ok", (btnView, which) -> ok.run())
+                .setNegativeButton("Cancel", (btnView, which) -> {})
+                .show();
     }
 
     public void addGroup(MenuItem item) {

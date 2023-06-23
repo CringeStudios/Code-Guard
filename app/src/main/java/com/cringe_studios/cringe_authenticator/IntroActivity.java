@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,6 +42,12 @@ public class IntroActivity extends AppCompatActivity {
         });
 
         binding.videoView.setOnCompletionListener(mp -> openMainActivity());
+
+        binding.videoView.setOnErrorListener((MediaPlayer mp, int what, int extra) -> {
+            Toast.makeText(this, "Failed to play video", Toast.LENGTH_LONG).show();
+            openMainActivity();
+            return true;
+        });
 
         setContentView(binding.getRoot());
     }
