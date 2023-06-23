@@ -16,9 +16,9 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        FabUtil.hideFabs(getActivity());
+        FabUtil.hideFabs(requireActivity());
         return binding.getRoot();
 
     }

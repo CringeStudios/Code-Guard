@@ -1,14 +1,12 @@
 package com.cringe_studios.cringe_authenticator.util;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.cringe_studios.cringe_authenticator.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class NavigationUtil {
 

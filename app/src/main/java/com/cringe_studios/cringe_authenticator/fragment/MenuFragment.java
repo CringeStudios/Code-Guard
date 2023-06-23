@@ -4,17 +4,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
@@ -29,7 +26,7 @@ public class MenuFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMenuBinding.inflate(inflater);
 
-        SharedPreferences pr = getContext().getSharedPreferences("menu", Context.MODE_PRIVATE);
+        SharedPreferences pr = requireContext().getSharedPreferences("menu", Context.MODE_PRIVATE);
 
         String[] items = {"a", "b"};
 
@@ -42,7 +39,7 @@ public class MenuFragment extends Fragment {
                 NavigationUtil.navigate(this, DynamicFragment.class, bundle);
             });
             itemBinding.button.setOnLongClickListener(view -> {
-                new AlertDialog.Builder(getContext())
+                new AlertDialog.Builder(requireContext())
                         .setTitle("Delete?")
                         .setMessage("Delete this?")
                         .setPositiveButton("Yes", (dialog, which) -> itemBinding.button.setVisibility(View.GONE))
@@ -59,7 +56,7 @@ public class MenuFragment extends Fragment {
             // TODO: edit mode
         });
 
-        FabUtil.hideFabs(getActivity());
+        FabUtil.hideFabs(requireActivity());
 
         return binding.getRoot();
     }

@@ -29,7 +29,6 @@ import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerActivity;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.concurrent.Executor;
 
@@ -76,8 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
             if(fragment instanceof DynamicFragment) {
                 DynamicFragment frag = (DynamicFragment) fragment;
-                SettingsUtil.addOTP(getSharedPreferences(SettingsUtil.GROUPS_PREFS_NAME, MODE_PRIVATE), frag.getGroupName(), obj);
-                frag.loadOTPs();
+                frag.addOTP(obj);
             }
             Log.i("AMOGUS", "Actually got something bruh" + obj);
         });
@@ -146,10 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSettings(MenuItem item) {
         NavigationUtil.navigate(this, SettingsFragment.class, null);
-    }
-
-    public void addCode(MenuItem item) {
-        // TODO: add code
     }
 
     public void scanCode(View view) {

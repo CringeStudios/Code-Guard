@@ -2,28 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/rectangle"
+    android:layout_margin="5dp"
+    android:padding="5dp">
+    <TextView
+        android:id="@+id/label"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/rectangle"
-        android:layout_margin="5dp"
-        android:padding="5dp"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My OTP"
-            android:textAlignment="center"
-            android:textSize="16sp" />
+        android:layout_height="wrap_content"
+        android:text="My OTP"
+        android:textAlignment="center"
+        android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/otpCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="000000"
-            android:textAlignment="center"
-            android:textSize="20sp" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/otpCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="000000"
+        android:textAlignment="center"
+        android:textSize="20sp" />
 </LinearLayout>

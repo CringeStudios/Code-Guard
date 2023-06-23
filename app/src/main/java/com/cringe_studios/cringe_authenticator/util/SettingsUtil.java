@@ -29,7 +29,7 @@ public class SettingsUtil {
         otps.add(data);
 
         prefs.edit()
-                .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[otps.size()])))
+                .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[0])))
                 .apply();
     }
 

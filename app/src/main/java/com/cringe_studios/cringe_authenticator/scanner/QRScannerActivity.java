@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Size;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +21,11 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
-import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
@@ -37,8 +33,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 public class QRScannerActivity extends AppCompatActivity {

@@ -1,10 +1,13 @@
 package com.cringe_studios.cringe_authenticator;
 
+import androidx.annotation.NonNull;
+
 import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class OTPData implements Serializable {
 
@@ -15,6 +18,9 @@ public class OTPData implements Serializable {
     private int digits;
     private int period;
     private int counter;
+
+    // Cached
+    private OTP otp;
 
     public OTPData(String name, OTPType type, String secret, OTPAlgorithm algorithm, int digits, int period, int counter) {
         this.name = name;
@@ -56,9 +62,11 @@ public class OTPData implements Serializable {
 
     public OTP toOTP() {
         // TODO: checksum
-        return OTP.createNewOTP(type, secret, algorithm, digits, counter, period, false);
+        if(otp != null) return otp;
+        return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, false);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "OTPData{" +
@@ -70,5 +78,18 @@ public class OTPData implements Serializable {
                 ", period=" + period +
                 ", counter=" + counter +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OTPData otpData = (OTPData) o;
+        return digits == otpData.digits && period == otpData.period && counter == otpData.counter && Objects.equals(name, otpData.name) && type == otpData.type && Objects.equals(secret, otpData.secret) && algorithm == otpData.algorithm;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, secret, algorithm, digits, period, counter);
     }
 }
