@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
+import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.io.Serializable;
@@ -17,12 +18,12 @@ public class OTPData implements Serializable {
     private OTPAlgorithm algorithm;
     private int digits;
     private int period;
-    private int counter;
+    private long counter;
 
     // Cached
-    private OTP otp;
+    private transient OTP otp;
 
-    public OTPData(String name, OTPType type, String secret, OTPAlgorithm algorithm, int digits, int period, int counter) {
+    public OTPData(String name, OTPType type, String secret, OTPAlgorithm algorithm, int digits, int period, long counter) {
         this.name = name;
         this.type = type;
         this.secret = secret;
@@ -56,11 +57,29 @@ public class OTPData implements Serializable {
         return period;
     }
 
-    public int getCounter() {
+    public long getCounter() {
         return counter;
     }
 
-    public OTP toOTP() {
+    public String getPin() {
+        return getOTP().getPin();
+    }
+
+    public void incrementCounter() {
+        getOTP().incrementCounter();
+        this.counter = getOTP().getCounter();
+    }
+
+    public boolean validate() {
+        try {
+            getOTP();
+            return true;
+        }catch(IllegalArgumentException | OTPException e) {
+            return false;
+        }
+    }
+
+    private OTP getOTP() {
         // TODO: checksum
         if(otp != null) return otp;
         return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, false);

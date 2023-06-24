@@ -60,7 +60,7 @@ public class DynamicFragment extends Fragment {
             for(int i = 0; i < binding.itemList.getChildCount(); i++) {
                 OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
                 if(vh == null) continue;
-                vh.getBinding().otpCode.setText(vh.getOTPData().toOTP().getPin());
+                vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
             }
 
             handler.postDelayed(refreshCodes, 1000L);

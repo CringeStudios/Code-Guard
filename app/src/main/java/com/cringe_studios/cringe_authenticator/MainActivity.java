@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO: load configured theme
+        setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
+
         Executor executor = ContextCompat.getMainExecutor(this);
         BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
@@ -140,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Log.i("AMOGUS", "navigateUp");
         if(!(NavigationUtil.getCurrentFragment(this) instanceof HomeFragment)) {
             NavigationUtil.navigate(this, HomeFragment.class, null);
         }
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     showHOTPDialog();
                     break;
             }
-            showTOTPDialog();
+
             dialog.dismiss();
         });
 
@@ -197,6 +199,27 @@ public class MainActivity extends AppCompatActivity {
         binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
         showCodeDialog(binding.getRoot(), () -> {
             // TODO: handle input
+            Fragment fragment = NavigationUtil.getCurrentFragment(this);
+            if(!(fragment instanceof DynamicFragment)) return;
+
+            try {
+                String name = binding.inputName.getText().toString();
+                String secret = binding.inputSecret.getText().toString();
+                OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
+                int digits = (int) binding.inputDigits.getSelectedItem();
+                int period = Integer.parseInt(binding.inputPeriod.getText().toString());
+
+                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0);
+                if(!data.validate()) {
+                    // TODO: error
+                    return;
+                }
+
+                ((DynamicFragment) fragment).addOTP(data);
+            }catch(NumberFormatException e) {
+                // TODO: error
+                return;
+            }
         });
     }
 

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorTheme1" format="color" />
+    <attr name="colorTheme2" format="color" />
+</resources>

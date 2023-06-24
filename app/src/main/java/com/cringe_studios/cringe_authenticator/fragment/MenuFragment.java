@@ -31,7 +31,7 @@ public class MenuFragment extends Fragment {
         String[] items = {"a", "b"};
 
         for(String item : items) {
-            MenuItemBinding itemBinding = MenuItemBinding.inflate(inflater);
+            MenuItemBinding itemBinding = MenuItemBinding.inflate(inflater, binding.menuItems, false);
             itemBinding.button.setText(item);
             itemBinding.button.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();

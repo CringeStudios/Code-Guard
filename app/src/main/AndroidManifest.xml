@@ -33,10 +33,10 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CringeAuthenticator">
+            android:theme="@style/Theme.CringeAuthenticator.None">
         </activity>
         <activity android:name=".scanner.QRScannerActivity"
-            android:theme="@style/Theme.CringeAuthenticator">
+            android:theme="@style/Theme.CringeAuthenticator.None">
         </activity>
     </application>
 

@@ -4,4 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#008BFF</color>
     <color name="colorSecondary">#90D14C</color>
+
+    <!-- Theme colors -->
+    <color name="color_blue_green_1">#008BFF</color>
+    <color name="color_blue_green_2">#90D14C</color>
 </resources>

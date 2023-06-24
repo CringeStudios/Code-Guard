@@ -1,9 +1,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CringeAuthenticator" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.CringeAuthenticator_Base" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorTheme1">#FF00FF</item>
+        <item name="colorTheme2">#000000</item>
     </style>
 
-    <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator" />
+    <style name="Base.Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator_Base">
+        <!--<item name="android:textColor">@color/black</item>
+        <item name="colorOnBackground">@color/white</item>-->
+        <!--<item name="colorTheme1">@color/color_blue_green_1</item>
+        <item name="colorTheme2">@color/color_blue_green_2</item>-->
+    </style>
+
+    <style name="Theme.CringeAuthenticator.None" parent="Base.Theme.CringeAuthenticator" />
+
+    <style name="Theme.CringeAuthenticator.Blue_Green" parent="Base.Theme.CringeAuthenticator">
+        <item name="colorTheme1">@color/color_blue_green_1</item>
+        <item name="colorTheme2">@color/color_blue_green_2</item>
+    </style>
 </resources>
