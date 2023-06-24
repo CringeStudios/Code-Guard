@@ -7,8 +7,8 @@
                 android:color="#FFFFFF" />
             <gradient
                 android:angle="180"
-                android:endColor="#FFE500"
-                android:startColor="#FF0088FF" />
+                android:startColor="?attr/colorTheme1"
+                android:endColor="?attr/colorTheme2" />
             <corners
                 android:bottomLeftRadius="20dp"
                 android:bottomRightRadius="20dp"
@@ -25,10 +25,7 @@
             <stroke
                 android:width="0dp"
                 android:color="#FFFFFF" />
-            <gradient
-                android:angle="180"
-                android:endColor="?attr/colorOnBackground"
-                android:startColor="?attr/colorOnBackground" />
+            <solid android:color="?attr/colorOnBackground" />
             <corners
                 android:bottomLeftRadius="20dp"
                 android:bottomRightRadius="20dp"
