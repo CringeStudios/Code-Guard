@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="My OTP"
         android:textAlignment="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/otpCode"

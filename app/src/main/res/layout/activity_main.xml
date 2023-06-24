@@ -29,6 +29,8 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/baseline_edit_24"
+        app:tint="@color/white"
+        android:backgroundTint="?attr/colorTheme1"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,6 +41,8 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/baseline_qr_code_scanner_24"
+        app:tint="@color/white"
+        android:backgroundTint="?attr/colorTheme1"
         android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -48,6 +52,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@drawable/baseline_menu_24" />
+        app:srcCompat="@drawable/baseline_menu_24"
+        app:tint="@color/white"
+        android:backgroundTint="?attr/colorTheme1"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

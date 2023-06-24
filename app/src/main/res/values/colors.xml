@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="background_grey">#222222</color>
+    <color name="background_light_grey">#DCDCDC</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary">#008BFF</color>
     <color name="colorSecondary">#90D14C</color>
 
     <!-- Theme colors -->
-    <color name="color_blue_green_1">#008BFF</color>
-    <color name="color_blue_green_2">#90D14C</color>
+    <color name="color_blue">#008BFF</color>
+    <color name="color_light_green">#90D14C</color>
+    <color name="color_pink">#D900FF</color>
+    <color name="color_orange">#FF7700</color>
+    <color name="color_red">#DA0303</color>
+    <color name="color_yellow">#FFE500</color>
+    <color name="color_turquoise">#00FFF7</color>
+    <color name="color_green">#00FF0A</color>
 </resources>

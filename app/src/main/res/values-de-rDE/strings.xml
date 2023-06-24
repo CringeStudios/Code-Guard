@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cringe Authenticator</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="next">Weiter</string>
+    <string name="previous">Zurück</string>
+    <string name="edit">Editieren</string>
+    <string name="choose_language">Sprachauswahl</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="add">hinzufügen</string>
+    <string name="no">nein</string>
+    <string name="yes">ja</string>
+    <string name="invalid_input">ungültige Eingabe</string>
+    <string name="about">über</string>
+    <string name="haptic_feedback">vibration</string>
+    <string name="reset_app">App zurücksetzen</string>
+    <string name="import_export">importieren / exportieren</string>
+    <string name="language">Sprache</string>
+</resources>
