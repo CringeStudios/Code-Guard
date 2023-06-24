@@ -52,7 +52,6 @@ public class SettingsFragment extends Fragment {
                 Integer themeID = SettingsUtil.THEMES.get(theme);
                 if(themeID == null) return;
 
-                Log.e("AMOGUS", "REstarting activity");
                 requireActivity().setTheme(themeID);
                 requireActivity().recreate();
             }

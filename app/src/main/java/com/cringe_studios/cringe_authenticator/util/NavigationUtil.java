@@ -1,5 +1,6 @@
 package com.cringe_studios.cringe_authenticator.util;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,42 +1,42 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.CringeAuthenticator_Base" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.CringeAuthenticator" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
         <item name="colorTheme1">#FF00FF</item>
         <item name="colorTheme2">#000000</item>
         <item name="android:textColor">@color/black</item>
         <item name="colorOnBackground">@color/background_light_grey</item>
     </style>
 
-    <style name="Base.Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator_Base">
-        <!--<item name="android:textColor">@color/black</item>
-        <item name="colorOnBackground">@color/white</item>-->
-        <!--<item name="colorTheme1">@color/color_blue_green_1</item>
-        <item name="colorTheme2">@color/color_blue_green_2</item>-->
-    </style>
+    <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator" />
 
-    <style name="Theme.CringeAuthenticator.None" parent="Base.Theme.CringeAuthenticator" />
+    <style name="Theme.CringeAuthenticator.None" />
 
-    <style name="Theme.CringeAuthenticator.Blue_Green" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Blue_Green">
         <item name="colorTheme1">@color/color_blue</item>
         <item name="colorTheme2">@color/color_light_green</item>
     </style>
-    <style name="Theme.CringeAuthenticator.Red_Blue" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Red_Blue">
         <item name="colorTheme1">@color/color_red</item>
         <item name="colorTheme2">@color/color_blue</item>
     </style>
-    <style name="Theme.CringeAuthenticator.Pink_Green" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Pink_Green">
         <item name="colorTheme1">@color/color_pink</item>
         <item name="colorTheme2">@color/color_green</item>
     </style>
-    <style name="Theme.CringeAuthenticator.Blue_Yellow" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Blue_Yellow">
         <item name="colorTheme1">@color/color_blue</item>
         <item name="colorTheme2">@color/color_yellow</item>
     </style>
-    <style name="Theme.CringeAuthenticator.Green_Yellow" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Green_Yellow">
         <item name="colorTheme1">@color/color_green</item>
         <item name="colorTheme2">@color/color_yellow</item>
     </style>
-    <style name="Theme.CringeAuthenticator.Orange_Turquoise" parent="Base.Theme.CringeAuthenticator">
+    <style name="Theme.CringeAuthenticator.Orange_Turquoise">
         <item name="colorTheme1">@color/color_orange</item>
         <item name="colorTheme2">@color/color_turquoise</item>
     </style>

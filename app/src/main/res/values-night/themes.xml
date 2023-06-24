@@ -1,9 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator_Base">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator">
         <item name="android:textColor">@color/white</item>
         <item name="colorOnBackground">@color/background_grey</item>
-
     </style>
 </resources>
