@@ -6,20 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:orientation="vertical">
 
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="0dp"
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_enable_intro_video"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Enable something"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Enable intro video" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Spinner
+            android:id="@+id/settings_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
+    </LinearLayout>
 </androidx.core.widget.NestedScrollView>

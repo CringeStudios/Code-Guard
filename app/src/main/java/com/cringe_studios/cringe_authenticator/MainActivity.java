@@ -36,6 +36,7 @@ import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerActivity;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -52,8 +53,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: load configured theme
-        setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
+        Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(this));
+        if(themeID != null) {
+            setTheme(themeID);
+        }else {
+            setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
+        }
 
         Executor executor = ContextCompat.getMainExecutor(this);
         BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {

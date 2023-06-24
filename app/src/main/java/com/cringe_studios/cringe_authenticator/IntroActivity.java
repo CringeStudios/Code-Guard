@@ -12,9 +12,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityIntroBinding;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 public class IntroActivity extends AppCompatActivity {
-    public static boolean show_logoanimation = false;
 
     private static ActivityIntroBinding binding;
 
@@ -22,12 +22,11 @@ public class IntroActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences p = getSharedPreferences("appsettings", Activity.MODE_PRIVATE);
-        show_logoanimation = p.getBoolean("Logoanimation", true);
         super.onCreate(savedInstanceState);
-        if (show_logoanimation) {
-            setContentView(R.layout.activity_intro);
-        } else {
+
+        if (!SettingsUtil.isIntroVideoEnabled(this)) {
+            openMainActivity();
+            return;
         }
 
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
@@ -63,7 +62,7 @@ public class IntroActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         // When the Activity is destroyed, release our MediaPlayer and set it to null.
-        mMediaPlayer.release();
+        if(mMediaPlayer != null) mMediaPlayer.release();
         mMediaPlayer = null;
     }
 
