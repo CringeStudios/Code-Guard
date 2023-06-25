@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,12 +29,14 @@ import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
+import com.cringe_studios.cringe_authenticator.util.DialogCallback;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.concurrent.Executor;
+import java.util.function.Supplier;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -76,15 +79,17 @@ public class MainActivity extends AppCompatActivity {
         launchApp();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
-            if(obj == null) { // Got some error TODO: show error message
-                Toast.makeText(this, "Failed to scan code", Toast.LENGTH_LONG).show();
+            if(obj == null) return; // Cancelled
+
+            if(!obj.isSuccess()) {
+                Toast.makeText(this, "Failed to scan code: " + obj.getErrorMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
 
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
             if(fragment instanceof DynamicFragment) {
                 DynamicFragment frag = (DynamicFragment) fragment;
-                frag.addOTP(obj);
+                frag.addOTP(obj.getData());
             }
             Log.i("AMOGUS", "Actually got something bruh" + obj);
         });
@@ -180,13 +185,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showTOTPDialog() {
+        // TODO: checksum option
         DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
         binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
         binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
         showCodeDialog(binding.getRoot(), () -> {
-            // TODO: handle input
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof DynamicFragment)) return;
+            if(!(fragment instanceof DynamicFragment)) return true;
 
             try {
                 String name = binding.inputName.getText().toString();
@@ -195,31 +200,52 @@ public class MainActivity extends AppCompatActivity {
                 int digits = (int) binding.inputDigits.getSelectedItem();
                 int period = Integer.parseInt(binding.inputPeriod.getText().toString());
 
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0);
-                if(!data.validate()) {
-                    // TODO: error
-                    return;
+                // TODO: checksum
+                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0, false);
+
+                String errorMessage = data.validate();
+                if(errorMessage != null) {
+                    showErrorDialog(errorMessage);
+                    return false;
                 }
 
                 ((DynamicFragment) fragment).addOTP(data);
+                return true;
             }catch(NumberFormatException e) {
-                // TODO: error
-                return;
+                showErrorDialog("Invalid number entered");
+                return false;
             }
         });
     }
 
     private void showHOTPDialog() {
         DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
-        showCodeDialog(binding.getRoot(), () -> {});
+        showCodeDialog(binding.getRoot(), () -> true);
     }
 
-    private void showCodeDialog(View view, Runnable ok) {
-        new AlertDialog.Builder(this)
+    private void showCodeDialog(View view, DialogCallback ok) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Input Code")
                 .setView(view)
-                .setPositiveButton("Ok", (btnView, which) -> ok.run())
+                .setPositiveButton("Ok", (btnView, which) -> {})
                 .setNegativeButton("Cancel", (btnView, which) -> {})
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                if(ok.callback()) dialog.dismiss();
+            });
+        });
+
+        dialog.show();
+    }
+
+    private void showErrorDialog(String errorMessage) {
+        new AlertDialog.Builder(this)
+                .setTitle("Failed to add code")
+                .setMessage(errorMessage)
+                .setPositiveButton("Ok", (dialog, which) -> {})
                 .show();
     }
 

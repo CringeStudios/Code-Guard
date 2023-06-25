@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
 
-public class QRScannerContract extends ActivityResultContract<Void, OTPData> {
+public class QRScannerContract extends ActivityResultContract<Void, ScannerResult> {
 
     @NonNull
     @Override
@@ -19,12 +19,16 @@ public class QRScannerContract extends ActivityResultContract<Void, OTPData> {
     }
 
     @Override
-    public @Nullable OTPData parseResult(int result, @Nullable Intent intent) {
+    public @Nullable ScannerResult parseResult(int result, @Nullable Intent intent) {
         if(result != Activity.RESULT_OK || intent == null) {
+            if(intent != null) {
+                return new ScannerResult(intent.getStringExtra("error"));
+            }
+
             return null;
         }
 
-        return (OTPData) intent.getSerializableExtra("data");
+        return new ScannerResult((OTPData) intent.getSerializableExtra("data"));
     }
 
 }

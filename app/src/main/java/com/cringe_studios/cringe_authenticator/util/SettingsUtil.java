@@ -41,6 +41,7 @@ public class SettingsUtil {
 
     private static final Gson GSON = new Gson();
 
+    // TODO: refactor
     public static List<OTPData> getOTPs(SharedPreferences prefs, String group) {
         String currentOTPs = prefs.getString("group." + group, "[]");
         return Arrays.asList(GSON.fromJson(currentOTPs, OTPData[].class));
@@ -71,6 +72,14 @@ public class SettingsUtil {
 
     public static String getTheme(Context ctx) {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("theme", THEME_NAMES.get(0));
+    }
+
+    public static void enableSuperSecretHamburgers(Context ctx) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("iLikeHamburgers", true).apply();
+    }
+
+    public static boolean isSuperSecretHamburgersEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("iLikeHamburgers", false);
     }
 
 }

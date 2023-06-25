@@ -19,11 +19,12 @@ public class OTPData implements Serializable {
     private int digits;
     private int period;
     private long counter;
+    private boolean checksum;
 
     // Cached
     private transient OTP otp;
 
-    public OTPData(String name, OTPType type, String secret, OTPAlgorithm algorithm, int digits, int period, long counter) {
+    public OTPData(String name, OTPType type, String secret, OTPAlgorithm algorithm, int digits, int period, long counter, boolean checksum) {
         this.name = name;
         this.type = type;
         this.secret = secret;
@@ -31,6 +32,7 @@ public class OTPData implements Serializable {
         this.digits = digits;
         this.period = period;
         this.counter = counter;
+        this.checksum = checksum;
     }
 
     public String getName() {
@@ -70,19 +72,19 @@ public class OTPData implements Serializable {
         this.counter = getOTP().getCounter();
     }
 
-    public boolean validate() {
+    public String validate() {
         try {
             getOTP();
-            return true;
+            return null;
         }catch(IllegalArgumentException | OTPException e) {
-            return false;
+            return e.getMessage() != null ? e.getMessage() : e.toString();
         }
     }
 
     private OTP getOTP() {
         // TODO: checksum
         if(otp != null) return otp;
-        return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, false);
+        return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, checksum);
     }
 
     @NonNull
@@ -96,6 +98,7 @@ public class OTPData implements Serializable {
                 ", digits=" + digits +
                 ", period=" + period +
                 ", counter=" + counter +
+                ", checksum=" + checksum +
                 '}';
     }
 

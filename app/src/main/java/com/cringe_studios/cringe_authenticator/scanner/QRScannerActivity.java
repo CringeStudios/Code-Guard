@@ -3,11 +3,12 @@ package com.cringe_studios.cringe_authenticator.scanner;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,19 +17,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalGetImage;
+import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
+import androidx.camera.core.MeteringPointFactory;
 import androidx.camera.core.Preview;
+import androidx.camera.core.SurfaceOrientedMeteringPointFactory;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
+import com.cringe_studios.cringe_authenticator.util.OTPParser;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
@@ -36,6 +40,8 @@ import com.google.mlkit.vision.common.InputImage;
 import java.util.concurrent.ExecutionException;
 
 public class QRScannerActivity extends AppCompatActivity {
+
+    public static final int RESULT_ERROR = -2;
 
     private ActivityQrScannerBinding binding;
 
@@ -47,7 +53,7 @@ public class QRScannerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234);
         }
 
@@ -56,7 +62,6 @@ public class QRScannerActivity extends AppCompatActivity {
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(() -> {
-            Log.i("AMOGUS", "Got something");
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
                 bindPreview(cameraProvider);
@@ -66,11 +71,12 @@ public class QRScannerActivity extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
 
-        BarcodeScannerOptions opts = new BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-                .build();
-
         scanner = BarcodeScanning.getClient();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -84,15 +90,24 @@ public class QRScannerActivity extends AppCompatActivity {
         preview.setSurfaceProvider(binding.preview.getSurfaceProvider());
 
         ImageAnalysis analysis = new ImageAnalysis.Builder()
-                //.setTargetResolution(new Size(1280, 720))
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build();
-        analysis.setAnalyzer(ContextCompat.getMainExecutor(this), new Amogus());
+        analysis.setAnalyzer(ContextCompat.getMainExecutor(this), new QRAnalyzer());
 
         Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, analysis);
+
+        binding.preview.setOnTouchListener((view, event) -> {
+            if(event.getAction() != MotionEvent.ACTION_DOWN) return true;
+            view.performClick();
+
+            MeteringPointFactory factory = new SurfaceOrientedMeteringPointFactory(binding.preview.getWidth(), binding.preview.getHeight());
+            camera.getCameraControl().startFocusAndMetering(new FocusMeteringAction.Builder(factory.createPoint(event.getX(), event.getY())).build());
+
+            return true;
+        });
     }
 
-    private class Amogus implements ImageAnalysis.Analyzer {
+    private class QRAnalyzer implements ImageAnalysis.Analyzer {
 
         @OptIn(markerClass = ExperimentalGetImage.class)
         @Override
@@ -101,13 +116,11 @@ public class QRScannerActivity extends AppCompatActivity {
             if(mediaImage != null) {
                 InputImage input = InputImage.fromMediaImage(mediaImage, image.getImageInfo().getRotationDegrees());
                 scanner.process(input).addOnSuccessListener(barcodes -> {
-                    //Log.i("AMOGUS", "found " + barcodes.size() + " codes");
                     image.close();
 
                     if(barcodes.size() >= 1) {
                         Barcode code = null;
 
-                        Log.i("AMOGUS", "TYPE " + barcodes.get(0).getValueType());
                         for(Barcode c : barcodes) {
                             if(c.getValueType() == Barcode.TYPE_TEXT) {
                                 code = c;
@@ -118,58 +131,10 @@ public class QRScannerActivity extends AppCompatActivity {
                         if(code == null) return;
 
                         Uri uri = Uri.parse(code.getRawValue());
-                        Log.i("AMOGUS", code.getRawValue());
-                        Log.i("AMOGUS", uri.getHost());
-                        Log.i("AMOGUS", uri.getPath());
-
-                        String type = uri.getHost();
-                        String accountName = uri.getPath();
-                        String secret = uri.getQueryParameter("secret");
-                        String algorithm = uri.getQueryParameter("algorithm");
-                        String digits = uri.getQueryParameter("digits");
-                        String period = uri.getQueryParameter("period");
-                        String counter = uri.getQueryParameter("counter");
-
-                        if(type == null || secret == null) {
-                            error("Missing params");
-                            return;
-                        }
-
-                        OTPType fType;
                         try {
-                            fType = OTPType.valueOf(type.toUpperCase());
+                            success(OTPParser.parse(uri));
                         }catch(IllegalArgumentException e) {
-                            Log.i("AMOGUS", e.toString());
-                            error("Failed to parse OTP parameters");
-                            return;
-                        }
-
-                        if(fType == OTPType.HOTP && counter == null) {
-                            error("Missing params");
-                            return;
-                        }
-
-                        if(accountName == null || accountName.length() < 2 /* Because path is /accName, so 2 letters for acc with 1 letter name */) {
-                            // TODO: error
-                            Log.i("AMOGUS", "Missing params");
-                            error("Missing OTP parameters");
-                            return;
-                        }
-
-                        accountName = accountName.substring(1);
-
-                        try {
-                            // 0 or null for defaults (handled by Cringe-Authenticator-Library)
-                            OTPAlgorithm fAlgorithm = algorithm == null ? null : OTPAlgorithm.valueOf(algorithm.toUpperCase());
-                            int fDigits = digits == null ? 0 : Integer.parseInt(digits);
-                            int fPeriod = period == null ? 0 : Integer.parseInt(period);
-                            int fCounter = counter == null ? 0 : Integer.parseInt(counter);
-
-                            success(new OTPData(accountName, fType, secret, fAlgorithm, fDigits, fPeriod, fCounter));
-                        }catch(IllegalArgumentException e) {
-                            Log.i("AMOGUS", e.toString());
-                            error("Failed to parse OTP parameters");
-                            return;
+                            error(e.getMessage());
                         }
                     }
                 }).addOnFailureListener(e -> {});
@@ -185,7 +150,9 @@ public class QRScannerActivity extends AppCompatActivity {
     }
 
     private void error(String errorMessage) {
-        setResult(Activity.RESULT_CANCELED, null);
+        Intent result = new Intent();
+        result.putExtra("error", errorMessage);
+        setResult(RESULT_ERROR, result);
         finish();
     }
 
