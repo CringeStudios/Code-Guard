@@ -38,12 +38,12 @@
         android:paddingBottom="10dp" />
 
     <EditText
-        android:id="@+id/input_period"
+        android:id="@+id/input_counter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:hint="Period"
+        android:hint="Counter"
         android:autofillHints="" />
 
     <CheckBox

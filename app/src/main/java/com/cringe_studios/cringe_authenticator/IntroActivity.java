@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.i("AMOGUS", "CREATE");
 
         if (!SettingsUtil.isIntroVideoEnabled(this)) {
             openMainActivity();
@@ -61,9 +64,14 @@ public class IntroActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // When the Activity is destroyed, release our MediaPlayer and set it to null.
         if(mMediaPlayer != null) mMediaPlayer.release();
         mMediaPlayer = null;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.videoView.start();
     }
 
     private void setDimension() {

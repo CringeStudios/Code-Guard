@@ -27,9 +27,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends NamedFragment {
 
     private FragmentSettingsBinding binding;
+
+    @Override
+    public String getName() {
+        return "Settings";
+    }
 
     @Nullable
     @Override

@@ -68,6 +68,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     public void remove(OTPData data) {
         int index = items.indexOf(data);
+        if(index == -1) return;
         items.remove(data);
         notifyItemRemoved(index);
     }

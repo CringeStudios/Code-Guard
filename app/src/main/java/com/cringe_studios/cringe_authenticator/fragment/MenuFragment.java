@@ -3,6 +3,7 @@ package com.cringe_studios.cringe_authenticator.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,53 +13,69 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
+import com.cringe_studios.cringe_authenticator.grouplist.GroupListAdapter;
+import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
-public class MenuFragment extends Fragment {
+import java.util.List;
+
+public class MenuFragment extends NamedFragment {
 
     private FragmentMenuBinding binding;
+
+    private GroupListAdapter groupListAdapter;
+
+    @Override
+    public String getName() {
+        return "Menu";
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMenuBinding.inflate(inflater);
 
-        SharedPreferences pr = requireContext().getSharedPreferences("menu", Context.MODE_PRIVATE);
+        groupListAdapter = new GroupListAdapter(requireContext(), group -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(DynamicFragment.BUNDLE_GROUP, group);
+            NavigationUtil.navigate(this, DynamicFragment.class, bundle);
+        }, this::removeGroup);
 
-        String[] items = {"a", "b"};
+        binding.menuItems.setAdapter(groupListAdapter);
 
-        for(String item : items) {
-            MenuItemBinding itemBinding = MenuItemBinding.inflate(inflater, binding.menuItems, false);
-            itemBinding.button.setText(item);
-            itemBinding.button.setOnClickListener(view -> {
-                Bundle bundle = new Bundle();
-                bundle.putString(DynamicFragment.BUNDLE_GROUP, item);
-                NavigationUtil.navigate(this, DynamicFragment.class, bundle);
-            });
-            itemBinding.button.setOnLongClickListener(view -> {
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Delete?")
-                        .setMessage("Delete this?")
-                        .setPositiveButton("Yes", (dialog, which) -> itemBinding.button.setVisibility(View.GONE))
-                        .setNegativeButton("No", (dialog, which) -> {})
-                        .show();
-                // TODO: better method?
-                // TODO: actually delete
-                return true;
-            });
-            binding.menuItems.addView(itemBinding.getRoot());
-        }
+        loadGroups();
 
-        binding.editSwitch.setOnCheckedChangeListener((view, checked) -> {
+        /*binding.editSwitch.setOnCheckedChangeListener((view, checked) -> {
             // TODO: edit mode
-        });
+        });*/
 
         FabUtil.hideFabs(requireActivity());
 
         return binding.getRoot();
+    }
+
+    private void loadGroups() {
+        List<String> items = SettingsUtil.getGroups(requireContext());
+        Log.i("AMOGUS", "items: " + items);
+
+        for(String item : items) {
+            groupListAdapter.add(item);
+        }
+    }
+
+    public void addGroup(String group) {
+        SettingsUtil.addGroup(requireContext(), group);
+        groupListAdapter.add(group);
+    }
+
+    public void removeGroup(String group) {
+        SettingsUtil.removeGroup(requireContext(), group);
+        groupListAdapter.remove(group);
     }
 
     @Override

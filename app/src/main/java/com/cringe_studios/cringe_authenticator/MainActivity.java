@@ -23,6 +23,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
 import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
@@ -185,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showTOTPDialog() {
-        // TODO: checksum option
         DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
         binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
         binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
@@ -199,9 +199,9 @@ public class MainActivity extends AppCompatActivity {
                 OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
                 int digits = (int) binding.inputDigits.getSelectedItem();
                 int period = Integer.parseInt(binding.inputPeriod.getText().toString());
+                boolean checksum = binding.inputChecksum.isChecked();
 
-                // TODO: checksum
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0, false);
+                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0, checksum);
 
                 String errorMessage = data.validate();
                 if(errorMessage != null) {
@@ -219,8 +219,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showHOTPDialog() {
-        DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
-        showCodeDialog(binding.getRoot(), () -> true);
+        DialogInputCodeHotpBinding binding = DialogInputCodeHotpBinding.inflate(getLayoutInflater());
+        binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
+        binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
+        showCodeDialog(binding.getRoot(), () -> {
+            Fragment fragment = NavigationUtil.getCurrentFragment(this);
+            if(!(fragment instanceof DynamicFragment)) return true;
+
+            try {
+                String name = binding.inputName.getText().toString();
+                String secret = binding.inputSecret.getText().toString();
+                OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
+                int digits = (int) binding.inputDigits.getSelectedItem();
+                int counter = Integer.parseInt(binding.inputCounter.getText().toString());
+                boolean checksum = binding.inputChecksum.isChecked();
+
+                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, 0, counter, checksum);
+
+                String errorMessage = data.validate();
+                if(errorMessage != null) {
+                    showErrorDialog(errorMessage);
+                    return false;
+                }
+
+                ((DynamicFragment) fragment).addOTP(data);
+                return true;
+            }catch(NumberFormatException e) {
+                showErrorDialog("Invalid number entered");
+                return false;
+            }
+        });
     }
 
     private void showCodeDialog(View view, DialogCallback ok) {
@@ -254,7 +282,17 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("New Group")
                 .setView(t)
-                .setPositiveButton("Add", (view, which) -> {})
+                .setPositiveButton("Add", (view, which) -> {
+                    if(t.getText().length() == 0) {
+                        showErrorDialog("You need to input a name");
+                        return;
+                    }
+
+                    Fragment frag = NavigationUtil.getCurrentFragment(this);
+                    if(frag instanceof MenuFragment) {
+                        ((MenuFragment) frag).addGroup(t.getText().toString());
+                    }
+                })
                 .setNegativeButton("Cancel", (view, which) -> {})
                 .show();
     }

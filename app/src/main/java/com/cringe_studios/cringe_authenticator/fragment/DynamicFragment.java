@@ -22,7 +22,7 @@ import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.List;
 
-public class DynamicFragment extends Fragment {
+public class DynamicFragment extends NamedFragment {
 
     public static final String BUNDLE_GROUP = "group";
 
@@ -35,6 +35,11 @@ public class DynamicFragment extends Fragment {
     private Runnable refreshCodes;
 
     private OTPListAdapter otpListAdapter;
+
+    @Override
+    public String getName() {
+        return groupName;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,8 +77,7 @@ public class DynamicFragment extends Fragment {
     }
 
     private void loadOTPs() {
-        SharedPreferences prefs = requireActivity().getSharedPreferences(SettingsUtil.GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
-        List<OTPData> data = SettingsUtil.getOTPs(prefs, groupName);
+        List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupName);
 
         for(OTPData otp : data) {
             otpListAdapter.add(otp);
@@ -81,8 +85,7 @@ public class DynamicFragment extends Fragment {
     }
 
     public void addOTP(OTPData data) {
-        SharedPreferences prefs = requireActivity().getSharedPreferences(SettingsUtil.GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
-        SettingsUtil.addOTP(prefs, groupName, data);
+        SettingsUtil.addOTP(requireContext(), groupName, data);
         otpListAdapter.add(data);
     }
 

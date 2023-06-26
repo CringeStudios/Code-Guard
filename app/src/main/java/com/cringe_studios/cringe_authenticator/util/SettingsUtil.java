@@ -41,18 +41,46 @@ public class SettingsUtil {
 
     private static final Gson GSON = new Gson();
 
-    // TODO: refactor
-    public static List<OTPData> getOTPs(SharedPreferences prefs, String group) {
-        String currentOTPs = prefs.getString("group." + group, "[]");
+    public static List<String> getGroups(Context ctx) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
+        return Arrays.asList(GSON.fromJson(prefs.getString("groups", "[]"), String[].class));
+    }
+
+    public static void addGroup(Context ctx, String group) {
+        List<String> groups = new ArrayList<>(getGroups(ctx));
+        groups.add(group);
+
+        SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("groups", GSON.toJson(groups)).apply();
+    }
+
+    public static void removeGroup(Context ctx, String group) {
+        List<String> groups = new ArrayList<>(getGroups(ctx));
+        groups.remove(group);
+
+        SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("groups", GSON.toJson(groups)).apply();
+
+        deleteOTPs(ctx, group);
+    }
+
+    public static List<OTPData> getOTPs(Context ctx, String group) {
+        String currentOTPs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group, "[]");
         return Arrays.asList(GSON.fromJson(currentOTPs, OTPData[].class));
     }
 
-    public static void addOTP(SharedPreferences prefs, String group, @NonNull OTPData data) {
-        List<OTPData> otps = new ArrayList<>(getOTPs(prefs, group));
+    public static void addOTP(Context ctx, String group, @NonNull OTPData data) {
+        List<OTPData> otps = new ArrayList<>(getOTPs(ctx, group));
         otps.add(data);
 
-        prefs.edit()
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[0])))
+                .apply();
+    }
+
+    private static void deleteOTPs(Context ctx, String group) {
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .remove("group." + group)
                 .apply();
     }
 

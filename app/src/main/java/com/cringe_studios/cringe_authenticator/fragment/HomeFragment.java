@@ -11,9 +11,14 @@ import androidx.fragment.app.Fragment;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentHomeBinding;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends NamedFragment {
 
     private FragmentHomeBinding binding;
+
+    @Override
+    public String getName() {
+        return "Home";
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

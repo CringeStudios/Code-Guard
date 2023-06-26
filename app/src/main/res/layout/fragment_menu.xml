@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/menuItems"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -25,7 +25,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Edit" />
-        </LinearLayout>
+        </LinearLayout>-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/menu_items"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
