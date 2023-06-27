@@ -1,10 +1,14 @@
 package com.cringe_studios.cringe_authenticator;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
         Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(this));
         if(themeID != null) {
             setTheme(themeID);
@@ -66,15 +72,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Biometric login for my app")
-                .setSubtitle("Log in using your biometric credential")
-                .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                .build();
+        if(SettingsUtil.isBiometricLock(this)) {
+            BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Cringe Authenticator")
+                    .setSubtitle("Unlock the authenticator")
+                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                    .build();
 
-        prompt.authenticate(info);*/
-
-        launchApp();
+            prompt.authenticate(info);
+        }else {
+            launchApp();
+        }
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
             if(obj == null) return; // Cancelled

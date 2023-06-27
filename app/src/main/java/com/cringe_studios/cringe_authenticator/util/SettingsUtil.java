@@ -91,6 +91,15 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableIntroVideo", true);
     }
 
+    public static void setBiometricLock(Context ctx, boolean biometricLock) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("biometricLock", biometricLock).apply();
+    }
+
+    public static boolean isBiometricLock(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("biometricLock", true);
+    }
+
     public static void setTheme(Context ctx, String theme) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("theme", theme).apply();

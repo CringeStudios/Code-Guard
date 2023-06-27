@@ -61,7 +61,6 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
                     .setNegativeButton("No", (dialog, which) -> {})
                     .show();
             // TODO: better method?
-            // TODO: actually delete
             return true;
         });
     }
