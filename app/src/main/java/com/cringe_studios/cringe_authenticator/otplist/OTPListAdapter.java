@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         holder.setOTPData(data);
         holder.getBinding().label.setText(holder.getOTPData().getName());
+        holder.getBinding().progress.setVisibility(holder.getOTPData().getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
             if(data.getType() != OTPType.HOTP) return;
@@ -52,6 +54,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
             view.setClickable(false);
             Toast.makeText(view.getContext(), "Generated new code", Toast.LENGTH_LONG).show();
             data.incrementCounter();
+            holder.getBinding().otpCode.setText(data.getPin());
             handler.postDelayed(() -> view.setClickable(true), 5000);
         });
     }

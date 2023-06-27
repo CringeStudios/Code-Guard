@@ -72,6 +72,10 @@ public class OTPData implements Serializable {
         this.counter = getOTP().getCounter();
     }
 
+    public long getNextDueTime() {
+        return getOTP().getNextDueTime();
+    }
+
     public String validate() {
         try {
             getOTP();

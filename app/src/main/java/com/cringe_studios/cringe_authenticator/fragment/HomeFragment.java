@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.FragmentHomeBinding;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;

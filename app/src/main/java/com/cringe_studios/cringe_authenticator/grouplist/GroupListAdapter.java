@@ -1,24 +1,17 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
-import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
-import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.ArrayList;
 import java.util.List;

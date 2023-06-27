@@ -29,8 +29,6 @@ import androidx.core.content.ContextCompat;
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
-import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
-import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;

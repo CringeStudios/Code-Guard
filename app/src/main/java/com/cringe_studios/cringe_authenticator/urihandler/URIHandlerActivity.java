@@ -2,7 +2,6 @@ package com.cringe_studios.cringe_authenticator.urihandler;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;

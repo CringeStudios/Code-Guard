@@ -16,8 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import kotlinx.coroutines.flow.SharedFlow;
-
 public class SettingsUtil {
 
     public static final Map<String, Integer> THEMES;

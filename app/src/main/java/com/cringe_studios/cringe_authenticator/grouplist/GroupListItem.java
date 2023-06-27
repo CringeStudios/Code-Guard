@@ -1,8 +1,5 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
-import android.view.MenuItem;
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 

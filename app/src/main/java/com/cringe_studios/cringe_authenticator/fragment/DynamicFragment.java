@@ -1,7 +1,5 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
@@ -19,6 +16,7 @@ import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.List;
 
@@ -62,12 +60,7 @@ public class DynamicFragment extends NamedFragment {
 
         handler = new Handler(Looper.getMainLooper());
         refreshCodes = () -> {
-            for(int i = 0; i < binding.itemList.getChildCount(); i++) {
-                OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
-                if(vh == null) continue;
-                vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
-            }
-
+            refreshCodes();
             handler.postDelayed(refreshCodes, 1000L);
         };
 
@@ -87,6 +80,19 @@ public class DynamicFragment extends NamedFragment {
     public void addOTP(OTPData data) {
         SettingsUtil.addOTP(requireContext(), groupName, data);
         otpListAdapter.add(data);
+    }
+
+    public void refreshCodes() {
+        for(int i = 0; i < binding.itemList.getChildCount(); i++) {
+            OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
+            if(vh == null) continue;
+            vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
+
+            if(vh.getOTPData().getType() == OTPType.TOTP) {
+                long timeDiff = vh.getOTPData().getNextDueTime() - System.currentTimeMillis() / 1000;
+                vh.getBinding().progress.setProgress((int) ((1 - ((double) timeDiff / vh.getOTPData().getPeriod())) * 100));
+            }
+        }
     }
 
     @Override

@@ -21,4 +21,12 @@
         android:text="000000"
         android:textAlignment="center"
         android:textSize="20sp" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100" />
+
 </LinearLayout>

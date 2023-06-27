@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
@@ -37,7 +35,6 @@ import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.concurrent.Executor;
-import java.util.function.Supplier;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -105,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
         binding.fabInput.setOnClickListener(view -> inputCode());
+
+        NavigationUtil.navigate(this, HomeFragment.class, null);
     }
 
     @Override

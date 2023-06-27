@@ -1,6 +1,5 @@
 package com.cringe_studios.cringe_authenticator.util;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
@@ -11,12 +10,12 @@ import androidx.fragment.app.FragmentManager;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 
-import kotlin.Suppress;
-
 public class NavigationUtil {
 
+    // TODO: check if this still works after changes
+
     public static void navigate(AppCompatActivity activity, Class<? extends NamedFragment> fragmentClass, Bundle args) {
-        FragmentManager manager = activity.getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager();
+        FragmentManager manager = activity.getSupportFragmentManager();
         NamedFragment fragment = instantiateFragment(manager, fragmentClass, args);
 
         ActionBar bar = activity.getSupportActionBar();
@@ -45,7 +44,7 @@ public class NavigationUtil {
     }
 
     public static Fragment getCurrentFragment(AppCompatActivity activity) {
-        return getCurrentFragment(activity.getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager());
+        return getCurrentFragment(activity.getSupportFragmentManager());
     }
 
     public static Fragment getCurrentFragment(Fragment currentFragment) {
