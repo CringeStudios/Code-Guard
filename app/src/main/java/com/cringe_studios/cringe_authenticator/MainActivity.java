@@ -4,7 +4,6 @@ import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRON
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +18,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -27,7 +27,7 @@ import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
-import com.cringe_studios.cringe_authenticator.fragment.DynamicFragment;
+import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(SettingsUtil.isBiometricLock(this)) {
+        if(SettingsUtil.isBiometricLock(this) && BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
             BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle("Cringe Authenticator")
                     .setSubtitle("Unlock the authenticator")
@@ -93,11 +93,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(fragment instanceof DynamicFragment) {
-                DynamicFragment frag = (DynamicFragment) fragment;
+            if(fragment instanceof GroupFragment) {
+                GroupFragment frag = (GroupFragment) fragment;
                 frag.addOTP(obj.getData());
             }
-            Log.i("AMOGUS", "Actually got something bruh" + obj);
         });
     }
 
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
         showCodeDialog(binding.getRoot(), () -> {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof DynamicFragment)) return true;
+            if(!(fragment instanceof GroupFragment)) return true;
 
             try {
                 String name = binding.inputName.getText().toString();
@@ -216,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
 
-                ((DynamicFragment) fragment).addOTP(data);
+                ((GroupFragment) fragment).addOTP(data);
                 return true;
             }catch(NumberFormatException e) {
                 showErrorDialog("Invalid number entered");
@@ -231,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
         showCodeDialog(binding.getRoot(), () -> {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof DynamicFragment)) return true;
+            if(!(fragment instanceof GroupFragment)) return true;
 
             try {
                 String name = binding.inputName.getText().toString();
@@ -249,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
 
-                ((DynamicFragment) fragment).addOTP(data);
+                ((GroupFragment) fragment).addOTP(data);
                 return true;
             }catch(NumberFormatException e) {
                 showErrorDialog("Invalid number entered");

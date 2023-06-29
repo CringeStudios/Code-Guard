@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
-import com.cringe_studios.cringe_authenticator.databinding.FragmentDynamicBinding;
+import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
@@ -20,13 +20,13 @@ import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.List;
 
-public class DynamicFragment extends NamedFragment {
+public class GroupFragment extends NamedFragment {
 
     public static final String BUNDLE_GROUP = "group";
 
     private String groupName;
 
-    private FragmentDynamicBinding binding;
+    private FragmentGroupBinding binding;
 
     private Handler handler;
 
@@ -47,9 +47,9 @@ public class DynamicFragment extends NamedFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentDynamicBinding.inflate(inflater, container, false);
+        binding = FragmentGroupBinding.inflate(inflater, container, false);
 
-        groupName = requireArguments().getString(DynamicFragment.BUNDLE_GROUP);
+        groupName = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
 
         FabUtil.showFabs(requireActivity());
 

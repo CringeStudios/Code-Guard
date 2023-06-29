@@ -35,8 +35,8 @@ public class MenuFragment extends NamedFragment {
 
         groupListAdapter = new GroupListAdapter(requireContext(), group -> {
             Bundle bundle = new Bundle();
-            bundle.putString(DynamicFragment.BUNDLE_GROUP, group);
-            NavigationUtil.navigate(this, DynamicFragment.class, bundle);
+            bundle.putString(GroupFragment.BUNDLE_GROUP, group);
+            NavigationUtil.navigate(this, GroupFragment.class, bundle);
         }, this::removeGroup);
 
         binding.menuItems.setAdapter(groupListAdapter);

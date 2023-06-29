@@ -25,8 +25,8 @@
     </fragment>
     <fragment
         android:id="@+id/DynamicFragment"
-        android:name="com.cringe_studios.cringe_authenticator.fragment.DynamicFragment"
+        android:name="com.cringe_studios.cringe_authenticator.fragment.GroupFragment"
         android:label="Dynamic"
-        tools:layout="@layout/fragment_dynamic">
+        tools:layout="@layout/fragment_group">
     </fragment>
 </navigation>
