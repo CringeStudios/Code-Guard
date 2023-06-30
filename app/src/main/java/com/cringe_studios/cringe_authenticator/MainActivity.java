@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
@@ -30,6 +31,7 @@ import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBi
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
+import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogCallback;
@@ -42,9 +44,15 @@ import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final long LOCK_TIMEOUT = 10000;
+
     private ActivityMainBinding binding;
 
     private ActivityResultLauncher<Void> startQRCodeScan;
+
+    private boolean unlocked;
+
+    private long pauseTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(SettingsUtil.isBiometricLock(this) && BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+        boolean supportsBiometricAuth = BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
+        boolean recentlyUnlocked = savedInstanceState != null && (System.currentTimeMillis() - savedInstanceState.getLong("pauseTime", 0L) < LOCK_TIMEOUT);
+
+        if(!recentlyUnlocked && SettingsUtil.isBiometricLock(this) && supportsBiometricAuth) {
             BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
                     .setTitle("Cringe Authenticator")
                     .setSubtitle("Unlock the authenticator")
@@ -101,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void launchApp() {
+        unlocked = true;
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -110,7 +123,13 @@ public class MainActivity extends AppCompatActivity {
         binding.fabScan.setOnClickListener(view -> scanCode());
         binding.fabInput.setOnClickListener(view -> inputCode());
 
-        NavigationUtil.navigate(this, HomeFragment.class, null);
+        Fragment fragment = NavigationUtil.getCurrentFragment(this);
+        if(fragment instanceof NamedFragment) {
+            ActionBar bar = getSupportActionBar();
+            if(bar != null) bar.setTitle(((NamedFragment) fragment).getName());
+        }else {
+            NavigationUtil.navigate(this, HomeFragment.class, null);
+        }
     }
 
     @Override
@@ -303,4 +322,17 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.pauseTime = System.currentTimeMillis();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(unlocked) {
+            outState.putLong("pauseTime", pauseTime);
+        }
+    }
 }
