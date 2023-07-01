@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
 
 public class URIHandlerActivity extends AppCompatActivity {
@@ -30,9 +31,9 @@ public class URIHandlerActivity extends AppCompatActivity {
             finish();
         }catch(IllegalArgumentException e) {
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("Failed to add code")
+                    .setTitle(R.string.uri_handler_failed_title)
                     .setMessage(e.getMessage())
-                    .setPositiveButton("Ok", (d, which) -> finish())
+                    .setPositiveButton(R.string.ok, (d, which) -> finish())
                     .create();
 
             dialog.setOnDismissListener(d -> finish());

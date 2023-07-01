@@ -63,7 +63,11 @@ public class OTPData implements Serializable {
         return counter;
     }
 
-    public String getPin() {
+    public boolean hasChecksum() {
+        return checksum;
+    }
+
+    public String getPin() throws OTPException {
         return getOTP().getPin();
     }
 
@@ -80,15 +84,18 @@ public class OTPData implements Serializable {
         try {
             getOTP();
             return null;
-        }catch(IllegalArgumentException | OTPException e) {
+        }catch(RuntimeException e) {
             return e.getMessage() != null ? e.getMessage() : e.toString();
         }
     }
 
     private OTP getOTP() {
-        // TODO: checksum
         if(otp != null) return otp;
-        return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, checksum);
+        try {
+            return otp = OTP.createNewOTP(type, secret, algorithm, digits, counter, period, checksum);
+        } catch (OTPException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
     }
 
     @NonNull

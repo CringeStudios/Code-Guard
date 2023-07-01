@@ -76,6 +76,12 @@ public class SettingsUtil {
                 .apply();
     }
 
+    public static void updateOTPs(Context ctx, String group, List<OTPData> otps) {
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[0])))
+                .apply();
+    }
+
     private static void deleteOTPs(Context ctx, String group) {
         ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .remove("group." + group)

@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
 
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
         holder.getBinding().button.setOnClickListener(view -> navigateToGroup.accept(group));
         holder.getBinding().button.setOnLongClickListener(view -> {
             new AlertDialog.Builder(context)
-                    .setTitle("Delete?")
-                    .setMessage("Delete this?")
-                    .setPositiveButton("Yes", (dialog, which) -> removeGroup.accept(group))
-                    .setNegativeButton("No", (dialog, which) -> {})
+                    .setTitle(R.string.group_delete_title)
+                    .setMessage(R.string.group_delete_message)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> removeGroup.accept(group))
+                    .setNegativeButton(R.string.no, (dialog, which) -> {})
                     .show();
             // TODO: better method?
             return true;

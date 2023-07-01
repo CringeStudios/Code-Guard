@@ -44,16 +44,40 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="edit">Edit</string>
-    <string name="choose_language">choose Language</string>
-    <string name="cancel">cancel</string>
-    <string name="add">add</string>
-    <string name="ok" translatable="false">Ok</string>
-    <string name="no">no</string>
-    <string name="yes">yes</string>
-    <string name="invalid_input">invalid input</string>
-    <string name="about">about</string>
-    <string name="haptic_feedback">haptic feedback</string>
-    <string name="reset_app">reset app</string>
-    <string name="import_export">import / export</string>
-    <string name="language">language</string>
+    <string name="choose_language">Choose Language</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="ok" translatable="false">OK</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="invalid_input">Invalid Input</string>
+    <string name="about">About</string>
+    <string name="haptic_feedback">Haptic Feedback</string>
+    <string name="reset_app">Reset App</string>
+    <string name="import_export">Import / Export</string>
+    <string name="language">Language</string>
+    <string name="biometric_lock_subtitle">Unlock the authenticator</string>
+    <string name="create_totp_title">Select Code Type</string>
+    <string name="action_new_group">New Group</string>
+    <string name="new_group_missing_title">You need to input a name</string>
+    <string name="qr_scanner_failed">Failed to scan code: %s</string>
+    <string name="intro_video_failed">Failed to play video</string>
+    <string name="edit_otp_title">Edit OTP</string>
+    <string name="group_delete_title">Delete?</string>
+    <string name="group_delete_message">Delete this?</string>
+    <string name="hotp_generated_new_code">Generated new code</string>
+    <string name="uri_handler_failed_title">Failed to add code</string>
+    <string name="code_input_title">Input Code</string>
+    <string name="failed_title">Action failed</string>
+    <string name="input_code_invalid_number">Invalid number entered</string>
+    <string name="back">Back</string>
+    <string-array name="view_edit_delete">
+        <item>View</item>
+        <item>Edit</item>
+        <item>Delete</item>
+    </string-array>
+    <string-array name="rename_delete">
+        <item>Rename</item>
+        <item>Delete</item>
+    </string-array>
 </resources>

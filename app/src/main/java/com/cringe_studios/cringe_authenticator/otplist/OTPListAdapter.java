@@ -9,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
+import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.ArrayList;
@@ -26,10 +29,13 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     private Handler handler;
 
-    public OTPListAdapter(Context context) {
+    private Consumer<OTPData> showMenuCallback;
+
+    public OTPListAdapter(Context context, Consumer<OTPData> showMenuCallback) {
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
+        this.showMenuCallback = showMenuCallback;
     }
 
     @NonNull
@@ -52,10 +58,22 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
             // Click delay for HOTP
             view.setClickable(false);
-            Toast.makeText(view.getContext(), "Generated new code", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
             data.incrementCounter();
-            holder.getBinding().otpCode.setText(data.getPin());
+
+            try {
+                holder.getBinding().otpCode.setText(data.getPin());
+            }catch(OTPException e) {
+                // TODO: show user an error message
+                return;
+            }
+
             handler.postDelayed(() -> view.setClickable(true), 5000);
+        });
+
+        holder.getBinding().getRoot().setOnLongClickListener(view -> {
+            showMenuCallback.accept(holder.getOTPData());
+            return true;
         });
     }
 
@@ -64,9 +82,20 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         return items.size();
     }
 
+    public List<OTPData> getItems() {
+        return items;
+    }
+
     public void add(OTPData data) {
         items.add(data);
         notifyItemInserted(items.size() - 1);
+    }
+
+    public void replace(OTPData oldData, OTPData newData) {
+        int index = items.indexOf(oldData);
+        if(index == -1) return;
+        items.set(index, newData);
+        notifyItemChanged(index);
     }
 
     public void remove(OTPData data) {

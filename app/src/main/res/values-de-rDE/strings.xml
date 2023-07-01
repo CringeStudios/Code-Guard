@@ -4,16 +4,40 @@
     <string name="action_settings">Einstellungen</string>
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
-    <string name="edit">Editieren</string>
+    <string name="edit">Bearbeiten</string>
     <string name="choose_language">Sprachauswahl</string>
     <string name="cancel">Abbrechen</string>
-    <string name="add">hinzufügen</string>
-    <string name="no">nein</string>
-    <string name="yes">ja</string>
-    <string name="invalid_input">ungültige Eingabe</string>
-    <string name="about">über</string>
-    <string name="haptic_feedback">vibration</string>
+    <string name="add">Hinzufügen</string>
+    <string name="no">Nein</string>
+    <string name="yes">Ja</string>
+    <string name="invalid_input">Ungültige Eingabe</string>
+    <string name="about">Über</string>
+    <string name="haptic_feedback">Vibration</string>
     <string name="reset_app">App zurücksetzen</string>
-    <string name="import_export">importieren / exportieren</string>
+    <string name="import_export">Importieren / Exportieren</string>
     <string name="language">Sprache</string>
+    <string name="biometric_lock_subtitle">Entsperre den Authentifikator</string>
+    <string name="create_totp_title">Wähle den Code-Typ</string>
+    <string name="action_new_group">Neue Gruppe</string>
+    <string name="new_group_missing_title">Du musst einen Namen eingeben</string>
+    <string name="qr_scanner_failed">Scannen des Codes fehlgeschlagen: %s</string>
+    <string name="intro_video_failed">Abspielen des Videos fehlgeschlagen</string>
+    <string name="edit_otp_title">OTP bearbeiten</string>
+    <string name="group_delete_title">Löschen?</string>
+    <string name="group_delete_message">Gruppe löschen?</string>
+    <string name="hotp_generated_new_code">Neuen Code generiert</string>
+    <string name="uri_handler_failed_title">Hinzufügen des Codes fehlgeschlagen</string>
+    <string name="code_input_title">Code eingeben</string>
+    <string name="failed_title">Aktion fehlgeschlagen</string>
+    <string name="input_code_invalid_number">Ungültige Zahl</string>
+    <string name="back">Zurück</string>
+    <string-array name="view_edit_delete">
+        <item>Anzeigen</item>
+        <item>Bearbeiten</item>
+        <item>Löschen</item>
+    </string-array>
+    <string-array name="rename_delete">
+        <item>Umbenennen</item>
+        <item>Löschen</item>
+    </string-array>
 </resources>

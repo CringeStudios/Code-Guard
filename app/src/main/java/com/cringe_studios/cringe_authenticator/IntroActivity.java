@@ -41,7 +41,7 @@ public class IntroActivity extends AppCompatActivity {
         binding.videoView.setOnCompletionListener(mp -> openMainActivity());
 
         binding.videoView.setOnErrorListener((MediaPlayer mp, int what, int extra) -> {
-            Toast.makeText(this, "Failed to play video", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.intro_video_failed, Toast.LENGTH_LONG).show();
             openMainActivity();
             return true;
         });

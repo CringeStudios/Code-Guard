@@ -1,7 +1,6 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +53,6 @@ public class MenuFragment extends NamedFragment {
 
     private void loadGroups() {
         List<String> items = SettingsUtil.getGroups(requireContext());
-        Log.i("AMOGUS", "items: " + items);
 
         for(String item : items) {
             groupListAdapter.add(item);

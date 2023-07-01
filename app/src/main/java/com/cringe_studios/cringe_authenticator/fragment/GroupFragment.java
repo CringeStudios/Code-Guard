@@ -9,13 +9,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.List;
@@ -53,7 +57,8 @@ public class GroupFragment extends NamedFragment {
 
         FabUtil.showFabs(requireActivity());
 
-        otpListAdapter = new OTPListAdapter(getContext());
+        otpListAdapter = new OTPListAdapter(requireContext(), data -> showOTPDialog(data));
+
         binding.itemList.setAdapter(otpListAdapter);
 
         loadOTPs();
@@ -67,6 +72,50 @@ public class GroupFragment extends NamedFragment {
         handler.post(refreshCodes);
 
         return binding.getRoot();
+    }
+
+    private void showOTPDialog(OTPData data) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.edit_otp_title)
+                .setItems(R.array.view_edit_delete, (dialog, which) -> {
+                    switch(which) {
+                        case 0:
+                            DialogUtil.showViewCodeDialog(getLayoutInflater(), data, newData -> {
+                                otpListAdapter.replace(data, newData);
+                                saveOTPs();
+                            }, () -> showOTPDialog(data));
+                            break;
+                        case 1:
+                            DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
+                            otpListAdapter.replace(data, newData);
+                                saveOTPs();
+                            }, () -> showOTPDialog(data));
+                            break;
+                        case 2: break;
+                    }
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .show();
+
+        /*switch(data.getType()) {
+            case HOTP:
+                DialogUtil.showHOTPDialog(getLayoutInflater(), data, newData -> {
+                    otpListAdapter.replace(data, newData);
+                    saveOTPs();
+                });
+                break;
+            case TOTP:
+                DialogUtil.showTOTPDialog(getLayoutInflater(), data, newData -> {
+                    otpListAdapter.replace(data, newData);
+                    saveOTPs();
+                });
+                break;
+        }*/
+    }
+
+    private void saveOTPs() {
+        SettingsUtil.updateOTPs(requireContext(), groupName, otpListAdapter.getItems());
+        refreshCodes();
     }
 
     private void loadOTPs() {
@@ -86,7 +135,11 @@ public class GroupFragment extends NamedFragment {
         for(int i = 0; i < binding.itemList.getChildCount(); i++) {
             OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
             if(vh == null) continue;
-            vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
+            try {
+                vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
+            } catch (OTPException e) {
+                DialogUtil.showErrorDialog(requireContext(), e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
+            }
 
             if(vh.getOTPData().getType() == OTPType.TOTP) {
                 long timeDiff = vh.getOTPData().getNextDueTime() - System.currentTimeMillis() / 1000;

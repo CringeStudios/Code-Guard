@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.cringe_studios.cringe_authenticator.MainActivity">
     <item
-        android:id="@+id/action_code"
+        android:id="@+id/action_new_group"
         android:orderInCategory="100"
-        android:title="New Group"
+        android:title="@string/action_new_group"
         app:showAsAction="never"
         android:onClick="addGroup" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="Settings"
+        android:title="@string/action_settings"
         app:showAsAction="never"
         android:onClick="openSettings" />
 </menu>

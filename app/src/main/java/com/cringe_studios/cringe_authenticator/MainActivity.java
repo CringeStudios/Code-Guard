@@ -3,14 +3,13 @@ package com.cringe_studios.cringe_authenticator;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,20 +25,18 @@ import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
-import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
-import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
-import com.cringe_studios.cringe_authenticator.util.DialogCallback;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
+import java.util.Locale;
 import java.util.concurrent.Executor;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        setLocale("de");
+
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(this));
         if(themeID != null) {
@@ -85,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(!recentlyUnlocked && SettingsUtil.isBiometricLock(this) && supportsBiometricAuth) {
             BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle("Cringe Authenticator")
-                    .setSubtitle("Unlock the authenticator")
+                    .setTitle(getString(R.string.app_name))
+                    .setSubtitle(getString(R.string.biometric_lock_subtitle))
                     .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
                     .build();
 
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             if(obj == null) return; // Cancelled
 
             if(!obj.isSuccess()) {
-                Toast.makeText(this, "Failed to scan code: " + obj.getErrorMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.qr_scanner_failed, obj.getErrorMessage()), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -109,6 +108,14 @@ public class MainActivity extends AppCompatActivity {
                 frag.addOTP(obj.getData());
             }
         });
+    }
+
+    private void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     private void launchApp() {
@@ -188,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
         options[1] = OTPType.HOTP.getFriendlyName() + " (HOTP)";
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Select Code Type")
+                .setTitle(R.string.create_totp_title)
                 .setView(binding.getRoot())
-                .setNegativeButton("Cancel", (view, which) -> {})
+                .setNegativeButton(R.string.cancel, (view, which) -> {})
                 .create();
 
         binding.codeTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
@@ -211,105 +218,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showTOTPDialog() {
-        DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(getLayoutInflater());
-        binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
-        binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
-        showCodeDialog(binding.getRoot(), () -> {
+        DialogUtil.showTOTPDialog(getLayoutInflater(), null, data -> {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof GroupFragment)) return true;
+            if(!(fragment instanceof GroupFragment)) return;
 
-            try {
-                String name = binding.inputName.getText().toString();
-                String secret = binding.inputSecret.getText().toString();
-                OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
-                int digits = (int) binding.inputDigits.getSelectedItem();
-                int period = Integer.parseInt(binding.inputPeriod.getText().toString());
-                boolean checksum = binding.inputChecksum.isChecked();
-
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0, checksum);
-
-                String errorMessage = data.validate();
-                if(errorMessage != null) {
-                    showErrorDialog(errorMessage);
-                    return false;
-                }
-
-                ((GroupFragment) fragment).addOTP(data);
-                return true;
-            }catch(NumberFormatException e) {
-                showErrorDialog("Invalid number entered");
-                return false;
-            }
-        });
+            ((GroupFragment) fragment).addOTP(data);
+        }, () -> inputCode(), false);
     }
 
     private void showHOTPDialog() {
-        DialogInputCodeHotpBinding binding = DialogInputCodeHotpBinding.inflate(getLayoutInflater());
-        binding.inputAlgorithm.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, OTPAlgorithm.values()));
-        binding.inputDigits.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, new Integer[]{6, 7, 8, 9, 10, 11, 12}));
-        showCodeDialog(binding.getRoot(), () -> {
+        DialogUtil.showHOTPDialog(getLayoutInflater(), null, data -> {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof GroupFragment)) return true;
+            if(!(fragment instanceof GroupFragment)) return;
 
-            try {
-                String name = binding.inputName.getText().toString();
-                String secret = binding.inputSecret.getText().toString();
-                OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
-                int digits = (int) binding.inputDigits.getSelectedItem();
-                int counter = Integer.parseInt(binding.inputCounter.getText().toString());
-                boolean checksum = binding.inputChecksum.isChecked();
-
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, 0, counter, checksum);
-
-                String errorMessage = data.validate();
-                if(errorMessage != null) {
-                    showErrorDialog(errorMessage);
-                    return false;
-                }
-
-                ((GroupFragment) fragment).addOTP(data);
-                return true;
-            }catch(NumberFormatException e) {
-                showErrorDialog("Invalid number entered");
-                return false;
-            }
-        });
-    }
-
-    private void showCodeDialog(View view, DialogCallback ok) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Input Code")
-                .setView(view)
-                .setPositiveButton("Ok", (btnView, which) -> {})
-                .setNegativeButton("Cancel", (btnView, which) -> {})
-                .create();
-
-        dialog.setOnShowListener(d -> {
-            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            okButton.setOnClickListener(v -> {
-                if(ok.callback()) dialog.dismiss();
-            });
-        });
-
-        dialog.show();
-    }
-
-    private void showErrorDialog(String errorMessage) {
-        new AlertDialog.Builder(this)
-                .setTitle("Failed to add code")
-                .setMessage(errorMessage)
-                .setPositiveButton("Ok", (dialog, which) -> {})
-                .show();
+            ((GroupFragment) fragment).addOTP(data);
+        }, () -> inputCode(), false);
     }
 
     public void addGroup(MenuItem item) {
         EditText t = new EditText(this);
         new AlertDialog.Builder(this)
-                .setTitle("New Group")
+                .setTitle(R.string.action_new_group)
                 .setView(t)
-                .setPositiveButton("Add", (view, which) -> {
+                .setPositiveButton(R.string.add, (view, which) -> {
                     if(t.getText().length() == 0) {
-                        showErrorDialog("You need to input a name");
+                        DialogUtil.showErrorDialog(this, getString(R.string.new_group_missing_title));
                         return;
                     }
 
@@ -318,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                         ((MenuFragment) frag).addGroup(t.getText().toString());
                     }
                 })
-                .setNegativeButton("Cancel", (view, which) -> {})
+                .setNegativeButton(R.string.cancel, (view, which) -> {})
                 .show();
     }
 
