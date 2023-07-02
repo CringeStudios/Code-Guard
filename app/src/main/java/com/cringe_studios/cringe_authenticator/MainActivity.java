@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.cancel, (view, which) -> {})
                 .create();
 
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
         binding.codeTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
         binding.codeTypes.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             switch(position) {

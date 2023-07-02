@@ -32,7 +32,7 @@ public class DialogUtil {
                 .setNegativeButton(R.string.cancel, (btnView, which) -> {})
                 .create();
 
-        //dialog.getWindow().setBackgroundDrawableResource(R.drawable.button_themed); TODO: dialog style
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
 
         dialog.setOnShowListener(d -> {
             Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -45,11 +45,13 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage) {
-        new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(R.string.failed_title)
                 .setMessage(errorMessage)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {})
-                .show();
+                .setPositiveButton(R.string.ok, (d, which) -> {})
+                .create();
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
+        dialog.show();
     }
 
     public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, Runnable back, boolean view) {
@@ -171,5 +173,4 @@ public class DialogUtil {
             case TOTP: showTOTPDialog(inflater, initialData, callback, back, false); break;
         }
     }
-
 }
