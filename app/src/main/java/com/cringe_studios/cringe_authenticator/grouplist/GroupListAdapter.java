@@ -7,12 +7,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
         holder.getBinding().button.setOnClickListener(view -> navigateToGroup.accept(group));
         holder.getBinding().button.setOnLongClickListener(view -> {
-            new AlertDialog.Builder(context)
+            new StyledDialogBuilder(context)
                     .setTitle(R.string.group_delete_title)
                     .setMessage(R.string.group_delete_message)
                     .setPositiveButton(R.string.yes, (dialog, which) -> removeGroup.accept(group))

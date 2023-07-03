@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 
 public class URIHandlerActivity extends AppCompatActivity {
 
@@ -30,7 +31,7 @@ public class URIHandlerActivity extends AppCompatActivity {
             Toast.makeText(this, "Code received", Toast.LENGTH_LONG).show();
             finish();
         }catch(IllegalArgumentException e) {
-            AlertDialog dialog = new AlertDialog.Builder(this)
+            AlertDialog dialog = new StyledDialogBuilder(this)
                     .setTitle(R.string.uri_handler_failed_title)
                     .setMessage(e.getMessage())
                     .setPositiveButton(R.string.ok, (d, which) -> finish())

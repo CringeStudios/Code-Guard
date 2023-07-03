@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.R;
@@ -19,6 +18,7 @@ import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -75,23 +75,30 @@ public class GroupFragment extends NamedFragment {
     }
 
     private void showOTPDialog(OTPData data) {
-        new AlertDialog.Builder(requireContext())
+        new StyledDialogBuilder(requireContext())
                 .setTitle(R.string.edit_otp_title)
                 .setItems(R.array.view_edit_delete, (dialog, which) -> {
                     switch(which) {
                         case 0:
-                            DialogUtil.showViewCodeDialog(getLayoutInflater(), data, newData -> {
+                            DialogUtil.showViewCodeDialog(getLayoutInflater(), data, () -> showOTPDialog(data));
+                            break;
+                        case 1:
+                            DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
                                 otpListAdapter.replace(data, newData);
                                 saveOTPs();
                             }, () -> showOTPDialog(data));
                             break;
-                        case 1:
-                            DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
-                            otpListAdapter.replace(data, newData);
-                                saveOTPs();
-                            }, () -> showOTPDialog(data));
+                        case 2:
+                            new StyledDialogBuilder(requireContext())
+                                    .setTitle("Delete?")
+                                    .setMessage("Delete this?")
+                                    .setPositiveButton(R.string.yes, (d, w) -> {
+                                        otpListAdapter.remove(data);
+                                        saveOTPs();
+                                    })
+                                    .setNegativeButton(R.string.no, (d, w) -> {})
+                                    .show();
                             break;
-                        case 2: break;
                     }
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {})

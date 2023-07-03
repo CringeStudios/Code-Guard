@@ -24,15 +24,13 @@ public class DialogUtil {
     private static final Integer[] DIGITS = new Integer[]{6, 7, 8, 9, 10, 11, 12};
 
     private static void showCodeDialog(Context context, View view, DialogCallback ok, Runnable back) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle(R.string.code_input_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok, (btnView, which) -> {})
                 .setNeutralButton(R.string.back, (btnView, which) -> back.run())
                 .setNegativeButton(R.string.cancel, (btnView, which) -> {})
                 .create();
-
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
 
         dialog.setOnShowListener(d -> {
             Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -45,13 +43,11 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        new StyledDialogBuilder(context)
                 .setTitle(R.string.failed_title)
                 .setMessage(errorMessage)
                 .setPositiveButton(R.string.ok, (d, which) -> {})
-                .create();
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
-        dialog.show();
+                .show();
     }
 
     public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, Runnable back, boolean view) {
@@ -160,10 +156,10 @@ public class DialogUtil {
         }, back);
     }
 
-    public static void showViewCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Consumer<OTPData> callback, Runnable back) {
+    public static void showViewCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Runnable back) {
         switch(initialData.getType()) {
-            case HOTP: showHOTPDialog(inflater, initialData, callback, back, true); break;
-            case TOTP: showTOTPDialog(inflater, initialData, callback, back, true); break;
+            case HOTP: showHOTPDialog(inflater, initialData, d -> {}, back, true); break;
+            case TOTP: showTOTPDialog(inflater, initialData, d -> {}, back, true); break;
         }
     }
 

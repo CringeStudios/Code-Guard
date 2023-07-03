@@ -34,6 +34,7 @@ import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.Locale;
@@ -194,13 +195,12 @@ public class MainActivity extends AppCompatActivity {
         options[0] = OTPType.TOTP.getFriendlyName() + " (TOTP)";
         options[1] = OTPType.HOTP.getFriendlyName() + " (HOTP)";
 
-        AlertDialog dialog = new AlertDialog.Builder(this)
+        AlertDialog dialog = new StyledDialogBuilder(this)
                 .setTitle(R.string.create_totp_title)
                 .setView(binding.getRoot())
                 .setNegativeButton(R.string.cancel, (view, which) -> {})
                 .create();
 
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.dialog_themed); // TODO: dialog style
         binding.codeTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
         binding.codeTypes.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
             switch(position) {
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void addGroup(MenuItem item) {
         EditText t = new EditText(this);
-        new AlertDialog.Builder(this)
+        new StyledDialogBuilder(this)
                 .setTitle(R.string.action_new_group)
                 .setView(t)
                 .setPositiveButton(R.string.add, (view, which) -> {
