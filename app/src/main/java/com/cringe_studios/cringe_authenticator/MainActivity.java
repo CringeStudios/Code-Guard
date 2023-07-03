@@ -55,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setLocale("de");
-
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE); TODO: enable secure flag
 
         Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(this));
         if(themeID != null) {
@@ -65,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         }else {
             setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
         }
+
+        setLocale(SettingsUtil.getLocale(this));
 
         Executor executor = ContextCompat.getMainExecutor(this);
         BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
@@ -110,8 +110,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setLocale(String lang) {
-        Locale locale = new Locale(lang);
+    public void setLocale(Locale locale) {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;

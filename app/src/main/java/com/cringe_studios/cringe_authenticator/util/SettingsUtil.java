@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class SettingsUtil {
@@ -128,6 +129,15 @@ public class SettingsUtil {
 
     public static String getTheme(Context ctx) {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("theme", THEME_NAMES.get(0));
+    }
+
+    public static void setLocale(Context ctx, Locale locale) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("locale", locale.getLanguage()).apply();
+    }
+
+    public static Locale getLocale(Context ctx) {
+        return new Locale(ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("locale", Locale.ENGLISH.getLanguage()));
     }
 
     public static void enableSuperSecretHamburgers(Context ctx) {

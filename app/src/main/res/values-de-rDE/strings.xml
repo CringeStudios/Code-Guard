@@ -34,6 +34,8 @@
     <string name="otp_delete_title">Löschen?</string>
     <string name="otp_delete_message">OTP löschen?</string>
     <string name="edit_group_title">Gruppe bearbeiten</string>
+    <string name="settings_enable_intro_video">Intro-Video zeigen</string>
+    <string name="settings_biometric_lock">Biometrische Authentifizierung aktivieren</string>
     <string-array name="view_edit_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

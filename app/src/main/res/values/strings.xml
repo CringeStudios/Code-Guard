@@ -74,6 +74,8 @@
     <string name="otp_delete_title">Delete?</string>
     <string name="otp_delete_message">Delete this?</string>
     <string name="edit_group_title">Edit Group</string>
+    <string name="settings_enable_intro_video">Enable intro video</string>
+    <string name="settings_biometric_lock">Require biometric unlock</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>

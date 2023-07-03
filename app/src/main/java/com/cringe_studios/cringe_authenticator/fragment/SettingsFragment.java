@@ -14,9 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.biometric.BiometricManager;
 
+import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 public class SettingsFragment extends NamedFragment {
 
@@ -31,6 +35,32 @@ public class SettingsFragment extends NamedFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater);
+
+        Locale[] locales = new Locale[] {Locale.ENGLISH, Locale.GERMAN};
+
+        String[] localeNames = new String[locales.length];
+        for(int i = 0; i < locales.length; i++) {
+            localeNames[i] = locales[i].getDisplayName(locales[i]);
+        }
+
+        binding.settingsLanguage.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, localeNames));
+        binding.settingsLanguage.setSelection(Arrays.asList(locales).indexOf(SettingsUtil.getLocale(requireContext())));
+        binding.settingsLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Locale locale = locales[position];
+                if(locale.equals(SettingsUtil.getLocale(requireContext()))) return;
+
+                SettingsUtil.setLocale(requireContext(), locale);
+                ((MainActivity) requireActivity()).setLocale(locale);
+                requireActivity().recreate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
         binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));

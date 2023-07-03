@@ -11,17 +11,24 @@
         android:padding="16dp"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/settings_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_intro_video"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enable intro video" />
+            android:text="@string/settings_enable_intro_video" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_biometric_lock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Require biometric unlock" />
+            android:text="@string/settings_biometric_lock" />
 
         <Spinner
             android:id="@+id/settings_theme"
