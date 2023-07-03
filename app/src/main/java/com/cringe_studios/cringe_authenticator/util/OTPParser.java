@@ -2,7 +2,7 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.net.Uri;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 

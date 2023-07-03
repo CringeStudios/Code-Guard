@@ -3,8 +3,8 @@ package com.cringe_studios.cringe_authenticator.otplist;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 
 public class OTPListItem extends RecyclerView.ViewHolder {
 

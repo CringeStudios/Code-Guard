@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
@@ -28,7 +28,7 @@ public class GroupFragment extends NamedFragment {
 
     public static final String BUNDLE_GROUP = "group";
 
-    private String groupName;
+    private String groupID;
 
     private FragmentGroupBinding binding;
 
@@ -40,7 +40,7 @@ public class GroupFragment extends NamedFragment {
 
     @Override
     public String getName() {
-        return groupName;
+        return SettingsUtil.getGroupName(requireContext(), groupID);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class GroupFragment extends NamedFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentGroupBinding.inflate(inflater, container, false);
 
-        groupName = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
+        groupID = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
 
         FabUtil.showFabs(requireActivity());
 
@@ -90,8 +90,8 @@ public class GroupFragment extends NamedFragment {
                             break;
                         case 2:
                             new StyledDialogBuilder(requireContext())
-                                    .setTitle("Delete?")
-                                    .setMessage("Delete this?")
+                                    .setTitle(R.string.otp_delete_title)
+                                    .setMessage(R.string.otp_delete_message)
                                     .setPositiveButton(R.string.yes, (d, w) -> {
                                         otpListAdapter.remove(data);
                                         saveOTPs();
@@ -103,30 +103,15 @@ public class GroupFragment extends NamedFragment {
                 })
                 .setNegativeButton(R.string.cancel, (dialog, which) -> {})
                 .show();
-
-        /*switch(data.getType()) {
-            case HOTP:
-                DialogUtil.showHOTPDialog(getLayoutInflater(), data, newData -> {
-                    otpListAdapter.replace(data, newData);
-                    saveOTPs();
-                });
-                break;
-            case TOTP:
-                DialogUtil.showTOTPDialog(getLayoutInflater(), data, newData -> {
-                    otpListAdapter.replace(data, newData);
-                    saveOTPs();
-                });
-                break;
-        }*/
     }
 
     private void saveOTPs() {
-        SettingsUtil.updateOTPs(requireContext(), groupName, otpListAdapter.getItems());
+        SettingsUtil.updateOTPs(requireContext(), groupID, otpListAdapter.getItems());
         refreshCodes();
     }
 
     private void loadOTPs() {
-        List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupName);
+        List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupID);
 
         for(OTPData otp : data) {
             otpListAdapter.add(otp);
@@ -134,7 +119,7 @@ public class GroupFragment extends NamedFragment {
     }
 
     public void addOTP(OTPData data) {
-        SettingsUtil.addOTP(requireContext(), groupName, data);
+        SettingsUtil.addOTP(requireContext(), groupID, data);
         otpListAdapter.add(data);
     }
 

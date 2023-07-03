@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
-import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +28,12 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
     private Consumer<String> navigateToGroup;
 
-    private Consumer<String> removeGroup;
+    private Consumer<String> showMenuCallback;
 
-    public GroupListAdapter(Context context, Consumer<String> navigateToGroup, Consumer<String> removeGroup) {
+    public GroupListAdapter(Context context, Consumer<String> navigateToGroup, Consumer<String> showMenuCallback) {
         this.context = context;
         this.navigateToGroup = navigateToGroup;
-        this.removeGroup = removeGroup;
+        this.showMenuCallback = showMenuCallback;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
@@ -51,17 +50,11 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
     public void onBindViewHolder(@NonNull GroupListItem holder, int position) {
         String group = items.get(position);
 
-        holder.getBinding().button.setText(group);
+        holder.getBinding().button.setText(SettingsUtil.getGroupName(context, group));
 
         holder.getBinding().button.setOnClickListener(view -> navigateToGroup.accept(group));
         holder.getBinding().button.setOnLongClickListener(view -> {
-            new StyledDialogBuilder(context)
-                    .setTitle(R.string.group_delete_title)
-                    .setMessage(R.string.group_delete_message)
-                    .setPositiveButton(R.string.yes, (dialog, which) -> removeGroup.accept(group))
-                    .setNegativeButton(R.string.no, (dialog, which) -> {})
-                    .show();
-            // TODO: better method?
+            showMenuCallback.accept(group);
             return true;
         });
     }
@@ -81,6 +74,12 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
         if(index == -1) return;
         items.remove(group);
         notifyItemRemoved(index);
+    }
+
+    public void update(String group) {
+        int index = items.indexOf(group);
+        if(index == -1) return;
+        notifyItemChanged(index);
     }
 
 }

@@ -31,6 +31,9 @@
     <string name="failed_title">Aktion fehlgeschlagen</string>
     <string name="input_code_invalid_number">Ungültige Zahl</string>
     <string name="back">Zurück</string>
+    <string name="otp_delete_title">Löschen?</string>
+    <string name="otp_delete_message">OTP löschen?</string>
+    <string name="edit_group_title">Gruppe bearbeiten</string>
     <string-array name="view_edit_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

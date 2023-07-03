@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 
 public class QRScannerContract extends ActivityResultContract<Void, ScannerResult> {
 

@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListAdapter;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 
 import java.util.List;
+import java.util.UUID;
 
 public class MenuFragment extends NamedFragment {
 
@@ -36,19 +40,40 @@ public class MenuFragment extends NamedFragment {
             Bundle bundle = new Bundle();
             bundle.putString(GroupFragment.BUNDLE_GROUP, group);
             NavigationUtil.navigate(this, GroupFragment.class, bundle);
-        }, this::removeGroup);
+        }, this::showGroupDialog);
 
         binding.menuItems.setAdapter(groupListAdapter);
 
         loadGroups();
 
-        /*binding.editSwitch.setOnCheckedChangeListener((view, checked) -> {
-            // TODO: edit mode
-        });*/
-
         FabUtil.hideFabs(requireActivity());
 
         return binding.getRoot();
+    }
+
+    private void showGroupDialog(String group) {
+        new StyledDialogBuilder(requireContext())
+                .setTitle(R.string.edit_group_title)
+                .setItems(R.array.rename_delete, (dialog, which) -> {
+                    switch(which) {
+                        case 0:
+                            DialogUtil.showCreateGroupDialog(getLayoutInflater(), SettingsUtil.getGroupName(requireContext(), group), newName -> {
+                                renameGroup(group, newName);
+                            });
+
+                            break;
+                        case 1:
+                            new StyledDialogBuilder(requireContext())
+                                    .setTitle(R.string.group_delete_title)
+                                    .setMessage(R.string.group_delete_message)
+                                    .setPositiveButton(R.string.yes, (d, w) -> removeGroup(group))
+                                    .setNegativeButton(R.string.no, (d, w) -> {})
+                                    .show();
+                            break;
+                    }
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
+                .show();
     }
 
     private void loadGroups() {
@@ -59,14 +84,20 @@ public class MenuFragment extends NamedFragment {
         }
     }
 
-    public void addGroup(String group) {
-        SettingsUtil.addGroup(requireContext(), group);
-        groupListAdapter.add(group);
+    public void addGroup(String groupName) {
+        String id = UUID.randomUUID().toString();
+        SettingsUtil.addGroup(requireContext(), id, groupName);
+        groupListAdapter.add(id);
     }
 
     public void removeGroup(String group) {
         SettingsUtil.removeGroup(requireContext(), group);
         groupListAdapter.remove(group);
+    }
+
+    public void renameGroup(String group, String newName) {
+        SettingsUtil.setGroupName(requireContext(), group, newName);
+        groupListAdapter.update(group);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.cringe_studios.cringe_authenticator;
+package com.cringe_studios.cringe_authenticator.model;
 
 import androidx.annotation.NonNull;
 

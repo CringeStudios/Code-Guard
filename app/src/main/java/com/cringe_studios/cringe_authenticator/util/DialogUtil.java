@@ -10,10 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Consumer;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.databinding.DialogCreateGroupBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -169,4 +170,34 @@ public class DialogUtil {
             case TOTP: showTOTPDialog(inflater, initialData, callback, back, false); break;
         }
     }
+
+    public static void showCreateGroupDialog(LayoutInflater inflater, String initialName, Consumer<String> callback) {
+        Context context = inflater.getContext();
+
+        DialogCreateGroupBinding binding = DialogCreateGroupBinding.inflate(inflater);
+        binding.createGroupName.setText(initialName);
+
+        AlertDialog dialog = new StyledDialogBuilder(context)
+                .setTitle(R.string.action_new_group)
+                .setView(binding.getRoot())
+                .setPositiveButton(R.string.add, (view, which) -> {})
+                .setNegativeButton(R.string.cancel, (view, which) -> {})
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                if(binding.createGroupName.getText().length() == 0) {
+                    DialogUtil.showErrorDialog(context, context.getString(R.string.new_group_missing_title));
+                    return;
+                }
+
+                dialog.dismiss();
+                callback.accept(binding.createGroupName.getText().toString());
+            });
+        });
+
+        dialog.show();
+    }
+
 }

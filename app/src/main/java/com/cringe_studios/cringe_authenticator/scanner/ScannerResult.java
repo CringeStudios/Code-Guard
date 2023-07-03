@@ -3,7 +3,7 @@ package com.cringe_studios.cringe_authenticator.scanner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 
 public class ScannerResult {
 

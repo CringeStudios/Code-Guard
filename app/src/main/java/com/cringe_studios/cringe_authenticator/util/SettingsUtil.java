@@ -5,8 +5,8 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import com.cringe_studios.cringe_authenticator.OTPData;
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -44,12 +44,14 @@ public class SettingsUtil {
         return Arrays.asList(GSON.fromJson(prefs.getString("groups", "[]"), String[].class));
     }
 
-    public static void addGroup(Context ctx, String group) {
+    public static void addGroup(Context ctx, String group, String groupName) {
         List<String> groups = new ArrayList<>(getGroups(ctx));
         groups.add(group);
 
         SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("groups", GSON.toJson(groups)).apply();
+
+        setGroupName(ctx, group, groupName);
     }
 
     public static void removeGroup(Context ctx, String group) {
@@ -59,32 +61,45 @@ public class SettingsUtil {
         SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("groups", GSON.toJson(groups)).apply();
 
-        deleteOTPs(ctx, group);
+        deleteGroupData(ctx, group);
     }
 
     public static List<OTPData> getOTPs(Context ctx, String group) {
-        String currentOTPs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group, "[]");
+        String currentOTPs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".otps", "[]");
         return Arrays.asList(GSON.fromJson(currentOTPs, OTPData[].class));
     }
 
     public static void addOTP(Context ctx, String group, @NonNull OTPData data) {
+        // TODO: check for code with same name
+
         List<OTPData> otps = new ArrayList<>(getOTPs(ctx, group));
         otps.add(data);
 
         ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[0])))
+                .putString("group." + group + ".otps", GSON.toJson(otps.toArray(new OTPData[0])))
                 .apply();
     }
 
     public static void updateOTPs(Context ctx, String group, List<OTPData> otps) {
         ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putString("group." + group, GSON.toJson(otps.toArray(new OTPData[0])))
+                .putString("group." + group + ".otps", GSON.toJson(otps.toArray(new OTPData[0])))
                 .apply();
     }
 
-    private static void deleteOTPs(Context ctx, String group) {
+    public static String getGroupName(Context ctx, String group) {
+        return ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".name", group);
+    }
+
+    public static void setGroupName(Context ctx, String group, String name) {
         ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .remove("group." + group)
+                .putString("group." + group + ".name", name)
+                .apply();
+    }
+
+    private static void deleteGroupData(Context ctx, String group) {
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .remove("group." + group + ".otps")
+                .remove("group." + group + ".name")
                 .apply();
     }
 

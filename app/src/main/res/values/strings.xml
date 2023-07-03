@@ -71,6 +71,9 @@
     <string name="failed_title">Action failed</string>
     <string name="input_code_invalid_number">Invalid number entered</string>
     <string name="back">Back</string>
+    <string name="otp_delete_title">Delete?</string>
+    <string name="otp_delete_message">Delete this?</string>
+    <string name="edit_group_title">Edit Group</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>

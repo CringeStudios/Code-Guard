@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -237,23 +236,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addGroup(MenuItem item) {
-        EditText t = new EditText(this);
-        new StyledDialogBuilder(this)
-                .setTitle(R.string.action_new_group)
-                .setView(t)
-                .setPositiveButton(R.string.add, (view, which) -> {
-                    if(t.getText().length() == 0) {
-                        DialogUtil.showErrorDialog(this, getString(R.string.new_group_missing_title));
-                        return;
-                    }
-
-                    Fragment frag = NavigationUtil.getCurrentFragment(this);
-                    if(frag instanceof MenuFragment) {
-                        ((MenuFragment) frag).addGroup(t.getText().toString());
-                    }
-                })
-                .setNegativeButton(R.string.cancel, (view, which) -> {})
-                .show();
+        DialogUtil.showCreateGroupDialog(getLayoutInflater(), null, group -> {
+            Fragment frag = NavigationUtil.getCurrentFragment(this);
+            if(frag instanceof MenuFragment) {
+                ((MenuFragment) frag).addGroup(group);
+            }
+        });
     }
 
     @Override
