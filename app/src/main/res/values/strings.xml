@@ -76,6 +76,8 @@
     <string name="edit_group_title">Edit Group</string>
     <string name="settings_enable_intro_video">Enable intro video</string>
     <string name="settings_biometric_lock">Require biometric unlock</string>
+    <string name="uri_handler_code_added">Code added</string>
+    <string name="uri_handler_add_code_title">Add Code</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>
