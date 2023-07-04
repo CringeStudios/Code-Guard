@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
+import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
@@ -180,6 +181,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSettings(MenuItem item) {
         NavigationUtil.navigate(this, SettingsFragment.class, null);
+    }
+
+    public void openAbout(MenuItem item) {
+        NavigationUtil.navigate(this, AboutFragment.class, null);
     }
 
     public void scanCode() {

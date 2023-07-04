@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Cringe Authenticator</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="action_about">Über</string>
     <string name="next">Weiter</string>
     <string name="previous">Zurück</string>
     <string name="edit">Bearbeiten</string>
@@ -11,7 +12,6 @@
     <string name="no">Nein</string>
     <string name="yes">Ja</string>
     <string name="invalid_input">Ungültige Eingabe</string>
-    <string name="about">Über</string>
     <string name="haptic_feedback">Vibration</string>
     <string name="reset_app">App zurücksetzen</string>
     <string name="import_export">Importieren / Exportieren</string>
@@ -36,6 +36,9 @@
     <string name="edit_group_title">Gruppe bearbeiten</string>
     <string name="settings_enable_intro_video">Intro-Video zeigen</string>
     <string name="settings_biometric_lock">Biometrische Authentifizierung aktivieren</string>
+    <string name="uri_handler_code_added">Code hinzugefügt</string>
+    <string name="uri_handler_add_code_title">Code hinzufügen</string>
+    <string name="theme">Theme</string>
     <string-array name="view_edit_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

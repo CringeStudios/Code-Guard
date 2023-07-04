@@ -11,6 +11,11 @@
         android:padding="16dp"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/language" />
+
         <Spinner
             android:id="@+id/settings_language"
             android:layout_width="match_parent"
@@ -29,6 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_biometric_lock" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/theme" />
 
         <Spinner
             android:id="@+id/settings_theme"
