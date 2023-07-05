@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="Name"
+        android:hint="@string/otp_add_name"
         android:autofillHints="" />
 
     <EditText
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:hint="Secret"
+        android:hint="@string/otp_add_secret"
         android:autofillHints="" />
 
     <Spinner
@@ -43,13 +43,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:hint="Period"
+        android:hint="@string/otp_add_period"
         android:autofillHints="" />
 
     <CheckBox
         android:id="@+id/input_checksum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add Checksum" />
+        android:text="@string/otp_add_checksum" />
 
 </LinearLayout>

@@ -30,7 +30,6 @@ public class URIHandlerActivity extends AppCompatActivity {
 
         try {
             OTPData data = OTPParser.parse(intent.getData());
-            // TODO: choose group, add code
             List<String> groups = SettingsUtil.getGroups(this);
             String[] groupNames = new String[groups.size()];
             for(int i = 0; i < groups.size(); i++) {

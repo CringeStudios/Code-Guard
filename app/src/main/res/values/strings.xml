@@ -79,6 +79,11 @@
     <string name="uri_handler_code_added">Code added</string>
     <string name="uri_handler_add_code_title">Add Code</string>
     <string name="theme">Theme</string>
+    <string name="otp_add_counter">Counter</string>
+    <string name="otp_add_checksum">Add Checksum</string>
+    <string name="otp_add_secret">Secret</string>
+    <string name="otp_add_name">Name</string>
+    <string name="otp_add_period">Period</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>
