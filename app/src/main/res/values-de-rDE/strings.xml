@@ -44,6 +44,7 @@
     <string name="otp_add_secret">Geheimnis</string>
     <string name="otp_add_name">Name</string>
     <string name="otp_add_period">Intervall</string>
+    <string name="otp_add_error">Hinzufügen des OTP-Codes fehlgeschlagen: %s</string>
     <string-array name="view_edit_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

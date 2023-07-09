@@ -84,6 +84,7 @@
     <string name="otp_add_secret">Secret</string>
     <string name="otp_add_name">Name</string>
     <string name="otp_add_period">Period</string>
+    <string name="otp_add_error">Failed to update OTP: %s</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>

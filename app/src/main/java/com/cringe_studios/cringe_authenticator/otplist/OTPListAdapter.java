@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -22,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
+
+    private Context context;
 
     private LayoutInflater inflater;
 
@@ -32,6 +35,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
     private Consumer<OTPData> showMenuCallback;
 
     public OTPListAdapter(Context context, Consumer<OTPData> showMenuCallback) {
+        this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
@@ -58,15 +62,16 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
             // Click delay for HOTP
             view.setClickable(false);
-            Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
             data.incrementCounter();
 
             try {
                 holder.getBinding().otpCode.setText(data.getPin());
             }catch(OTPException e) {
-                // TODO: show user an error message
+                DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
                 return;
             }
+
+            Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
 
             handler.postDelayed(() -> view.setClickable(true), 5000);
         });
