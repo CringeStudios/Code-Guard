@@ -3,6 +3,7 @@ package com.cringe_studios.cringe_authenticator.urihandler;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -26,49 +27,28 @@ public class URIHandlerActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if(intent == null) {
-            finish();
+            finishAndRemoveTask();
             return;
         }
 
-        Uri uri = intent.getData();
-        switch(uri.getScheme().toLowerCase()) {
-            case "otpauth":
-                importCode(uri);
-                break;
-            case "otpauth-migration":
-                importMigration(uri);
-                break;
-        }
-    }
-
-    private void importCode(Uri uri) {
         try {
-            OTPData data = OTPParser.parse(uri);
-            importCodes(data);
+            Uri uri = intent.getData();
+            switch(uri.getScheme().toLowerCase()) {
+                case "otpauth":
+                    importCodes(OTPParser.parse(uri));
+                    break;
+                case "otpauth-migration":
+                    importCodes(OTPParser.parseMigration(uri));
+                    break;
+            }
         }catch(IllegalArgumentException e) {
             AlertDialog dialog = new StyledDialogBuilder(this)
                     .setTitle(R.string.uri_handler_failed_title)
                     .setMessage(e.getMessage())
-                    .setPositiveButton(R.string.ok, (d, which) -> finish())
+                    .setPositiveButton(R.string.ok, (d, which) -> finishAndRemoveTask())
                     .create();
 
-            dialog.setOnDismissListener(d -> finish());
-            dialog.show();
-        }
-    }
-
-    private void importMigration(Uri uri) {
-        try {
-            OTPData[] data = OTPParser.parseMigration(uri);
-            importCodes(data);
-        }catch(IllegalArgumentException e) {
-            AlertDialog dialog = new StyledDialogBuilder(this)
-                    .setTitle(R.string.uri_handler_failed_title)
-                    .setMessage(e.getMessage())
-                    .setPositiveButton(R.string.ok, (d, which) -> finish())
-                    .create();
-
-            dialog.setOnDismissListener(d -> finish());
+            dialog.setOnDismissListener(d -> finishAndRemoveTask());
             dialog.show();
         }
     }
@@ -76,7 +56,8 @@ public class URIHandlerActivity extends AppCompatActivity {
     private void importCodes(OTPData... data) {
         DialogUtil.showImportCodeDialog(this, group -> {
             for(OTPData d : data) SettingsUtil.addOTP(this, group, d);
-        }, this::finish);
+            Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
+        }, this::finishAndRemoveTask);
     }
 
 }

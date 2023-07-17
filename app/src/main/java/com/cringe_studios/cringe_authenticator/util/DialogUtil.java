@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -247,7 +246,6 @@ public class DialogUtil {
                     }
 
                     callback.accept(groups.get(which - 1));
-                    Toast.makeText(context, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
                     if(onDismiss != null) onDismiss.run();
                 })
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
