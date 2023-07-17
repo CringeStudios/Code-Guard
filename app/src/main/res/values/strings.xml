@@ -60,7 +60,7 @@
     <string name="create_totp_title">Select Code Type</string>
     <string name="action_new_group">New Group</string>
     <string name="new_group_missing_title">You need to input a name</string>
-    <string name="qr_scanner_failed">Failed to scan code: %s</string>
+    <string name="qr_scanner_failed">Scan failed: %s</string>
     <string name="intro_video_failed">Failed to play video</string>
     <string name="edit_otp_title">Edit OTP</string>
     <string name="group_delete_title">Delete?</string>
@@ -78,6 +78,7 @@
     <string name="settings_biometric_lock">Require biometric unlock</string>
     <string name="uri_handler_code_added">Code added</string>
     <string name="uri_handler_add_code_title">Add Code</string>
+    <string name="uri_handler_create_group">Create New Group</string>
     <string name="theme">Theme</string>
     <string name="otp_add_counter">Counter</string>
     <string name="otp_add_checksum">Add Checksum</string>
@@ -85,6 +86,10 @@
     <string name="otp_add_name">Name</string>
     <string name="otp_add_period">Period</string>
     <string name="otp_add_error">Failed to update OTP: %s</string>
+    <string name="otp_add_issuer">Issuer (optional)</string>
+    <string name="otp_add_missing_name">Missing name</string>
+    <string name="qr_scanner_migration_title">OTP Migration</string>
+    <string name="qr_scanner_migration_message">It seems like you\'re trying to import OTP codes from another app. Do you want to import all codes into this group?</string>
     <string-array name="view_edit_delete">
         <item>View</item>
         <item>Edit</item>

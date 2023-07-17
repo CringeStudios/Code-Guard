@@ -2,6 +2,7 @@ package com.cringe_studios.cringe_authenticator.scanner;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -27,9 +28,12 @@ import androidx.camera.core.SurfaceOrientedMeteringPointFactory;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
+import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -48,11 +52,15 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private BarcodeScanner scanner;
 
+    private boolean process = true;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+
+        ThemeUtil.loadTheme(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234);
@@ -113,6 +121,8 @@ public class QRScannerActivity extends AppCompatActivity {
         @OptIn(markerClass = ExperimentalGetImage.class)
         @Override
         public void analyze(@NonNull ImageProxy image) {
+            if(!process) return;
+
             Image mediaImage = image.getImage();
             if(mediaImage != null) {
                 InputImage input = InputImage.fromMediaImage(mediaImage, image.getImageInfo().getRotationDegrees());
@@ -132,18 +142,40 @@ public class QRScannerActivity extends AppCompatActivity {
                         if(code == null) return;
 
                         Uri uri = Uri.parse(code.getRawValue());
-                        try {
-                            success(OTPParser.parse(uri));
-                        }catch(IllegalArgumentException e) {
-                            error(e.getMessage());
-                        }
+                        process = false;
+                        importUri(uri);
                     }
                 }).addOnFailureListener(e -> {});
             }
         }
     }
 
-    private void success(@NonNull OTPData data) {
+    private void importUri(Uri uri) {
+        if("otpauth-migration".equalsIgnoreCase(uri.getScheme())) {
+            Dialog dialog = new StyledDialogBuilder(this)
+                    .setTitle(R.string.qr_scanner_migration_title)
+                    .setMessage(R.string.qr_scanner_migration_message)
+                    .setPositiveButton(R.string.yes, (d, which) -> {
+                        try {
+                            success(OTPParser.parseMigration(uri));
+                        }catch(IllegalArgumentException e) {
+                            error(e.getMessage());
+                        }
+                    })
+                    .setNegativeButton(R.string.no, (d, which) -> cancel())
+                    .setOnDismissListener(d -> cancel())
+                    .show();
+            return;
+        }
+
+        try {
+            success(OTPParser.parse(uri));
+        }catch(IllegalArgumentException e) {
+            error(e.getMessage());
+        }
+    }
+
+    private void success(@NonNull OTPData... data) {
         Intent result = new Intent();
         result.putExtra("data", data);
         setResult(Activity.RESULT_OK, result);
@@ -154,6 +186,11 @@ public class QRScannerActivity extends AppCompatActivity {
         Intent result = new Intent();
         result.putExtra("error", errorMessage);
         setResult(RESULT_ERROR, result);
+        finish();
+    }
+
+    private void cancel() {
+        setResult(RESULT_CANCELED);
         finish();
     }
 

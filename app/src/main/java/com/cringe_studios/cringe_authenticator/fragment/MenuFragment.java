@@ -59,7 +59,7 @@ public class MenuFragment extends NamedFragment {
                         case 0:
                             DialogUtil.showCreateGroupDialog(getLayoutInflater(), SettingsUtil.getGroupName(requireContext(), group), newName -> {
                                 renameGroup(group, newName);
-                            });
+                            }, null);
 
                             break;
                         case 1:

@@ -1,20 +1,119 @@
 package com.cringe_studios.cringe_authenticator.util;
 
 import android.net.Uri;
+import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.proto.OTPMigration;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
+import com.cringe_studios.cringe_authenticator_library.impl.Base32;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 public class OTPParser {
+
+    public static OTPData[] parseMigration(Uri uri) throws IllegalArgumentException {
+        if(!"otpauth-migration".equals(uri.getScheme())) {
+            throw new IllegalArgumentException("Wrong URI scheme");
+        }
+
+        if(!uri.isHierarchical()) {
+            throw new IllegalArgumentException("Not a hierarchical URI");
+        }
+
+        String data = uri.getQueryParameter("data");
+        if(data == null) {
+            throw new IllegalArgumentException("Missing data");
+        }
+
+        byte[] dataBytes = Base64.decode(data, Base64.DEFAULT);
+        try {
+            OTPMigration.MigrationPayload payload = OTPMigration.MigrationPayload.parseFrom(dataBytes);
+            int count = payload.getOtpParametersCount();
+            OTPData[] otps = new OTPData[count];
+            for(int i = 0; i < payload.getOtpParametersCount(); i++) {
+                OTPMigration.MigrationPayload.OtpParameters params = payload.getOtpParameters(i);
+
+                // TODO: issuer
+
+                String name = params.getName();
+                String issuer = params.getIssuer();
+
+                OTPType type;
+                switch(params.getType()) {
+                    case OTP_TYPE_UNSPECIFIED:
+                    case UNRECOGNIZED:
+                    default:
+                        // TODO: be more lenient and only exclude the broken codes
+                        throw new IllegalArgumentException("Unknown OTP type in migration");
+                    case OTP_TYPE_HOTP:
+                        type = OTPType.HOTP;
+                        break;
+                    case OTP_TYPE_TOTP:
+                        type = OTPType.TOTP;
+                        break;
+                }
+
+                String secret = Base32.encode(params.getSecret().toByteArray());
+
+                OTPAlgorithm algorithm;
+                switch(params.getAlgorithm()) {
+                    case ALGORITHM_UNSPECIFIED:
+                    case UNRECOGNIZED:
+                    default:
+                        throw new IllegalArgumentException("Unknown or unsupported algorithm in migration");
+                    case ALGORITHM_SHA1:
+                        algorithm = OTPAlgorithm.SHA1;
+                        break;
+                    case ALGORITHM_SHA256:
+                        algorithm = OTPAlgorithm.SHA256;
+                        break;
+                    case ALGORITHM_SHA512:
+                        algorithm = OTPAlgorithm.SHA512;
+                        break;
+                    case ALGORITHM_MD5:
+                        algorithm = OTPAlgorithm.MD5;
+                        break;
+                }
+
+                int digits;
+                switch(params.getDigits()) {
+                    case DIGIT_COUNT_UNSPECIFIED:
+                    case UNRECOGNIZED:
+                    default:
+                        throw new IllegalArgumentException("Unknown or unsupported digit count in migration");
+                    case DIGIT_COUNT_SIX:
+                        digits = 6;
+                        break;
+                    case DIGIT_COUNT_EIGHT:
+                        digits = 8;
+                        break;
+                }
+
+                int period = 30; // Google authenticator doesn't support other periods
+                long counter = params.getCounter();
+                boolean checksum = false; // Google authenticator doesn't support checksums
+
+                otps[i] = new OTPData(name, issuer, type, secret, algorithm, digits, period, counter, checksum);
+            }
+            return otps;
+        } catch (InvalidProtocolBufferException e) {
+            throw new IllegalArgumentException("Failed to parse migration data", e);
+        }
+    }
 
     public static OTPData parse(Uri uri) throws IllegalArgumentException {
         if(!"otpauth".equals(uri.getScheme())) {
             throw new IllegalArgumentException("Wrong URI scheme");
         }
 
+        if(!uri.isHierarchical()) {
+            throw new IllegalArgumentException("Not a hierarchical URI");
+        }
+
         String type = uri.getHost();
         String accountName = uri.getPath();
+        String issuer = uri.getQueryParameter("issuer");
         String secret = uri.getQueryParameter("secret");
         String algorithm = uri.getQueryParameter("algorithm");
         String digits = uri.getQueryParameter("digits");
@@ -58,7 +157,7 @@ public class OTPParser {
                 }
             }
 
-            OTPData data = new OTPData(accountName, fType, secret, fAlgorithm, fDigits, fPeriod, fCounter, fChecksum);
+            OTPData data = new OTPData(accountName, issuer, fType, secret, fAlgorithm, fDigits, fPeriod, fCounter, fChecksum);
 
             String errorMessage = data.validate();
             if(errorMessage != null) {

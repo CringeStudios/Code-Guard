@@ -7,10 +7,10 @@ import com.cringe_studios.cringe_authenticator.model.OTPData;
 
 public class ScannerResult {
 
-    private OTPData data;
+    private OTPData[] data;
     private String errorMessage;
 
-    public ScannerResult(@NonNull OTPData data) {
+    public ScannerResult(@NonNull OTPData[] data) {
         this.data = data;
     }
 
@@ -22,7 +22,7 @@ public class ScannerResult {
         return data != null;
     }
 
-    public OTPData getData() {
+    public OTPData[] getData() {
         return data;
     }
 

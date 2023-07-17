@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +20,8 @@ import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class DialogUtil {
 
@@ -81,13 +84,23 @@ public class DialogUtil {
         showCodeDialog(context, binding.getRoot(), () -> {
             try {
                 String name = binding.inputName.getText().toString();
+                if(name.trim().isEmpty()) {
+                    showErrorDialog(context, context.getString(R.string.otp_add_missing_name));
+                    return false;
+                }
+
+                String issuer = binding.inputIssuer.getText().toString();
+                if(issuer.trim().isEmpty()) {
+                    issuer = null;
+                }
+
                 String secret = binding.inputSecret.getText().toString();
                 OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
                 int digits = (int) binding.inputDigits.getSelectedItem();
                 int period = Integer.parseInt(binding.inputPeriod.getText().toString());
                 boolean checksum = binding.inputChecksum.isChecked();
 
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, period, 0, checksum);
+                OTPData data = new OTPData(name, issuer, OTPType.TOTP, secret, algorithm, digits, period, 0, checksum);
 
                 String errorMessage = data.validate();
                 if(errorMessage != null) {
@@ -134,13 +147,23 @@ public class DialogUtil {
         showCodeDialog(context, binding.getRoot(), () -> {
             try {
                 String name = binding.inputName.getText().toString();
+                if(name.trim().isEmpty()) {
+                    showErrorDialog(context, context.getString(R.string.otp_add_missing_name));
+                    return false;
+                }
+
+                String issuer = binding.inputIssuer.getText().toString();
+                if(issuer.trim().isEmpty()) {
+                    issuer = null;
+                }
+
                 String secret = binding.inputSecret.getText().toString();
                 OTPAlgorithm algorithm = (OTPAlgorithm) binding.inputAlgorithm.getSelectedItem();
                 int digits = (int) binding.inputDigits.getSelectedItem();
                 int counter = Integer.parseInt(binding.inputCounter.getText().toString());
                 boolean checksum = binding.inputChecksum.isChecked();
 
-                OTPData data = new OTPData(name, OTPType.TOTP, secret, algorithm, digits, 0, counter, checksum);
+                OTPData data = new OTPData(name, issuer, OTPType.TOTP, secret, algorithm, digits, 0, counter, checksum);
 
                 String errorMessage = data.validate();
                 if(errorMessage != null) {
@@ -171,7 +194,7 @@ public class DialogUtil {
         }
     }
 
-    public static void showCreateGroupDialog(LayoutInflater inflater, String initialName, Consumer<String> callback) {
+    public static void showCreateGroupDialog(LayoutInflater inflater, String initialName, Consumer<String> callback, Runnable onDismiss) {
         Context context = inflater.getContext();
 
         DialogCreateGroupBinding binding = DialogCreateGroupBinding.inflate(inflater);
@@ -181,7 +204,7 @@ public class DialogUtil {
                 .setTitle(R.string.action_new_group)
                 .setView(binding.getRoot())
                 .setPositiveButton(R.string.add, (view, which) -> {})
-                .setNegativeButton(R.string.cancel, (view, which) -> {})
+                .setNegativeButton(R.string.cancel, (view, which) -> { if(onDismiss != null) onDismiss.run(); })
                 .create();
 
         dialog.setOnShowListener(d -> {
@@ -194,8 +217,42 @@ public class DialogUtil {
 
                 dialog.dismiss();
                 callback.accept(binding.createGroupName.getText().toString());
+                if(onDismiss != null) onDismiss.run();
             });
         });
+
+        dialog.setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); });
+        dialog.show();
+    }
+
+    public static void showImportCodeDialog(Context context, Consumer<String> callback, Runnable onDismiss) {
+        List<String> groups = SettingsUtil.getGroups(context);
+        String[] groupNames = new String[groups.size() + 1];
+
+        groupNames[0] = context.getString(R.string.uri_handler_create_group);
+        for(int i = 0; i < groups.size(); i++) {
+            groupNames[i + 1] = SettingsUtil.getGroupName(context, groups.get(i));
+        }
+
+        AlertDialog dialog = new StyledDialogBuilder(context)
+                .setTitle(R.string.uri_handler_add_code_title)
+                .setItems(groupNames, (d, which) -> {
+                    if(which == 0) { // Create New Group
+                        DialogUtil.showCreateGroupDialog(LayoutInflater.from(context), null, group -> {
+                            String id = UUID.randomUUID().toString();
+                            SettingsUtil.addGroup(context, id, group);
+                            callback.accept(id);
+                        }, onDismiss);
+                        return;
+                    }
+
+                    callback.accept(groups.get(which - 1));
+                    Toast.makeText(context, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
+                    if(onDismiss != null) onDismiss.run();
+                })
+                .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
+                .setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); })
+                .create();
 
         dialog.show();
     }

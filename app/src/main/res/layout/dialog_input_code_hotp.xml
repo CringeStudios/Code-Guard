@@ -15,6 +15,15 @@
         android:autofillHints="" />
 
     <EditText
+        android:id="@+id/input_issuer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="@string/otp_add_issuer"
+        android:autofillHints="" />
+
+    <EditText
         android:id="@+id/input_secret"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

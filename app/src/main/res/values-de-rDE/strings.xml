@@ -20,7 +20,7 @@
     <string name="create_totp_title">Wähle den Code-Typ</string>
     <string name="action_new_group">Neue Gruppe</string>
     <string name="new_group_missing_title">Du musst einen Namen eingeben</string>
-    <string name="qr_scanner_failed">Scannen des Codes fehlgeschlagen: %s</string>
+    <string name="qr_scanner_failed">Scannen fehlgeschlagen: %s</string>
     <string name="intro_video_failed">Abspielen des Videos fehlgeschlagen</string>
     <string name="edit_otp_title">OTP bearbeiten</string>
     <string name="group_delete_title">Löschen?</string>
@@ -38,6 +38,7 @@
     <string name="settings_biometric_lock">Biometrische Authentifizierung aktivieren</string>
     <string name="uri_handler_code_added">Code hinzugefügt</string>
     <string name="uri_handler_add_code_title">Code hinzufügen</string>
+    <string name="uri_handler_create_group">Neue Gruppe erstellen</string>
     <string name="theme">Theme</string>
     <string name="otp_add_counter">Zähler</string>
     <string name="otp_add_checksum">Prüfsumme hinzufügen</string>
@@ -45,6 +46,10 @@
     <string name="otp_add_name">Name</string>
     <string name="otp_add_period">Intervall</string>
     <string name="otp_add_error">Hinzufügen des OTP-Codes fehlgeschlagen: %s</string>
+    <string name="otp_add_issuer">Aussteller (optional)</string>
+    <string name="otp_add_missing_name">Name fehlt</string>
+    <string name="qr_scanner_migration_title">OTP-Migration</string>
+    <string name="qr_scanner_migration_message">Du scheinst zu versuchen, Codes aus einer anderen App zu importieren. Willst du alle Codes in diese Gruppe importieren?</string>
     <string-array name="view_edit_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

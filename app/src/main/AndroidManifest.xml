@@ -47,6 +47,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="otpauth" />
+                <data android:scheme="otpauth-migration" />
             </intent-filter>
         </activity>
     </application>

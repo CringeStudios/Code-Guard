@@ -30,11 +30,13 @@ import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
+import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.Locale;
@@ -58,12 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE); TODO: enable secure flag
 
-        Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(this));
-        if(themeID != null) {
-            setTheme(themeID);
-        }else {
-            setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
-        }
+        ThemeUtil.loadTheme(this);
 
         setLocale(SettingsUtil.getLocale(this));
 
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment = NavigationUtil.getCurrentFragment(this);
             if(fragment instanceof GroupFragment) {
                 GroupFragment frag = (GroupFragment) fragment;
-                frag.addOTP(obj.getData());
+                for(OTPData d : obj.getData()) frag.addOTP(d);
             }
         });
     }
@@ -238,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
             if(frag instanceof MenuFragment) {
                 ((MenuFragment) frag).addGroup(group);
             }
-        });
+        }, null);
     }
 
     @Override
