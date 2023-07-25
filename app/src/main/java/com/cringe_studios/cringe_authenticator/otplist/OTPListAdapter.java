@@ -54,8 +54,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         OTPData data = items.get(position);
 
         holder.setOTPData(data);
-        holder.getBinding().label.setText(holder.getOTPData().getName());
-        holder.getBinding().progress.setVisibility(holder.getOTPData().getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);
+        holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
+        holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
             if(data.getType() != OTPType.HOTP) return;

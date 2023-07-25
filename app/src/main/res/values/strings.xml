@@ -90,9 +90,10 @@
     <string name="otp_add_missing_name">Missing name</string>
     <string name="qr_scanner_migration_title">OTP Migration</string>
     <string name="qr_scanner_migration_message">It seems like you\'re trying to import OTP codes from another app. Do you want to import all codes into this group?</string>
-    <string-array name="view_edit_delete">
+    <string-array name="view_edit_move_delete">
         <item>View</item>
         <item>Edit</item>
+        <item>Move to other group</item>
         <item>Delete</item>
     </string-array>
     <string-array name="rename_delete">

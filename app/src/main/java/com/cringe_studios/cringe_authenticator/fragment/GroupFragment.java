@@ -77,7 +77,7 @@ public class GroupFragment extends NamedFragment {
     private void showOTPDialog(OTPData data) {
         new StyledDialogBuilder(requireContext())
                 .setTitle(R.string.edit_otp_title)
-                .setItems(R.array.view_edit_delete, (dialog, which) -> {
+                .setItems(R.array.view_edit_move_delete, (dialog, which) -> {
                     switch(which) {
                         case 0:
                             DialogUtil.showViewCodeDialog(getLayoutInflater(), data, () -> showOTPDialog(data));
@@ -89,6 +89,13 @@ public class GroupFragment extends NamedFragment {
                             }, () -> showOTPDialog(data));
                             break;
                         case 2:
+                            DialogUtil.showChooseGroupDialog(requireContext(), group -> {
+                                SettingsUtil.addOTP(requireContext(), group, data);
+                                otpListAdapter.remove(data);
+                                saveOTPs();
+                            }, null);
+                            break;
+                        case 3:
                             new StyledDialogBuilder(requireContext())
                                     .setTitle(R.string.otp_delete_title)
                                     .setMessage(R.string.otp_delete_message)

@@ -224,7 +224,7 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showImportCodeDialog(Context context, Consumer<String> callback, Runnable onDismiss) {
+    public static void showChooseGroupDialog(Context context, Consumer<String> callback, Runnable onDismiss) {
         List<String> groups = SettingsUtil.getGroups(context);
         String[] groupNames = new String[groups.size() + 1];
 

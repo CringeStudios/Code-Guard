@@ -54,7 +54,7 @@ public class URIHandlerActivity extends AppCompatActivity {
     }
 
     private void importCodes(OTPData... data) {
-        DialogUtil.showImportCodeDialog(this, group -> {
+        DialogUtil.showChooseGroupDialog(this, group -> {
             for(OTPData d : data) SettingsUtil.addOTP(this, group, d);
             Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
         }, this::finishAndRemoveTask);
