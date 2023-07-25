@@ -142,7 +142,8 @@ public class GroupFragment extends NamedFragment {
 
             if(vh.getOTPData().getType() == OTPType.TOTP) {
                 long timeDiff = vh.getOTPData().getNextDueTime() - System.currentTimeMillis() / 1000;
-                vh.getBinding().progress.setProgress((int) ((1 - ((double) timeDiff / vh.getOTPData().getPeriod())) * 100));
+                double progress = 1 - ((double) timeDiff / vh.getOTPData().getPeriod());
+                vh.getBinding().progress.setImageLevel((int) (progress * 10_000));
             }
         }
     }

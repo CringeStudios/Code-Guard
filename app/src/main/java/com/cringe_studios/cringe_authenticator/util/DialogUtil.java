@@ -127,6 +127,7 @@ public class DialogUtil {
         binding.inputDigits.setEnabled(!view);
 
         binding.inputName.setEnabled(!view);
+        binding.inputIssuer.setEnabled(!view);
         binding.inputSecret.setEnabled(!view);
         binding.inputCounter.setEnabled(!view);
         binding.inputChecksum.setEnabled(!view);
@@ -180,6 +181,7 @@ public class DialogUtil {
     }
 
     public static void showViewCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Runnable back) {
+        // TODO: use better dialogs
         switch(initialData.getType()) {
             case HOTP: showHOTPDialog(inflater, initialData, d -> {}, back, true); break;
             case TOTP: showTOTPDialog(inflater, initialData, d -> {}, back, true); break;
