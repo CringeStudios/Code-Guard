@@ -64,6 +64,7 @@ public class DialogUtil {
         binding.inputDigits.setEnabled(!view);
 
         binding.inputName.setEnabled(!view);
+        binding.inputIssuer.setEnabled(!view);
         binding.inputSecret.setEnabled(!view);
         binding.inputPeriod.setEnabled(!view);
         binding.inputChecksum.setEnabled(!view);
