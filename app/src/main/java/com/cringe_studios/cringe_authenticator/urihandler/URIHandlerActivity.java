@@ -33,6 +33,11 @@ public class URIHandlerActivity extends AppCompatActivity {
 
         try {
             Uri uri = intent.getData();
+            if(uri == null || uri.getScheme() == null) {
+                finishAndRemoveTask();
+                return;
+            }
+
             switch(uri.getScheme().toLowerCase()) {
                 case "otpauth":
                     importCodes(OTPParser.parse(uri));
