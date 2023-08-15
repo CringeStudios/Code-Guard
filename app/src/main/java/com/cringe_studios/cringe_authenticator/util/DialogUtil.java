@@ -71,6 +71,7 @@ public class DialogUtil {
 
         if(initialData != null) {
             binding.inputName.setText(initialData.getName());
+            binding.inputIssuer.setText(initialData.getIssuer());
             binding.inputSecret.setText(initialData.getSecret());
             binding.inputAlgorithm.setSelection(initialData.getAlgorithm().ordinal());
 
@@ -135,6 +136,7 @@ public class DialogUtil {
 
         if(initialData != null) {
             binding.inputName.setText(initialData.getName());
+            binding.inputIssuer.setText(initialData.getIssuer());
             binding.inputSecret.setText(initialData.getSecret());
             binding.inputAlgorithm.setSelection(initialData.getAlgorithm().ordinal());
 
