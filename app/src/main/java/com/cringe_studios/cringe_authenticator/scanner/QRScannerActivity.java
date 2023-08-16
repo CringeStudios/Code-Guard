@@ -2,7 +2,6 @@ package com.cringe_studios.cringe_authenticator.scanner;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
@@ -11,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +31,7 @@ import androidx.core.content.ContextCompat;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
@@ -40,6 +41,9 @@ import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class QRScannerActivity extends AppCompatActivity {
@@ -53,6 +57,12 @@ public class QRScannerActivity extends AppCompatActivity {
     private BarcodeScanner scanner;
 
     private boolean process = true;
+
+    private List<OTPData> currentCodes;
+
+    private OTPMigrationPart lastPart;
+
+    private Toast t;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +79,9 @@ public class QRScannerActivity extends AppCompatActivity {
         binding = ActivityQrScannerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        currentCodes = new ArrayList<>();
+        lastPart = null;
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(() -> {
             try {
@@ -81,11 +94,8 @@ public class QRScannerActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
 
         scanner = BarcodeScanning.getClient();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
+        t = Toast.makeText(this, "0", Toast.LENGTH_LONG);
+        t.show();
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -121,7 +131,10 @@ public class QRScannerActivity extends AppCompatActivity {
         @OptIn(markerClass = ExperimentalGetImage.class)
         @Override
         public void analyze(@NonNull ImageProxy image) {
-            if(!process) return;
+            if(!process) {
+                image.close();
+                return;
+            }
 
             Image mediaImage = image.getImage();
             if(mediaImage != null) {
@@ -152,19 +165,56 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private void importUri(Uri uri) {
         if("otpauth-migration".equalsIgnoreCase(uri.getScheme())) {
-            Dialog dialog = new StyledDialogBuilder(this)
-                    .setTitle(R.string.qr_scanner_migration_title)
-                    .setMessage(R.string.qr_scanner_migration_message)
-                    .setPositiveButton(R.string.yes, (d, which) -> {
-                        try {
-                            success(OTPParser.parseMigration(uri));
-                        }catch(IllegalArgumentException e) {
-                            error(e.getMessage());
-                        }
-                    })
-                    .setNegativeButton(R.string.no, (d, which) -> cancel())
-                    .setOnDismissListener(d -> cancel())
-                    .show();
+            OTPMigrationPart part;
+
+            try {
+                part = OTPParser.parseMigration(uri);
+            }catch(IllegalArgumentException e) {
+                error(e.getMessage());
+                return;
+            }
+
+            if((lastPart != null && part.getBatchIndex() != lastPart.getBatchIndex() + 1) || (lastPart == null && part.getBatchIndex() > 0)) {
+                // Not next batch, or first batch (if nothing was scanned yet), keep looking
+                process = true;
+                return;
+            }
+
+            if(part.getBatchIndex() == 0) {
+                new StyledDialogBuilder(this)
+                        .setTitle(R.string.qr_scanner_migration_title)
+                        .setMessage(R.string.qr_scanner_migration_message)
+                        .setPositiveButton(R.string.yes, (d, which) -> {
+                            if(part.getBatchSize() == 1) {
+                                success(part.getOTPs());
+                            }else {
+                                currentCodes.addAll(Arrays.asList(part.getOTPs()));
+                                lastPart = part;
+                                Toast.makeText(this, getString(R.string.qr_scanner_migration_part, part.getBatchIndex()+ 1, part.getBatchSize()), Toast.LENGTH_LONG).show();
+                                process = true;
+                            }
+                        })
+                        .setNegativeButton(R.string.no, (d, which) -> cancel())
+                        .show()
+                        .setCanceledOnTouchOutside(false);
+            }else {
+                currentCodes.addAll(Arrays.asList(part.getOTPs()));
+                Toast.makeText(this, getString(R.string.qr_scanner_migration_part, part.getBatchIndex()+ 1, part.getBatchSize()), Toast.LENGTH_LONG).show();
+
+                if(part.getBatchIndex() == part.getBatchSize() - 1) {
+                    success(currentCodes.toArray(new OTPData[0]));
+                }else {
+                    process = true;
+                }
+            }
+
+
+            return;
+        }
+
+        if(lastPart != null) {
+            // Migration is being imported
+            process = true;
             return;
         }
 

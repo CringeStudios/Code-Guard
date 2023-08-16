@@ -43,7 +43,8 @@ public class URIHandlerActivity extends AppCompatActivity {
                     importCodes(OTPParser.parse(uri));
                     break;
                 case "otpauth-migration":
-                    importCodes(OTPParser.parseMigration(uri));
+                    importCodes(OTPParser.parseMigration(uri).getOTPs());
+                    // TODO: notify user if there are multiple codes?
                     break;
             }
         }catch(IllegalArgumentException e) {

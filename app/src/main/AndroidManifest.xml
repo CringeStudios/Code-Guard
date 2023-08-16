@@ -38,7 +38,8 @@
         </activity>
         <activity android:name=".scanner.QRScannerActivity"
             android:exported="true"
-            android:theme="@style/Theme.CringeAuthenticator.None">
+            android:theme="@style/Theme.CringeAuthenticator.None"
+            android:configChanges="orientation|screenSize">
         </activity>
         <activity android:name=".urihandler.URIHandlerActivity"
             android:exported="true">

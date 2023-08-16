@@ -48,6 +48,7 @@
     <string name="otp_add_missing_name">Name fehlt</string>
     <string name="qr_scanner_migration_title">OTP-Migration</string>
     <string name="qr_scanner_migration_message">Du scheinst zu versuchen, Codes aus einer anderen App zu importieren. Willst du alle Codes in diese Gruppe importieren?</string>
+    <string name="qr_scanner_migration_part">Code %d von %d gescannt</string>
     <string-array name="view_edit_move_delete">
         <item>Anzeigen</item>
         <item>Bearbeiten</item>

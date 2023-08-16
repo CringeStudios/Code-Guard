@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;
 import com.cringe_studios.cringe_authenticator.proto.OTPMigration;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
@@ -12,7 +13,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public class OTPParser {
 
-    public static OTPData[] parseMigration(Uri uri) throws IllegalArgumentException {
+    public static OTPMigrationPart parseMigration(Uri uri) throws IllegalArgumentException {
         if(!"otpauth-migration".equals(uri.getScheme())) {
             throw new IllegalArgumentException("Wrong URI scheme");
         }
@@ -27,14 +28,15 @@ public class OTPParser {
         }
 
         byte[] dataBytes = Base64.decode(data, Base64.DEFAULT);
+
         try {
             OTPMigration.MigrationPayload payload = OTPMigration.MigrationPayload.parseFrom(dataBytes);
+
             int count = payload.getOtpParametersCount();
             OTPData[] otps = new OTPData[count];
+
             for(int i = 0; i < payload.getOtpParametersCount(); i++) {
                 OTPMigration.MigrationPayload.OtpParameters params = payload.getOtpParameters(i);
-
-                // TODO: issuer
 
                 String name = params.getName();
                 String issuer = params.getIssuer();
@@ -96,7 +98,8 @@ public class OTPParser {
 
                 otps[i] = new OTPData(name, issuer, type, secret, algorithm, digits, period, counter, checksum);
             }
-            return otps;
+
+            return new OTPMigrationPart(otps, payload.getBatchIndex(), payload.getBatchSize());
         } catch (InvalidProtocolBufferException e) {
             throw new IllegalArgumentException("Failed to parse migration data", e);
         }
