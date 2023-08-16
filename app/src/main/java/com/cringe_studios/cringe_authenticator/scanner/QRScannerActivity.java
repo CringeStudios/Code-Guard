@@ -62,8 +62,6 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private OTPMigrationPart lastPart;
 
-    private Toast t;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +92,6 @@ public class QRScannerActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
 
         scanner = BarcodeScanning.getClient();
-        t = Toast.makeText(this, "0", Toast.LENGTH_LONG);
-        t.show();
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
