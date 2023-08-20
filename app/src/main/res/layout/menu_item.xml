@@ -10,8 +10,11 @@
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
         android:background="@drawable/button_themed"
-        android:textAllCaps="false" />
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Button"
+        android:textAllCaps="false"
+        android:textSize="20sp" />
 
 </LinearLayout>
