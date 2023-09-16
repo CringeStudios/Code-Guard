@@ -45,7 +45,7 @@ android {
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:21.0-rc-1'
+        artifact = 'com.google.protobuf:protoc:3.24.3'
     }
     generateProtoTasks {
         all().each { task ->
@@ -84,5 +84,5 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation "androidx.camera:camera-extensions:${camerax_version}"
 
-    implementation 'com.google.protobuf:protobuf-javalite:3.20.1'
+    implementation 'com.google.protobuf:protobuf-javalite:3.24.3'
 }
