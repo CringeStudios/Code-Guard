@@ -24,6 +24,12 @@
             android:paddingBottom="10dp" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_enable_encryption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enable_encryption" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_intro_video"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
