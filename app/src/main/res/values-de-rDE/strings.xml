@@ -59,4 +59,6 @@
         <item>Umbenennen</item>
         <item>Löschen</item>
     </string-array>
+    <string name="screen_security">Bildschirmsicherheit</string>
+    <string name="hide_codes">Codes verstecken</string>
 </resources>
