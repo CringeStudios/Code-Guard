@@ -65,16 +65,14 @@ public class URIHandlerActivity extends AppCompatActivity {
     private void importCodes(OTPData... data) {
         DialogUtil.showChooseGroupDialog(this, group -> {
             for(OTPData d : data) {
-                if(OTPDatabase.getLoadedDatabase() == null) {
-                    // TODO: prompt user
-                }
-
-                OTPDatabase.getLoadedDatabase().addOTP(group, d);
-                try {
-                    OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
-                } catch (OTPDatabaseException | CryptoException e) {
-                    DialogUtil.showErrorDialog(this, e.toString());
-                }
+                OTPDatabase.promptLoadDatabase(this, () -> {
+                    OTPDatabase.getLoadedDatabase().addOTP(group, d);
+                    try {
+                        OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
+                    } catch (OTPDatabaseException | CryptoException e) {
+                        DialogUtil.showErrorDialog(this, e.toString());
+                    }
+                }, () -> finishAffinity());
             }
             Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
         }, this::finishAndRemoveTask);

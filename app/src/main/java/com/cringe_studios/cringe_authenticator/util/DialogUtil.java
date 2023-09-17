@@ -47,12 +47,17 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showErrorDialog(Context context, String errorMessage) {
+    public static void showErrorDialog(Context context, String errorMessage, Runnable closed) {
         new StyledDialogBuilder(context)
                 .setTitle(R.string.failed_title)
                 .setMessage(errorMessage)
                 .setPositiveButton(R.string.ok, (d, which) -> {})
+                .setOnDismissListener(d -> { if(closed != null) closed.run(); })
                 .show();
+    }
+
+    public static void showErrorDialog(Context context, String errorMessage) {
+        showErrorDialog(context, errorMessage, null);
     }
 
     public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, Runnable back, boolean view) {
@@ -262,23 +267,29 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showInputPasswordDialog(Context context, Consumer<String> callback, Runnable onDismiss) {
+    public static void showInputPasswordDialog(Context context, Consumer<String> callback, Runnable onCancel) {
         EditText passwordField = new EditText(context);
         passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle("Input Password")
                 .setView(passwordField) // TODO: better layout
-                .setPositiveButton("Ok", (d, which) -> {
-                    if(passwordField.getText().length() == 0) {
-                        DialogUtil.showErrorDialog(context, "You need to enter a password");
-                        return;
-                    }
-
-                    callback.accept(passwordField.getText().toString());
-                })
-                .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
-                .setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); })
+                .setPositiveButton("Ok", (d, which) -> {})
+                .setNegativeButton(R.string.cancel, (d, which) -> { if(onCancel != null) onCancel.run(); })
+                .setOnCancelListener(d -> { if(onCancel != null) onCancel.run(); })
                 .create();
+
+        dialog.setOnShowListener(d -> {
+            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                if(passwordField.getText().length() == 0) {
+                    DialogUtil.showErrorDialog(context, "You need to enter a password");
+                    return;
+                }
+
+                dialog.dismiss();
+                callback.accept(passwordField.getText().toString());
+            });
+        });
 
         dialog.show();
     }

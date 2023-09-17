@@ -93,14 +93,11 @@ public class GroupFragment extends NamedFragment {
                             break;
                         case 2:
                             DialogUtil.showChooseGroupDialog(requireContext(), group -> {
-                                if(OTPDatabase.getLoadedDatabase() == null) {
-                                    // TODO: prompt user
-                                    return;
-                                }
-
-                                OTPDatabase.getLoadedDatabase().addOTP(group, data);
-                                // TODO: save
-                                otpListAdapter.remove(data);
+                                OTPDatabase.promptLoadDatabase(requireContext(), () -> {
+                                    OTPDatabase.getLoadedDatabase().addOTP(group, data);
+                                    // TODO: save
+                                    otpListAdapter.remove(data);
+                                }, () -> DialogUtil.showErrorDialog(requireContext(), "Failed to add OTP"));
                                 saveOTPs();
                             }, null);
                             break;

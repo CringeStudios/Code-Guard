@@ -2,6 +2,8 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
 
+import androidx.core.util.Consumer;
+
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
@@ -69,19 +71,20 @@ public class OTPDatabase {
                 loadDatabase(ctx, null);
                 if(success != null) success.run();
             } catch (OTPDatabaseException | CryptoException e) {
-                throw new RuntimeException(e); // TODO
+                DialogUtil.showErrorDialog(ctx, "Failed to load database: " + e, failure);
             }
             return;
         }
 
-        DialogUtil.showErrorDialog(ctx, "LOAD DB!"); // TODO: implement
         DialogUtil.showInputPasswordDialog(ctx, password -> {
             try {
                 SecretKey key = Crypto.generateKey(SettingsUtil.getCryptoParameters(ctx), password);
                 loadDatabase(ctx, key);
-                if(success != null) success.run();
-            } catch (CryptoException | OTPDatabaseException e) {
-                failure.run(); // TODO: show error
+                if (success != null) success.run();
+            }catch(CryptoException e) {
+                DialogUtil.showErrorDialog(ctx, "Failed to load database: Invalid password or database corrupted", failure);
+            } catch (OTPDatabaseException e) {
+                DialogUtil.showErrorDialog(ctx, "Failed to load database: " + e, failure);
             }
         }, failure);
     }

@@ -107,12 +107,12 @@ public class OTPData implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OTPData otpData = (OTPData) o;
-        return digits == otpData.digits && period == otpData.period && counter == otpData.counter && checksum == otpData.checksum && Objects.equals(name, otpData.name) && Objects.equals(issuer, otpData.issuer) && type == otpData.type && Objects.equals(secret, otpData.secret) && algorithm == otpData.algorithm && Objects.equals(otp, otpData.otp);
+        return digits == otpData.digits && period == otpData.period && counter == otpData.counter && checksum == otpData.checksum && Objects.equals(name, otpData.name) && Objects.equals(issuer, otpData.issuer) && type == otpData.type && Objects.equals(secret, otpData.secret) && algorithm == otpData.algorithm;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, issuer, type, secret, algorithm, digits, period, counter, checksum, otp);
+        return Objects.hash(name, issuer, type, secret, algorithm, digits, period, counter, checksum);
     }
 
 }
