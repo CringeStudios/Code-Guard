@@ -2,4 +2,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab1_offset">65dp</dimen>
     <dimen name="fab2_offset">130dp</dimen>
+    <dimen name="fab3_offset">195dp</dimen>
 </resources>

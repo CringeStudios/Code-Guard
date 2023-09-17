@@ -16,11 +16,18 @@ public class FabUtil {
             fabScan.animate().translationX(-activity.getResources().getDimension(R.dimen.fab1_offset));
         }
 
+        FloatingActionButton fabScanImage = activity.findViewById(R.id.fab_scan_image);
+        if(fabScanImage != null) {
+            fabScanImage.setVisibility(View.VISIBLE);
+            fabScanImage.setClickable(true);
+            fabScanImage.animate().translationX(-activity.getResources().getDimension(R.dimen.fab2_offset));
+        }
+
         FloatingActionButton fabInput = activity.findViewById(R.id.fab_input);
         if(fabInput != null) {
             fabInput.setVisibility(View.VISIBLE);
             fabInput.setClickable(true);
-            fabInput.animate().translationX(-activity.getResources().getDimension(R.dimen.fab2_offset));
+            fabInput.animate().translationX(-activity.getResources().getDimension(R.dimen.fab3_offset));
         }
     }
 
@@ -29,6 +36,12 @@ public class FabUtil {
         if(fabScan != null) {
             fabScan.setClickable(false);
             fabScan.animate().translationX(0).withEndAction(() -> fabScan.setVisibility(View.GONE));
+        }
+
+        FloatingActionButton fabScanImage = activity.findViewById(R.id.fab_scan_image);
+        if(fabScan != null) {
+            fabScanImage.setClickable(false);
+            fabScanImage.animate().translationX(0).withEndAction(() -> fabScanImage.setVisibility(View.GONE));
         }
 
         FloatingActionButton fabInput = activity.findViewById(R.id.fab_input);

@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
+        binding.fabScanImage.setOnClickListener(view -> scanCode());
         binding.fabInput.setOnClickListener(view -> inputCode());
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
