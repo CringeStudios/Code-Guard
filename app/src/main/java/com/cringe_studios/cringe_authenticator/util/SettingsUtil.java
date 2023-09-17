@@ -3,10 +3,8 @@ package com.cringe_studios.cringe_authenticator.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.annotation.NonNull;
-
 import com.cringe_studios.cringe_authenticator.R;
-import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class SettingsUtil {
             GROUPS_PREFS_NAME = "groups",
             GENERAL_PREFS_NAME = "general";
 
-    private static final Gson GSON = new Gson();
+    public static final Gson GSON = new Gson();
 
     public static List<String> getGroups(Context ctx) {
         SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
@@ -65,7 +63,7 @@ public class SettingsUtil {
         deleteGroupData(ctx, group);
     }
 
-    public static List<OTPData> getOTPs(Context ctx, String group) {
+    /*public static List<OTPData> getOTPs(Context ctx, String group) {
         String currentOTPs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".otps", "[]");
         return Arrays.asList(GSON.fromJson(currentOTPs, OTPData[].class));
     }
@@ -85,6 +83,28 @@ public class SettingsUtil {
         ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putString("group." + group + ".otps", GSON.toJson(otps.toArray(new OTPData[0])))
                 .apply();
+    }*/
+
+    public static boolean isDatabaseEncrypted(Context ctx) {
+        return ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("encryption", false);
+    }
+
+    public static void enableEncryption(Context ctx, CryptoParameters parameters) {
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption", true)
+                .putString("encryption.parameters", GSON.toJson(parameters))
+                .apply();
+    }
+
+    public static void disableEncryption(Context ctx) {
+        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption", false)
+                .remove("encryption.parameters")
+                .apply();
+    }
+
+    public static CryptoParameters getCryptoParameters(Context ctx) {
+        return GSON.fromJson(ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.parameters", "{}"), CryptoParameters.class);
     }
 
     public static String getGroupName(Context ctx, String group) {

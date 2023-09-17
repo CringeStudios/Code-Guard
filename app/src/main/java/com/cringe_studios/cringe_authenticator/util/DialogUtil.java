@@ -1,10 +1,12 @@
 package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -252,6 +254,27 @@ public class DialogUtil {
 
                     callback.accept(groups.get(which - 1));
                     if(onDismiss != null) onDismiss.run();
+                })
+                .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
+                .setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); })
+                .create();
+
+        dialog.show();
+    }
+
+    public static void showInputPasswordDialog(Context context, Consumer<String> callback, Runnable onDismiss) {
+        EditText passwordField = new EditText(context);
+        passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        AlertDialog dialog = new StyledDialogBuilder(context)
+                .setTitle("Input Password")
+                .setView(passwordField) // TODO: better layout
+                .setPositiveButton("Ok", (d, which) -> {
+                    if(passwordField.getText().length() == 0) {
+                        DialogUtil.showErrorDialog(context, "You need to enter a password");
+                        return;
+                    }
+
+                    callback.accept(passwordField.getText().toString());
                 })
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
                 .setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); })

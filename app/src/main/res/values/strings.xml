@@ -51,6 +51,7 @@
     <string name="qr_scanner_migration_part">Code %d of %d scanned</string>
     <string name="screen_security">Screen Security</string>
     <string name="hide_codes">Hide Codes</string>
+    <string name="enable_encryption">Enable encryption</string>
     <string-array name="view_edit_move_delete">
         <item>View</item>
         <item>Edit</item>

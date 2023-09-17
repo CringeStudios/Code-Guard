@@ -4,6 +4,7 @@ import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRON
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,20 @@ import androidx.annotation.Nullable;
 import androidx.biometric.BiometricManager;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
+import com.cringe_studios.cringe_authenticator.crypto.Crypto;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.Arrays;
 import java.util.Locale;
+
+import javax.crypto.SecretKey;
 
 public class SettingsFragment extends NamedFragment {
 
@@ -59,6 +68,37 @@ public class SettingsFragment extends NamedFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
+            if(!OTPDatabase.isDatabaseLoaded()) {
+                // TODO: prompt user
+            }
+
+            if(checked) {
+                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                    CryptoParameters params = CryptoParameters.createNew();
+                    Log.d("Crypto", "Created new crypto params");
+
+                    try {
+                        SecretKey key = Crypto.generateKey(params, password);
+                        Log.d("Crypto", "Generated key");
+                        OTPDatabase.encrypt(requireContext(), key, params);
+                        SettingsUtil.enableEncryption(requireContext(), params);
+                        Log.d("Crypto", "DB encryption enabled");
+                    } catch (CryptoException | OTPDatabaseException e) {
+                        throw new RuntimeException(e); // TODO
+                    }
+                }, null);
+            }else {
+                try {
+                    OTPDatabase.decrypt(requireContext());
+                    SettingsUtil.disableEncryption(requireContext());
+                    Log.d("Crypto", "DB encryption disabled");
+                } catch (OTPDatabaseException | CryptoException e) {
+                    throw new RuntimeException(e); // TODO
+                }
             }
         });
 

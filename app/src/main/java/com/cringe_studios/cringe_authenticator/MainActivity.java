@@ -5,6 +5,8 @@ import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTI
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.security.keystore.KeyProtection;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,8 @@ import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.cringe_studios.cringe_authenticator.crypto.Crypto;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
@@ -34,13 +38,27 @@ import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
+import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
+import org.bouncycastle.crypto.params.Argon2Parameters;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+
+import javax.crypto.SecretKey;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,13 +76,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*try {
+            byte[] salt = Crypto.generateSalt();
+            SecretKey key = Crypto.generateKey("HELLO", salt);
+            Log.i("UWUSECRET", key.toString());
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            ks.setEntry("", new KeyStore.SecretKeyEntry(key), null);
+        } catch (CryptoException | KeyStoreException | CertificateException | IOException |
+                 NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }*/
+
+
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE); TODO: enable secure flag
 
         ThemeUtil.loadTheme(this);
 
         setLocale(SettingsUtil.getLocale(this));
 
-        Executor executor = ContextCompat.getMainExecutor(this);
+        OTPDatabase.promptLoadDatabase(this, () -> {
+            launchApp();
+        }, () -> finishAffinity());
+
+        /*Executor executor = ContextCompat.getMainExecutor(this);
         BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
@@ -90,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             prompt.authenticate(info);
         }else {
             launchApp();
-        }
+        }*/
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
             if(obj == null) return; // Cancelled
@@ -252,4 +287,5 @@ public class MainActivity extends AppCompatActivity {
             outState.putLong("pauseTime", pauseTime);
         }
     }
+
 }

@@ -10,8 +10,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
@@ -61,7 +64,18 @@ public class URIHandlerActivity extends AppCompatActivity {
 
     private void importCodes(OTPData... data) {
         DialogUtil.showChooseGroupDialog(this, group -> {
-            for(OTPData d : data) SettingsUtil.addOTP(this, group, d);
+            for(OTPData d : data) {
+                if(OTPDatabase.getLoadedDatabase() == null) {
+                    // TODO: prompt user
+                }
+
+                OTPDatabase.getLoadedDatabase().addOTP(group, d);
+                try {
+                    OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
+                } catch (OTPDatabaseException | CryptoException e) {
+                    DialogUtil.showErrorDialog(this, e.toString());
+                }
+            }
             Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
         }, this::finishAndRemoveTask);
     }

@@ -11,12 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
@@ -90,7 +93,13 @@ public class GroupFragment extends NamedFragment {
                             break;
                         case 2:
                             DialogUtil.showChooseGroupDialog(requireContext(), group -> {
-                                SettingsUtil.addOTP(requireContext(), group, data);
+                                if(OTPDatabase.getLoadedDatabase() == null) {
+                                    // TODO: prompt user
+                                    return;
+                                }
+
+                                OTPDatabase.getLoadedDatabase().addOTP(group, data);
+                                // TODO: save
                                 otpListAdapter.remove(data);
                                 saveOTPs();
                             }, null);
@@ -113,20 +122,32 @@ public class GroupFragment extends NamedFragment {
     }
 
     private void saveOTPs() {
-        SettingsUtil.updateOTPs(requireContext(), groupID, otpListAdapter.getItems());
+        //SettingsUtil.updateOTPs(requireContext(), groupID, otpListAdapter.getItems());
+        if(OTPDatabase.getLoadedDatabase() == null) {
+            // TODO: prompt user
+            return;
+        }
+
+        OTPDatabase.getLoadedDatabase().updateOTPs(groupID, otpListAdapter.getItems());
+        try {
+            OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+        } catch (OTPDatabaseException | CryptoException e) {
+            DialogUtil.showErrorDialog(requireContext(), e.toString());
+        }
+
         refreshCodes();
     }
 
     private void loadOTPs() {
-        List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupID);
+        /*List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupID); TODO
 
         for(OTPData otp : data) {
             otpListAdapter.add(otp);
-        }
+        }*/
     }
 
     public void addOTP(OTPData data) {
-        SettingsUtil.addOTP(requireContext(), groupID, data);
+        //SettingsUtil.addOTP(requireContext(), groupID, data); TODO
         otpListAdapter.add(data);
     }
 
