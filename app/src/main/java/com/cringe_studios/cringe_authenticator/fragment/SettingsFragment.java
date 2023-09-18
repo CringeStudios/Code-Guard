@@ -71,6 +71,7 @@ public class SettingsFragment extends NamedFragment {
             }
         });
 
+        binding.settingsEnableEncryption.setChecked(SettingsUtil.isDatabaseEncrypted(requireContext()));
         binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
             if(!OTPDatabase.isDatabaseLoaded()) {
                 // TODO: prompt user

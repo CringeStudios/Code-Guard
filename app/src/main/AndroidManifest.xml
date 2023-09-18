@@ -36,8 +36,13 @@
             android:theme="@style/Theme.CringeAuthenticator.None"
             android:configChanges="orientation|screenSize">
         </activity>
+        <activity android:name=".unlock.UnlockActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CringeAuthenticator.None"
+            android:configChanges="orientation|screenSize">
+        </activity>
         <activity android:name=".scanner.QRScannerActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/Theme.CringeAuthenticator.None"
             android:configChanges="orientation|screenSize">
         </activity>
@@ -47,7 +52,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="otpauth" />
+                <data android:scheme="otpauth"/>
                 <data android:scheme="otpauth-migration" />
             </intent-filter>
         </activity>

@@ -3,15 +3,18 @@ package com.cringe_studios.cringe_authenticator.urihandler;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.unlock.UnlockContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
@@ -20,7 +23,7 @@ import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 
-public class URIHandlerActivity extends AppCompatActivity {
+public class URIHandlerActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,19 +66,19 @@ public class URIHandlerActivity extends AppCompatActivity {
     }
 
     private void importCodes(OTPData... data) {
-        DialogUtil.showChooseGroupDialog(this, group -> {
-            for(OTPData d : data) {
-                OTPDatabase.promptLoadDatabase(this, () -> {
+        OTPDatabase.promptLoadDatabase(this, () -> {
+            DialogUtil.showChooseGroupDialog(this, group -> {
+                for(OTPData d : data) {
                     OTPDatabase.getLoadedDatabase().addOTP(group, d);
                     try {
                         OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
                     } catch (OTPDatabaseException | CryptoException e) {
                         DialogUtil.showErrorDialog(this, e.toString());
                     }
-                }, () -> finishAffinity());
-            }
-            Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
-        }, this::finishAndRemoveTask);
+                }
+                Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
+            }, this::finishAndRemoveTask);
+        }, null);
     }
 
 }

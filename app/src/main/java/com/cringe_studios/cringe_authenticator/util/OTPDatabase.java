@@ -1,13 +1,18 @@
 package com.cringe_studios.cringe_authenticator.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
 
+import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.unlock.UnlockContract;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
@@ -60,10 +65,14 @@ public class OTPDatabase {
         otps.remove(groupId);
     }
 
-    public static void promptLoadDatabase(Context ctx, Runnable success, Runnable failure) {
+    public static void promptLoadDatabase(Activity ctx, Runnable success, Runnable failure) {
         if(isDatabaseLoaded()) {
             success.run();
             return;
+        }
+
+        if(!(ctx instanceof BaseActivity)) {
+            throw new RuntimeException("NOT BASEACTIVITY");
         }
 
         if(!SettingsUtil.isDatabaseEncrypted(ctx)) {
@@ -76,7 +85,7 @@ public class OTPDatabase {
             return;
         }
 
-        DialogUtil.showInputPasswordDialog(ctx, password -> {
+        /*DialogUtil.showInputPasswordDialog(ctx, password -> {
             try {
                 SecretKey key = Crypto.generateKey(SettingsUtil.getCryptoParameters(ctx), password);
                 loadDatabase(ctx, key);
@@ -86,7 +95,8 @@ public class OTPDatabase {
             } catch (OTPDatabaseException e) {
                 DialogUtil.showErrorDialog(ctx, "Failed to load database: " + e, failure);
             }
-        }, failure);
+        }, failure);*/
+        ((BaseActivity) ctx).promptUnlock(success, failure);
     }
 
     public static OTPDatabase loadDatabase(Context context, SecretKey key) throws OTPDatabaseException, CryptoException {

@@ -12,7 +12,7 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textview_first"
+            android:id="@+id/unlock_password_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="This is the home fragment"

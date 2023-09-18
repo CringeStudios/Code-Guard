@@ -93,11 +93,16 @@ public class GroupFragment extends NamedFragment {
                             break;
                         case 2:
                             DialogUtil.showChooseGroupDialog(requireContext(), group -> {
-                                OTPDatabase.promptLoadDatabase(requireContext(), () -> {
-                                    OTPDatabase.getLoadedDatabase().addOTP(group, data);
-                                    // TODO: save
-                                    otpListAdapter.remove(data);
-                                }, () -> DialogUtil.showErrorDialog(requireContext(), "Failed to add OTP"));
+                                OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+                                    try {
+                                        OTPDatabase.getLoadedDatabase().addOTP(group, data);
+                                        OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                                        otpListAdapter.remove(data);
+                                        saveOTPs();
+                                    } catch (OTPDatabaseException | CryptoException e) {
+                                        DialogUtil.showErrorDialog(requireContext(), e.toString());
+                                    }
+                                }, null);
                                 saveOTPs();
                             }, null);
                             break;
@@ -119,33 +124,37 @@ public class GroupFragment extends NamedFragment {
     }
 
     private void saveOTPs() {
-        //SettingsUtil.updateOTPs(requireContext(), groupID, otpListAdapter.getItems());
-        if(OTPDatabase.getLoadedDatabase() == null) {
-            // TODO: prompt user
-            return;
-        }
-
-        OTPDatabase.getLoadedDatabase().updateOTPs(groupID, otpListAdapter.getItems());
-        try {
-            OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
-        } catch (OTPDatabaseException | CryptoException e) {
-            DialogUtil.showErrorDialog(requireContext(), e.toString());
-        }
-
-        refreshCodes();
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            try {
+                OTPDatabase.getLoadedDatabase().updateOTPs(groupID, otpListAdapter.getItems());
+                OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                refreshCodes();
+            } catch (OTPDatabaseException | CryptoException e) {
+                DialogUtil.showErrorDialog(requireContext(), e.toString());
+            }
+        }, null);
     }
 
     private void loadOTPs() {
-        /*List<OTPData> data = SettingsUtil.getOTPs(requireContext(), groupID); TODO
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            List<OTPData> data = OTPDatabase.getLoadedDatabase().getOTPs(groupID);
 
-        for(OTPData otp : data) {
-            otpListAdapter.add(otp);
-        }*/
+            for(OTPData otp : data) {
+                otpListAdapter.add(otp);
+            }
+        }, null);
     }
 
     public void addOTP(OTPData data) {
-        //SettingsUtil.addOTP(requireContext(), groupID, data); TODO
-        otpListAdapter.add(data);
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            try {
+                OTPDatabase.getLoadedDatabase().addOTP(groupID, data);
+                OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                otpListAdapter.add(data);
+            } catch (OTPDatabaseException | CryptoException e) {
+                DialogUtil.showErrorDialog(requireContext(), "Failed to save database: " + e);
+            }
+        }, null);
     }
 
     public void refreshCodes() {

@@ -1,12 +1,7 @@
 package com.cringe_studios.cringe_authenticator;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.security.keystore.KeyProtection;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.biometric.BiometricManager;
-import androidx.biometric.BiometricPrompt;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.cringe_studios.cringe_authenticator.crypto.Crypto;
-import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
@@ -44,25 +34,9 @@ import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
-import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
-import org.bouncycastle.crypto.params.Argon2Parameters;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.concurrent.Executor;
 
-import javax.crypto.SecretKey;
-
-public class MainActivity extends AppCompatActivity {
-
-    private static final long LOCK_TIMEOUT = 10000;
+public class MainActivity extends BaseActivity {
 
     private ActivityMainBinding binding;
 
@@ -95,37 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         setLocale(SettingsUtil.getLocale(this));
 
-        OTPDatabase.promptLoadDatabase(this, () -> {
-            launchApp();
-        }, () -> finishAffinity());
-
-        /*Executor executor = ContextCompat.getMainExecutor(this);
-        BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
-            @Override
-            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                finishAffinity();
-            }
-
-            @Override
-            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                launchApp();
-            }
-        });
-
-        boolean supportsBiometricAuth = BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
-        boolean recentlyUnlocked = savedInstanceState != null && (System.currentTimeMillis() - savedInstanceState.getLong("pauseTime", 0L) < LOCK_TIMEOUT);
-
-        if(!recentlyUnlocked && SettingsUtil.isBiometricLock(this) && supportsBiometricAuth) {
-            BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(getString(R.string.app_name))
-                    .setSubtitle(getString(R.string.biometric_lock_subtitle))
-                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                    .build();
-
-            prompt.authenticate(info);
-        }else {
-            launchApp();
-        }*/
+        OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
             if(obj == null) return; // Cancelled
@@ -160,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
-        binding.fabScanImage.setOnClickListener(view -> scanCode());
+        //binding.fabScanImage.setOnClickListener(view -> scanCode()); TODO: scan image
         binding.fabInput.setOnClickListener(view -> inputCode());
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);

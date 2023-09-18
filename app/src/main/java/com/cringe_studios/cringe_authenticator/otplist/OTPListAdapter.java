@@ -3,6 +3,7 @@ package com.cringe_studios.cringe_authenticator.otplist;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.INVISIBLE);
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
+            Log.i("CLICKED", "CLICKED: " + view.isClickable());
             if(data.getType() != OTPType.HOTP) return;
 
             // Click delay for HOTP

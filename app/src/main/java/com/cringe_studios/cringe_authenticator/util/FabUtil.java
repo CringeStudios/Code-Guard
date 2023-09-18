@@ -9,18 +9,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class FabUtil {
 
     public static void showFabs(Activity activity) {
-        FloatingActionButton fabScan = activity.findViewById(R.id.fab_scan);
-        if(fabScan != null) {
-            fabScan.setVisibility(View.VISIBLE);
-            fabScan.setClickable(true);
-            fabScan.animate().translationX(-activity.getResources().getDimension(R.dimen.fab1_offset));
-        }
-
         FloatingActionButton fabScanImage = activity.findViewById(R.id.fab_scan_image);
         if(fabScanImage != null) {
             fabScanImage.setVisibility(View.VISIBLE);
             fabScanImage.setClickable(true);
-            fabScanImage.animate().translationX(-activity.getResources().getDimension(R.dimen.fab2_offset));
+            fabScanImage.animate().translationX(-activity.getResources().getDimension(R.dimen.fab1_offset));
+        }
+
+        FloatingActionButton fabScan = activity.findViewById(R.id.fab_scan);
+        if(fabScan != null) {
+            fabScan.setVisibility(View.VISIBLE);
+            fabScan.setClickable(true);
+            fabScan.animate().translationX(-activity.getResources().getDimension(R.dimen.fab2_offset));
         }
 
         FloatingActionButton fabInput = activity.findViewById(R.id.fab_input);

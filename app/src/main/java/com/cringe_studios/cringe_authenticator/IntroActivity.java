@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityIntroBinding;
+import com.cringe_studios.cringe_authenticator.unlock.UnlockActivity;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 public class IntroActivity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     public void openMainActivity() {
-        Intent m = new Intent(getApplicationContext(), MainActivity.class);
+        Intent m = new Intent(getApplicationContext(), UnlockActivity.class);
         m.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(m);
         finish();
