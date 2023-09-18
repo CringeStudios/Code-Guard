@@ -2,10 +2,13 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.google.gson.Gson;
+
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -85,28 +88,6 @@ public class SettingsUtil {
                 .apply();
     }*/
 
-    public static boolean isDatabaseEncrypted(Context ctx) {
-        return ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("encryption", false);
-    }
-
-    public static void enableEncryption(Context ctx, CryptoParameters parameters) {
-        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putBoolean("encryption", true)
-                .putString("encryption.parameters", GSON.toJson(parameters))
-                .apply();
-    }
-
-    public static void disableEncryption(Context ctx) {
-        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putBoolean("encryption", false)
-                .remove("encryption.parameters")
-                .apply();
-    }
-
-    public static CryptoParameters getCryptoParameters(Context ctx) {
-        return GSON.fromJson(ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.parameters", "{}"), CryptoParameters.class);
-    }
-
     public static String getGroupName(Context ctx, String group) {
         return ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".name", group);
     }
@@ -124,6 +105,57 @@ public class SettingsUtil {
                 .apply();
     }
 
+    public static boolean isDatabaseEncrypted(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("encryption", false);
+    }
+
+    public static void enableEncryption(Context ctx, CryptoParameters parameters) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption", true)
+                .putString("encryption.parameters", GSON.toJson(parameters))
+                .apply();
+    }
+
+    public static void disableEncryption(Context ctx) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption", false)
+                .remove("encryption.parameters")
+                .apply();
+    }
+
+    public static CryptoParameters getCryptoParameters(Context ctx) {
+        return GSON.fromJson(ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.parameters", "{}"), CryptoParameters.class);
+    }
+
+    public static void enableBiometricEncryption(Context ctx, byte[] encryptedBiometricKey) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption.biometric", true)
+                .putString("encryption.biometric.key", Base64.encodeToString(encryptedBiometricKey, Base64.DEFAULT))
+                .apply();
+    }
+
+    public static void disableBiometricEncryption(Context ctx) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
+                .putBoolean("encryption.biometric", false)
+                .remove("encryption.biometric.key")
+                .apply();
+    }
+
+    public static byte[] getEncryptedBiometricKey(Context ctx) {
+        String encoded = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.biometric.key", null);
+        if(encoded == null) return null;
+        return Base64.decode(encoded, Base64.DEFAULT);
+    }
+
+    /*public static void setBiometricLock(Context ctx, boolean biometricLock) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("biometricLock", biometricLock).apply();
+    }
+
+    public static boolean isBiometricLock(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("biometricLock", true);
+    }*/
+
     public static void setEnableIntroVideo(Context ctx, boolean enableIntroVideo) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putBoolean("enableIntroVideo", enableIntroVideo).apply();
@@ -131,15 +163,6 @@ public class SettingsUtil {
 
     public static boolean isIntroVideoEnabled(Context ctx) {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableIntroVideo", true);
-    }
-
-    public static void setBiometricLock(Context ctx, boolean biometricLock) {
-        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putBoolean("biometricLock", biometricLock).apply();
-    }
-
-    public static boolean isBiometricLock(Context ctx) {
-        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("biometricLock", true);
     }
 
     public static void setTheme(Context ctx, String theme) {

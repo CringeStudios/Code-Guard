@@ -59,7 +59,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.INVISIBLE);
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
-            Log.i("CLICKED", "CLICKED: " + view.isClickable());
+            if(!view.isClickable()) return;
+
             if(data.getType() != OTPType.HOTP) return;
 
             // Click delay for HOTP

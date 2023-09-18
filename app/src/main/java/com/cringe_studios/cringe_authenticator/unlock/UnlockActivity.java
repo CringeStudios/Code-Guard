@@ -5,6 +5,9 @@ import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTI
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.security.KeyStoreParameter;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyProtection;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,8 +27,14 @@ import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 public class UnlockActivity extends AppCompatActivity {
@@ -41,24 +50,33 @@ public class UnlockActivity extends AppCompatActivity {
         ThemeUtil.loadTheme(this);
 
         if(!SettingsUtil.isDatabaseEncrypted(this)) {
-            launchApp();
+            success();
             return;
         }
 
         binding = ActivityUnlockBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
+            ks.load(null);
+            SecretKey key = KeyGenerator.getInstance("AES").generateKey();
+            ks.setEntry("amogus", new KeyStore.SecretKeyEntry(key), new KeyStoreParameter.Builder(this).build());
+        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+
         if(SettingsUtil.isBiometricLock(this)) {
             Executor executor = ContextCompat.getMainExecutor(this);
             BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
                 @Override
                 public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                    //finishAffinity();
+                    failure();
                 }
 
                 @Override
                 public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
-                    launchApp();
+                    success();
                 }
             });
 
@@ -78,7 +96,7 @@ public class UnlockActivity extends AppCompatActivity {
                     //prompt.authenticate(info);
                 });
             }else {
-                launchApp();
+                success();
             }
         }
 
@@ -93,7 +111,7 @@ public class UnlockActivity extends AppCompatActivity {
             try {
                 SecretKey key = Crypto.generateKey(SettingsUtil.getCryptoParameters(this), password);
                 OTPDatabase.loadDatabase(this, key);
-                launchApp();
+                success();
             }catch(CryptoException e) {
                 DialogUtil.showErrorDialog(this, "Failed to load database: Invalid password or database corrupted", this::failure);
             } catch (OTPDatabaseException e) {
@@ -102,7 +120,7 @@ public class UnlockActivity extends AppCompatActivity {
         });
     }
 
-    private void launchApp() {
+    private void success() {
         if(getIntent() != null && getIntent().hasExtra("contract")) {
             setResult(RESULT_OK);
             finish();

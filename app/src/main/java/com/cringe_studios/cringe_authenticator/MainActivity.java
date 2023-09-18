@@ -69,8 +69,6 @@ public class MainActivity extends BaseActivity {
 
         setLocale(SettingsUtil.getLocale(this));
 
-        OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
-
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
             if(obj == null) return; // Cancelled
 
@@ -85,6 +83,8 @@ public class MainActivity extends BaseActivity {
                 for(OTPData d : obj.getData()) frag.addOTP(d);
             }
         });
+
+        OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
     }
 
     public void setLocale(Locale locale) {
