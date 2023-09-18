@@ -8,6 +8,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -200,6 +201,7 @@ public class QRScannerActivity extends AppCompatActivity {
                 if(part.getBatchIndex() == part.getBatchSize() - 1) {
                     success(currentCodes.toArray(new OTPData[0]));
                 }else {
+                    lastPart = part;
                     process = true;
                 }
             }

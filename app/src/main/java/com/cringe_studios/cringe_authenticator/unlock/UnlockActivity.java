@@ -61,8 +61,7 @@ public class UnlockActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         if(SettingsUtil.isBiometricEncryption(this) && BiometricUtil.isSupported(this)) {
-            binding.unlockBiometrics.setOnClickListener(view -> BiometricUtil.promptBiometricAuth(this, this::success, () -> {}));
-            BiometricUtil.promptBiometricAuth(this, () -> {
+            Runnable onSuccess = () -> {
                 BiometricKey biometricKey = SettingsUtil.getBiometricKey(this);
                 try {
                     SecretKey biometricSecretKey = Crypto.getBiometricKey(biometricKey);
@@ -73,7 +72,10 @@ public class UnlockActivity extends AppCompatActivity {
                 } catch (CryptoException | OTPDatabaseException e) {
                     DialogUtil.showErrorDialog(this, "Failed to load database: " + e);
                 }
-            }, () -> {});
+            };
+
+            binding.unlockBiometrics.setOnClickListener(view -> BiometricUtil.promptBiometricAuth(this, onSuccess, () -> {}));
+            BiometricUtil.promptBiometricAuth(this, onSuccess, () -> {});
         }
 
         binding.unlockButton.setOnClickListener(view -> {

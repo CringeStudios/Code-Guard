@@ -117,13 +117,11 @@ public class SettingsFragment extends NamedFragment {
             binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> {
                 if(checked) {
                     OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-                        Log.i("PROMPT", "§BERIIO");
                         BiometricUtil.promptBiometricAuth(requireActivity(), () -> {
                             try {
                                 BiometricKey biometricKey = Crypto.createBiometricKey(SettingsUtil.getCryptoParameters(requireContext()));
                                 SettingsUtil.enableBiometricEncryption(requireContext(), biometricKey);
                             } catch (CryptoException e) {
-                                e.printStackTrace();
                                 DialogUtil.showErrorDialog(requireContext(), "Failed to enable: " + e);
                             }
                         }, () -> view.setChecked(false));

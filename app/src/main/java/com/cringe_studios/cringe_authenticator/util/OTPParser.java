@@ -41,6 +41,14 @@ public class OTPParser {
                 String name = params.getName();
                 String issuer = params.getIssuer();
 
+                if(name.contains(":")) { // Name possibly contains issuer prefix
+                    String[] spl = name.split(":");
+                    if(spl.length == 2) { // Otherwise it's not a valid prefix, or too many ':'s, just use everything as the account name
+                        if(issuer == null || issuer.isEmpty()) issuer = spl[0];
+                        name = spl[1];
+                    }
+                }
+
                 OTPType type;
                 switch(params.getType()) {
                     case OTP_TYPE_UNSPECIFIED:
@@ -115,8 +123,28 @@ public class OTPParser {
         }
 
         String type = uri.getHost();
-        String accountName = uri.getPath();
+        String path = uri.getPath();
+        if(path == null || path.length() < 2) {
+            throw new IllegalArgumentException("Missing required parameters");
+        }
+
+        path = path.substring(1);
+
         String issuer = uri.getQueryParameter("issuer");
+
+        String accountName;
+        if(path.contains(":")) { // Possibly contains issuer prefix
+            String[] spl = path.split(":");
+            if(spl.length != 2) { // Either not a valid prefix, or too many ':'s, just use everything as the account name
+                accountName = path;
+            }else {
+                if(issuer == null || issuer.isEmpty()) issuer = spl[0];
+                accountName = spl[1];
+            }
+        }else {
+            accountName = path;
+        }
+
         String secret = uri.getQueryParameter("secret");
         String algorithm = uri.getQueryParameter("algorithm");
         String digits = uri.getQueryParameter("digits");
@@ -139,11 +167,9 @@ public class OTPParser {
             throw new IllegalArgumentException("Missing required parameters");
         }
 
-        if(accountName == null || accountName.length() < 2 /* Because path is /accName, so 2 letters for acc with 1 letter name */) {
+        if(accountName.length() == 0 || (issuer != null && issuer.length() == 0)) {
             throw new IllegalArgumentException("Missing required parameters");
         }
-
-        accountName = accountName.substring(1);
 
         try {
             // 0 or null for defaults (handled by Cringe-Authenticator-Library)

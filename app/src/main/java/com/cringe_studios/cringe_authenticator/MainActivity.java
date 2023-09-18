@@ -50,19 +50,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*try {
-            byte[] salt = Crypto.generateSalt();
-            SecretKey key = Crypto.generateKey("HELLO", salt);
-            Log.i("UWUSECRET", key.toString());
-            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
-            ks.load(null);
-            ks.setEntry("", new KeyStore.SecretKeyEntry(key), null);
-        } catch (CryptoException | KeyStoreException | CertificateException | IOException |
-                 NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }*/
-
-
         //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE); TODO: enable secure flag
 
         ThemeUtil.loadTheme(this);

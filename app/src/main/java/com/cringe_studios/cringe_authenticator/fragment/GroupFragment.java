@@ -145,12 +145,12 @@ public class GroupFragment extends NamedFragment {
         }, null);
     }
 
-    public void addOTP(OTPData data) {
+    public void addOTP(OTPData... data) {
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
             try {
-                OTPDatabase.getLoadedDatabase().addOTP(groupID, data);
+                for(OTPData d : data) OTPDatabase.getLoadedDatabase().addOTP(groupID, d);
                 OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
-                otpListAdapter.add(data);
+                for(OTPData d : data) otpListAdapter.add(d);
             } catch (OTPDatabaseException | CryptoException e) {
                 DialogUtil.showErrorDialog(requireContext(), "Failed to save database: " + e);
             }
