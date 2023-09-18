@@ -52,6 +52,9 @@
     <string name="screen_security">Screen Security</string>
     <string name="hide_codes">Hide Codes</string>
     <string name="enable_encryption">Enable encryption</string>
+    <string name="password">Password</string>
+    <string name="set_password">set Password</string>
+    <string name="confirm_password">confirm Password</string>
     <string-array name="view_edit_move_delete">
         <item>View</item>
         <item>Edit</item>
