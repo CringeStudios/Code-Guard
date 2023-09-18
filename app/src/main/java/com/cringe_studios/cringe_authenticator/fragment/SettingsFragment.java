@@ -3,6 +3,7 @@ package com.cringe_studios.cringe_authenticator.fragment;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +17,12 @@ import androidx.annotation.Nullable;
 import androidx.biometric.BiometricManager;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
+import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
+import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
@@ -28,6 +31,7 @@ import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
@@ -106,9 +110,35 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
         binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
 
-        if(BiometricManager.from(requireContext()).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
-            binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricLock(requireContext()));
-            binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setBiometricLock(requireContext(), checked));
+        if(SettingsUtil.isDatabaseEncrypted(requireContext())
+                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && BiometricManager.from(requireContext()).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+            binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricEncryption(requireContext()));
+            binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> {
+                if(checked) {
+                    OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+                        Log.i("PROMPT", "§BERIIO");
+                        BiometricUtil.promptBiometricAuth(requireActivity(), () -> {
+                            try {
+                                BiometricKey biometricKey = Crypto.createBiometricKey(SettingsUtil.getCryptoParameters(requireContext()));
+                                SettingsUtil.enableBiometricEncryption(requireContext(), biometricKey);
+                            } catch (CryptoException e) {
+                                e.printStackTrace();
+                                DialogUtil.showErrorDialog(requireContext(), "Failed to enable: " + e);
+                            }
+                        }, () -> view.setChecked(false));
+                    }, null);
+                }else {
+                    try {
+                        BiometricKey key = SettingsUtil.getBiometricKey(requireContext());
+                        if(key != null) Crypto.deleteBiometricKey(key);
+                    } catch (CryptoException e) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to delete key: " + e);
+                    }
+
+                    SettingsUtil.disableBiometricEncryption(requireContext());
+                }
+            });
         }else {
             binding.settingsBiometricLock.setChecked(false);
             binding.settingsBiometricLock.setEnabled(false);

@@ -18,9 +18,11 @@ import androidx.core.content.ContextCompat;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityUnlockBinding;
+import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
@@ -36,6 +38,7 @@ import java.util.concurrent.Executor;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class UnlockActivity extends AppCompatActivity {
 
@@ -57,47 +60,20 @@ public class UnlockActivity extends AppCompatActivity {
         binding = ActivityUnlockBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        try {
-            KeyStore ks = KeyStore.getInstance("AndroidKeyStore");
-            ks.load(null);
-            SecretKey key = KeyGenerator.getInstance("AES").generateKey();
-            ks.setEntry("amogus", new KeyStore.SecretKeyEntry(key), new KeyStoreParameter.Builder(this).build());
-        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-
-        if(SettingsUtil.isBiometricLock(this)) {
-            Executor executor = ContextCompat.getMainExecutor(this);
-            BiometricPrompt prompt = new BiometricPrompt(this, executor, new BiometricPrompt.AuthenticationCallback() {
-                @Override
-                public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                    failure();
-                }
-
-                @Override
-                public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+        if(SettingsUtil.isBiometricEncryption(this) && BiometricUtil.isSupported(this)) {
+            binding.unlockBiometrics.setOnClickListener(view -> BiometricUtil.promptBiometricAuth(this, this::success, () -> {}));
+            BiometricUtil.promptBiometricAuth(this, () -> {
+                BiometricKey biometricKey = SettingsUtil.getBiometricKey(this);
+                try {
+                    SecretKey biometricSecretKey = Crypto.getBiometricKey(biometricKey);
+                    byte[] keyBytes = Crypto.decrypt(SettingsUtil.getCryptoParameters(this), biometricKey.getEncryptedKey(), biometricSecretKey, biometricKey.getIV());
+                    SecretKey key = new SecretKeySpec(keyBytes, "AES");
+                    OTPDatabase.loadDatabase(this, key);
                     success();
+                } catch (CryptoException | OTPDatabaseException e) {
+                    DialogUtil.showErrorDialog(this, "Failed to load database: " + e);
                 }
-            });
-
-            boolean supportsBiometricAuth = BiometricManager.from(this).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
-            boolean recentlyUnlocked = savedInstanceState != null && (System.currentTimeMillis() - savedInstanceState.getLong("pauseTime", 0L) < LOCK_TIMEOUT);
-
-            if(!recentlyUnlocked && SettingsUtil.isBiometricLock(this) && supportsBiometricAuth) {
-                BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
-                        .setTitle(getString(R.string.app_name))
-                        .setSubtitle(getString(R.string.biometric_lock_subtitle))
-                        .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
-                        .build();
-
-                //prompt.authenticate(info);
-
-                binding.unlockBiometrics.setOnClickListener(view -> {
-                    //prompt.authenticate(info);
-                });
-            }else {
-                success();
-            }
+            }, () -> {});
         }
 
         binding.unlockButton.setOnClickListener(view -> {

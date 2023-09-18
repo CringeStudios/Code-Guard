@@ -182,6 +182,10 @@ public class OTPDatabase {
         return loadedDatabase;
     }
 
+    public static SecretKey getLoadedKey() {
+        return loadedKey;
+    }
+
     public static void encrypt(Context ctx, SecretKey key, CryptoParameters parameters) throws OTPDatabaseException, CryptoException {
         if(!isDatabaseLoaded()) throw new IllegalStateException("Database is not loaded");
         loadedKey = key;

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.google.gson.Gson;
 
@@ -120,6 +121,8 @@ public class SettingsUtil {
         ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putBoolean("encryption", false)
                 .remove("encryption.parameters")
+                .remove("encryption.biometric")
+                .remove("encryption.biometric.key")
                 .apply();
     }
 
@@ -127,10 +130,10 @@ public class SettingsUtil {
         return GSON.fromJson(ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.parameters", "{}"), CryptoParameters.class);
     }
 
-    public static void enableBiometricEncryption(Context ctx, byte[] encryptedBiometricKey) {
+    public static void enableBiometricEncryption(Context ctx, BiometricKey biometricKey) {
         ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putBoolean("encryption.biometric", true)
-                .putString("encryption.biometric.key", Base64.encodeToString(encryptedBiometricKey, Base64.DEFAULT))
+                .putString("encryption.biometric.key", GSON.toJson(biometricKey))
                 .apply();
     }
 
@@ -141,20 +144,15 @@ public class SettingsUtil {
                 .apply();
     }
 
-    public static byte[] getEncryptedBiometricKey(Context ctx) {
+    public static boolean isBiometricEncryption(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("encryption.biometric", false);
+    }
+
+    public static BiometricKey getBiometricKey(Context ctx) {
         String encoded = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("encryption.biometric.key", null);
         if(encoded == null) return null;
-        return Base64.decode(encoded, Base64.DEFAULT);
+        return GSON.fromJson(encoded, BiometricKey.class);
     }
-
-    /*public static void setBiometricLock(Context ctx, boolean biometricLock) {
-        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putBoolean("biometricLock", biometricLock).apply();
-    }
-
-    public static boolean isBiometricLock(Context ctx) {
-        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("biometricLock", true);
-    }*/
 
     public static void setEnableIntroVideo(Context ctx, boolean enableIntroVideo) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
