@@ -1,7 +1,9 @@
 package com.cringe_studios.cringe_authenticator;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,7 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -25,6 +30,7 @@ import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.scanner.QRScanner;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
@@ -33,7 +39,10 @@ import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
+import com.google.mlkit.vision.common.InputImage;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
@@ -42,9 +51,9 @@ public class MainActivity extends BaseActivity {
 
     private ActivityResultLauncher<Void> startQRCodeScan;
 
-    private boolean unlocked;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickQRCodeImage;
 
-    private long pauseTime;
+    private QRScanner qrScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,8 @@ public class MainActivity extends BaseActivity {
         ThemeUtil.loadTheme(this);
 
         setLocale(SettingsUtil.getLocale(this));
+
+        qrScanner = new QRScanner();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
             if(obj == null) return; // Cancelled
@@ -71,7 +82,49 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        pickQRCodeImage = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), img -> {
+            try {
+                InputImage image = InputImage.fromFilePath(this, img);
+                qrScanner.scan(image, code -> {
+                    if(code == null) {
+                        DialogUtil.showErrorDialog(this, "No codes were detected in the provided image");
+                        return;
+                    }
+
+                    if(code.isMigrationPart()) {
+                        new StyledDialogBuilder(this) // TODO: duplicated from QRScannerActivity
+                                .setTitle(R.string.qr_scanner_migration_title)
+                                .setMessage(R.string.qr_scanner_migration_message)
+                                .setPositiveButton(R.string.yes, (d, which) -> {
+                                    Fragment fragment = NavigationUtil.getCurrentFragment(this);
+                                    if (fragment instanceof GroupFragment) {
+                                        GroupFragment frag = (GroupFragment) fragment;
+                                        for (OTPData dt : code.getOTPs()) frag.addOTP(dt);
+                                    }
+                                })
+                                .setNegativeButton(R.string.no, (d, which) -> {})
+                                .show()
+                                .setCanceledOnTouchOutside(false);
+                    }else {
+                        Fragment fragment = NavigationUtil.getCurrentFragment(this);
+                        if (fragment instanceof GroupFragment) {
+                            GroupFragment frag = (GroupFragment) fragment;
+                            for (OTPData dt : code.getOTPs()) frag.addOTP(dt);
+                        }
+                    }
+                }, error -> DialogUtil.showErrorDialog(this, "Failed to detect code: " + error));
+            } catch (IOException e) {
+                DialogUtil.showErrorDialog(this, "Failed to read image: " + e);
+            }
+        });
+
         OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        qrScanner.close();
     }
 
     public void setLocale(Locale locale) {
@@ -82,8 +135,6 @@ public class MainActivity extends BaseActivity {
     }
 
     private void launchApp() {
-        unlocked = true;
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -91,7 +142,7 @@ public class MainActivity extends BaseActivity {
 
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
-        //binding.fabScanImage.setOnClickListener(view -> scanCode()); TODO: scan image
+        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage()); // TODO: scan image
         binding.fabInput.setOnClickListener(view -> inputCode());
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
@@ -146,6 +197,13 @@ public class MainActivity extends BaseActivity {
 
     public void scanCode() {
         startQRCodeScan.launch(null);
+    }
+
+    public void scanCodeFromImage() {
+        Object mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE; // Cursed, but needs to happen because otherwise Android Studio complains about type casting even though it works
+        pickQRCodeImage.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType((ActivityResultContracts.PickVisualMedia.VisualMediaType) mediaType)
+                .build());
     }
 
     public void inputCode() {
@@ -208,15 +266,11 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        this.pauseTime = System.currentTimeMillis();
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(unlocked) {
-            outState.putLong("pauseTime", pauseTime);
-        }
     }
 
 }

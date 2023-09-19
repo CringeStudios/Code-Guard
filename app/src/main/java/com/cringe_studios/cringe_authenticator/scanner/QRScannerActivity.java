@@ -5,10 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -33,13 +31,9 @@ import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;
-import com.cringe_studios.cringe_authenticator.util.OTPParser;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.mlkit.vision.barcode.BarcodeScanner;
-import com.google.mlkit.vision.barcode.BarcodeScanning;
-import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.util.ArrayList;
@@ -55,7 +49,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
-    private BarcodeScanner scanner;
+    private QRScanner scanner;
 
     private boolean process = true;
 
@@ -92,7 +86,7 @@ public class QRScannerActivity extends AppCompatActivity {
             }
         }, ContextCompat.getMainExecutor(this));
 
-        scanner = BarcodeScanning.getClient();
+        scanner = new QRScanner();
     }
 
     void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
@@ -136,40 +130,27 @@ public class QRScannerActivity extends AppCompatActivity {
             Image mediaImage = image.getImage();
             if(mediaImage != null) {
                 InputImage input = InputImage.fromMediaImage(mediaImage, image.getImageInfo().getRotationDegrees());
-                scanner.process(input).addOnSuccessListener(barcodes -> {
+                scanner.scan(input, code -> {
                     image.close();
 
-                    if(barcodes.size() >= 1) {
-                        Barcode code = null;
-
-                        for(Barcode c : barcodes) {
-                            if(c.getValueType() == Barcode.TYPE_TEXT) {
-                                code = c;
-                                break;
-                            }
-                        }
-
-                        if(code == null) return;
-
-                        Uri uri = Uri.parse(code.getRawValue());
+                    if(code != null) {
                         process = false;
-                        importUri(uri);
+                        importCode(code);
                     }
-                }).addOnFailureListener(e -> {});
+                }, error -> {
+                    image.close();
+                    error(error);
+                });
+                /*.addOnSuccessListener(barcodes -> {
+
+                }).addOnFailureListener(e -> error("Failed to scan code"));*/
             }
         }
     }
 
-    private void importUri(Uri uri) {
-        if("otpauth-migration".equalsIgnoreCase(uri.getScheme())) {
-            OTPMigrationPart part;
-
-            try {
-                part = OTPParser.parseMigration(uri);
-            }catch(IllegalArgumentException e) {
-                error(e.getMessage());
-                return;
-            }
+    private void importCode(DetectedCode code) {
+        if(code.isMigrationPart()) {
+            OTPMigrationPart part = code.getMigrationPart();
 
             if((lastPart != null && part.getBatchIndex() != lastPart.getBatchIndex() + 1) || (lastPart == null && part.getBatchIndex() > 0)) {
                 // Not next batch, or first batch (if nothing was scanned yet), keep looking
@@ -206,7 +187,6 @@ public class QRScannerActivity extends AppCompatActivity {
                 }
             }
 
-
             return;
         }
 
@@ -217,10 +197,16 @@ public class QRScannerActivity extends AppCompatActivity {
         }
 
         try {
-            success(OTPParser.parse(uri));
+            success(code.getData());
         }catch(IllegalArgumentException e) {
             error(e.getMessage());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scanner.close();
     }
 
     private void success(@NonNull OTPData... data) {
