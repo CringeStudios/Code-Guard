@@ -1,46 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/button_themed"
     android:layout_margin="5dp"
+    android:background="@drawable/button_themed"
+    android:orientation="vertical"
     android:padding="5dp">
-    <TextView
-        android:id="@+id/label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My OTP"
-        android:textAlignment="center"
-        android:textSize="16sp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp">
-
-        <Space
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
-        <TextView
-            android:id="@+id/otpCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="000000"
-            android:textAlignment="center"
-            android:textSize="24sp" />
+        android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/progress"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/progress_circle" />
+            android:id="@+id/imageView5"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            app:srcCompat="@drawable/cringeauth_white"
+            tools:srcCompat="@drawable/cringeauth_white" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:minHeight="25dp"
+                android:text="My OTP"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center">
+
+                <Space
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/otpCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="top"
+                    android:text="000000"
+                    android:textAlignment="center"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/progress"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/progress_circle" />
+
+            </LinearLayout>
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
