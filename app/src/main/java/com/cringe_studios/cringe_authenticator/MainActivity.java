@@ -142,7 +142,7 @@ public class MainActivity extends BaseActivity {
 
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
-        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage()); // TODO: scan image
+        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage());
         binding.fabInput.setOnClickListener(view -> inputCode());
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
