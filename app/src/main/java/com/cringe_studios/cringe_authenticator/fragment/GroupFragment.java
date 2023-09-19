@@ -162,7 +162,7 @@ public class GroupFragment extends NamedFragment {
             OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
             if(vh == null) continue;
             try {
-                vh.getBinding().otpCode.setText(vh.getOTPData().getPin());
+                vh.getBinding().otpCode.setText(OTPListItem.formatCode(vh.getOTPData().getPin()));
             } catch (OTPException e) {
                 DialogUtil.showErrorDialog(requireContext(), e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
             }
