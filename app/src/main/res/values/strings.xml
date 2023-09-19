@@ -55,6 +55,13 @@
     <string name="password">Password</string>
     <string name="set_password">set Password</string>
     <string name="confirm_password">confirm Password</string>
+    <string name="unlock_cringe_authenticator">Unlock Authenticator</string>
+    <string name="unlock">Unlock</string>
+    <string name="unlock_using_biometrics">Unlock using biometrics</string>
+    <string name="name" translatable="false">Name</string>
+    <string name="add_code">Add Code</string>
+    <string name="settings">Settings</string>
+    <string name="developed_by">Developed by Cringe Studios and JG-Cody</string>
     <string-array name="view_edit_move_delete">
         <item>View</item>
         <item>Edit</item>

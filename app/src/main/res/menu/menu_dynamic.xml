@@ -5,13 +5,13 @@
     <item
         android:id="@+id/action_code"
         android:orderInCategory="100"
-        android:title="Add Code"
+        android:title="@string/add_code"
         app:showAsAction="never"
         android:onClick="addCode" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="never"
         android:onClick="openSettings" />
 </menu>

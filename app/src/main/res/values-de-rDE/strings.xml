@@ -61,4 +61,14 @@
     </string-array>
     <string name="screen_security">Bildschirmsicherheit</string>
     <string name="hide_codes">Codes verstecken</string>
+    <string name="enable_encryption">Verschlüsselung aktivieren</string>
+    <string name="password">Passwort</string>
+    <string name="set_password">Passwort setzen</string>
+    <string name="confirm_password">Passwort bestätigen</string>
+    <string name="unlock_cringe_authenticator">Authenticator entsperren</string>
+    <string name="unlock">Entsperren</string>
+    <string name="unlock_using_biometrics">Mit Biometrie ensperren</string>
+    <string name="add_code">Code hinzufügen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="developed_by">Developed by Cringe Studios and JG-Cody</string>
 </resources>
