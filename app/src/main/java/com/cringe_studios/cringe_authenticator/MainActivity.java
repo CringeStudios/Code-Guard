@@ -83,6 +83,8 @@ public class MainActivity extends BaseActivity {
         });
 
         pickQRCodeImage = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), img -> {
+            if(img == null) return;
+
             try {
                 InputImage image = InputImage.fromFilePath(this, img);
                 qrScanner.scan(image, code -> {
