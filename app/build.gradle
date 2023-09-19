@@ -81,7 +81,7 @@ dependencies {
     implementation "androidx.biometric:biometric:1.1.0"
     implementation 'com.cringe_studios:CringeAuthenticatorLibrary:1.5'
     implementation 'com.google.mlkit:barcode-scanning:17.2.0'
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'androidx.activity:activity:1.7.2'
 
     def camerax_version = "1.2.3"
