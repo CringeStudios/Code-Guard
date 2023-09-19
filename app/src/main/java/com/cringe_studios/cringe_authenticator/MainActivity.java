@@ -202,9 +202,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void scanCodeFromImage() {
-        Object mediaType = ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE; // Cursed, but needs to happen because otherwise Android Studio complains about type casting even though it works
         pickQRCodeImage.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType((ActivityResultContracts.PickVisualMedia.VisualMediaType) mediaType)
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
     }
 
