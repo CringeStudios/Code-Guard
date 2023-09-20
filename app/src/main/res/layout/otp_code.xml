@@ -18,8 +18,9 @@
             android:id="@+id/imageView5"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
+            android:paddingLeft="10dp"
+            android:paddingEnd="10dp"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/cringeauth_white"
             tools:srcCompat="@drawable/cringeauth_white" />
 
