@@ -7,9 +7,7 @@
     android:orientation="vertical"
     android:padding="5dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:clickable="true"
-    android:focusable="true" >
+    android:paddingEnd="16dp" >
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"

@@ -68,6 +68,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
         String group = items.get(position);
 
         holder.setGroupId(group);
+        holder.setSelected(false);
 
         holder.getBinding().button.setText(SettingsUtil.getGroupName(context, group));
 
@@ -80,10 +81,6 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
                 ((BaseActivity) context).invalidateMenu();
             }
         });
-        /*holder.getBinding().button.setOnLongClickListener(view -> {
-            showMenuCallback.accept(group);
-            return true;
-        });*/
 
         holder.getBinding().button.setOnLongClickListener(view -> {
             if(editing) return true;

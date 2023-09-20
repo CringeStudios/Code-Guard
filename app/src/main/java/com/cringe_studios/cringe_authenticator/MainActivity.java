@@ -167,6 +167,13 @@ public class MainActivity extends BaseActivity {
             return true;
         }
 
+        if(fragment instanceof GroupFragment) {
+            GroupFragment frag = (GroupFragment) fragment;
+            getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_otps_edit : R.menu.menu_otps, menu);
+            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_group);
+            return true;
+        }
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -193,6 +200,14 @@ public class MainActivity extends BaseActivity {
             MenuFragment menuFragment = (MenuFragment) fragment;
             if(menuFragment.isEditing()) {
                 menuFragment.finishEditing();
+                return;
+            }
+        }
+
+        if(fragment instanceof GroupFragment) {
+            GroupFragment groupFragment = (GroupFragment) fragment;
+            if(groupFragment.isEditing()) {
+                groupFragment.finishEditing();
                 return;
             }
         }
@@ -256,7 +271,7 @@ public class MainActivity extends BaseActivity {
             if(!(fragment instanceof GroupFragment)) return;
 
             ((GroupFragment) fragment).addOTP(data);
-        }, () -> inputCode(), false);
+        }, false);
     }
 
     private void showHOTPDialog() {
@@ -265,7 +280,7 @@ public class MainActivity extends BaseActivity {
             if(!(fragment instanceof GroupFragment)) return;
 
             ((GroupFragment) fragment).addOTP(data);
-        }, () -> inputCode(), false);
+        }, false);
     }
 
     public void addGroup(MenuItem item) {
@@ -286,6 +301,41 @@ public class MainActivity extends BaseActivity {
         Fragment frag = NavigationUtil.getCurrentFragment(this);
         if(frag instanceof MenuFragment) {
             ((MenuFragment) frag).removeSelectedGroups();
+        }
+    }
+
+    public void addOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof GroupFragment) {
+            ((GroupFragment) frag).addOTP();
+        }
+    }
+
+    public void viewOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof GroupFragment) {
+            ((GroupFragment) frag).viewOTP();
+        }
+    }
+
+    public void editOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof GroupFragment) {
+            ((GroupFragment) frag).editOTP();
+        }
+    }
+
+    public void moveOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof GroupFragment) {
+            ((GroupFragment) frag).moveOTP();
+        }
+    }
+
+    public void deleteOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof GroupFragment) {
+            ((GroupFragment) frag).deleteOTP();
         }
     }
 

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_view_otp"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_compare_24"
+        android:title="View OTP"
+        android:onClick="viewOTP"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_edit_otp"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="Edit OTP"
+        android:onClick="editOTP"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_move_otp"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_qr_code_scanner_24"
+        android:title="Move OTP"
+        android:onClick="moveOTP"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete_otp"
+        android:orderInCategory="100"
+        android:icon="@drawable/baseline_delete_24"
+        android:title="Delete OTP"
+        android:onClick="deleteOTP"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"
+        android:onClick="openSettings" />
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="@string/action_about"
+        app:showAsAction="never"
+        android:onClick="openAbout" />
+</menu>

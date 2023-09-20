@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
+import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
@@ -63,8 +65,7 @@ public class GroupFragment extends NamedFragment {
 
         FabUtil.showFabs(requireActivity());
 
-        otpListAdapter = new OTPListAdapter(requireContext(), data -> showOTPDialog(data));
-
+        otpListAdapter = new OTPListAdapter(requireContext(), binding.itemList);
         binding.itemList.setAdapter(otpListAdapter);
 
         loadOTPs();
@@ -78,52 +79,6 @@ public class GroupFragment extends NamedFragment {
         handler.post(refreshCodes);
 
         return binding.getRoot();
-    }
-
-    private void showOTPDialog(OTPData data) {
-        new StyledDialogBuilder(requireContext())
-                .setTitle(R.string.edit_otp_title)
-                .setItems(R.array.view_edit_move_delete, (dialog, which) -> {
-                    switch(which) {
-                        case 0:
-                            DialogUtil.showViewCodeDialog(getLayoutInflater(), data, () -> showOTPDialog(data));
-                            break;
-                        case 1:
-                            DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
-                                otpListAdapter.replace(data, newData);
-                                saveOTPs();
-                            }, () -> showOTPDialog(data));
-                            break;
-                        case 2:
-                            DialogUtil.showChooseGroupDialog(requireContext(), group -> {
-                                OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-                                    try {
-                                        OTPDatabase.getLoadedDatabase().addOTP(group, data);
-                                        OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
-                                        otpListAdapter.remove(data);
-                                        saveOTPs();
-                                    } catch (OTPDatabaseException | CryptoException e) {
-                                        DialogUtil.showErrorDialog(requireContext(), e.toString());
-                                    }
-                                }, null);
-                                saveOTPs();
-                            }, null);
-                            break;
-                        case 3:
-                            new StyledDialogBuilder(requireContext())
-                                    .setTitle(R.string.otp_delete_title)
-                                    .setMessage(R.string.otp_delete_message)
-                                    .setPositiveButton(R.string.yes, (d, w) -> {
-                                        otpListAdapter.remove(data);
-                                        saveOTPs();
-                                    })
-                                    .setNegativeButton(R.string.no, (d, w) -> {})
-                                    .show();
-                            break;
-                    }
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
-                .show();
     }
 
     private void saveOTPs() {
@@ -176,6 +131,89 @@ public class GroupFragment extends NamedFragment {
                 vh.getBinding().progress.setImageLevel((int) (progress * 10_000));
             }
         }
+    }
+
+    public void addOTP() {
+        // TODO
+    }
+
+    public void viewOTP() {
+        if(!otpListAdapter.isEditing()) return;
+
+        List<OTPListItem> items = otpListAdapter.getSelectedCodes();
+        if(items.size() != 1) return;
+
+        OTPData data = items.get(0).getOTPData();
+        DialogUtil.showViewCodeDialog(getLayoutInflater(), data);
+    }
+
+    public void editOTP() {
+        if(!otpListAdapter.isEditing()) return;
+
+        List<OTPListItem> items = otpListAdapter.getSelectedCodes();
+        if(items.size() != 1) return;
+
+        OTPData data = items.get(0).getOTPData();
+        DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
+            otpListAdapter.replace(data, newData);
+            saveOTPs();
+            otpListAdapter.finishEditing();
+        });
+    }
+
+    public void moveOTP() {
+        if(!otpListAdapter.isEditing()) return;
+
+        List<OTPListItem> items = otpListAdapter.getSelectedCodes();
+
+        DialogUtil.showChooseGroupDialog(requireContext(), group -> {
+            OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+                try {
+                    for(OTPListItem item : items) {
+                        OTPData data = item.getOTPData();
+                        OTPDatabase.getLoadedDatabase().addOTP(group, data);
+                        OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                        otpListAdapter.remove(data);
+                    }
+
+                    saveOTPs();
+                } catch (OTPDatabaseException | CryptoException e) {
+                    DialogUtil.showErrorDialog(requireContext(), e.toString());
+                }
+            }, null);
+            saveOTPs();
+        }, null);
+    }
+
+    public void deleteOTP() {
+        if(!otpListAdapter.isEditing()) return;
+
+        List<OTPListItem> items = otpListAdapter.getSelectedCodes();
+
+        new StyledDialogBuilder(requireContext())
+                .setTitle(R.string.otp_delete_title)
+                .setMessage(R.string.otp_delete_message)
+                .setPositiveButton(R.string.yes, (d, w) -> {
+                    for(OTPListItem item : items) {
+                        otpListAdapter.remove(item.getOTPData());
+                    }
+
+                    saveOTPs();
+                })
+                .setNegativeButton(R.string.no, (d, w) -> {})
+                .show();
+    }
+
+    public boolean isEditing() {
+        return otpListAdapter.isEditing();
+    }
+
+    public void finishEditing() {
+        otpListAdapter.finishEditing();
+    }
+
+    public boolean hasSelectedMultipleItems() {
+        return otpListAdapter.getSelectedCodes().size() > 1;
     }
 
     @Override

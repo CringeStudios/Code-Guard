@@ -1,8 +1,11 @@
 package com.cringe_studios.cringe_authenticator.otplist;
 
+import android.graphics.drawable.ColorDrawable;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 
@@ -11,6 +14,8 @@ public class OTPListItem extends RecyclerView.ViewHolder {
     private OtpCodeBinding binding;
 
     private OTPData otpData;
+
+    private boolean selected;
 
     public OTPListItem(OtpCodeBinding binding) {
         super(binding.getRoot());
@@ -41,6 +46,20 @@ public class OTPListItem extends RecyclerView.ViewHolder {
             b.append(c);
         }
         return b.toString();
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+
+        if(selected) {
+            binding.otpCodeBackground.setBackground(new ColorDrawable(binding.getRoot().getContext().getResources().getColor(R.color.selected_highlight)));
+        }else {
+            binding.otpCodeBackground.setBackground(null);
+        }
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 
 }

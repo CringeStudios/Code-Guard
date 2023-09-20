@@ -28,12 +28,11 @@ public class DialogUtil {
 
     private static final Integer[] DIGITS = new Integer[]{6, 7, 8, 9, 10, 11, 12};
 
-    private static void showCodeDialog(Context context, View view, DialogCallback ok, Runnable back) {
+    private static void showCodeDialog(Context context, View view, DialogCallback ok) {
         AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle(R.string.code_input_title)
                 .setView(view)
                 .setPositiveButton(R.string.ok, (btnView, which) -> {})
-                .setNeutralButton(R.string.back, (btnView, which) -> back.run())
                 .setNegativeButton(R.string.cancel, (btnView, which) -> {})
                 .create();
 
@@ -60,7 +59,7 @@ public class DialogUtil {
         showErrorDialog(context, errorMessage, null);
     }
 
-    public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, Runnable back, boolean view) {
+    public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, boolean view) {
         Context context = inflater.getContext();
         DialogInputCodeTotpBinding binding = DialogInputCodeTotpBinding.inflate(inflater);
 
@@ -122,10 +121,10 @@ public class DialogUtil {
                 showErrorDialog(context, context.getString(R.string.input_code_invalid_number));
                 return false;
             }
-        }, back);
+        });
     }
 
-    public static void showHOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, Runnable back, boolean view) {
+    public static void showHOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, boolean view) {
         Context context = inflater.getContext();
         DialogInputCodeHotpBinding binding = DialogInputCodeHotpBinding.inflate(inflater);
 
@@ -187,21 +186,21 @@ public class DialogUtil {
                 showErrorDialog(context, context.getString(R.string.input_code_invalid_number));
                 return false;
             }
-        }, back);
+        });
     }
 
-    public static void showViewCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Runnable back) {
+    public static void showViewCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData) {
         // TODO: use better dialogs
         switch(initialData.getType()) {
-            case HOTP: showHOTPDialog(inflater, initialData, d -> {}, back, true); break;
-            case TOTP: showTOTPDialog(inflater, initialData, d -> {}, back, true); break;
+            case HOTP: showHOTPDialog(inflater, initialData, d -> {}, true); break;
+            case TOTP: showTOTPDialog(inflater, initialData, d -> {}, true); break;
         }
     }
 
-    public static void showEditCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Consumer<OTPData> callback, Runnable back) {
+    public static void showEditCodeDialog(LayoutInflater inflater, @NonNull OTPData initialData, Consumer<OTPData> callback) {
         switch(initialData.getType()) {
-            case HOTP: showHOTPDialog(inflater, initialData, callback, back, false); break;
-            case TOTP: showTOTPDialog(inflater, initialData, callback, back, false); break;
+            case HOTP: showHOTPDialog(inflater, initialData, callback, false); break;
+            case TOTP: showTOTPDialog(inflater, initialData, callback, false); break;
         }
     }
 

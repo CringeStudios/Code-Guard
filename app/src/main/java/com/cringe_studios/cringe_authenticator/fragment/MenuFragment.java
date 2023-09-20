@@ -54,31 +54,6 @@ public class MenuFragment extends NamedFragment {
         return binding.getRoot();
     }
 
-    private void showGroupDialog(String group) {
-        new StyledDialogBuilder(requireContext())
-                .setTitle(R.string.edit_group_title)
-                .setItems(R.array.rename_delete, (dialog, which) -> {
-                    switch(which) {
-                        case 0:
-                            DialogUtil.showCreateGroupDialog(getLayoutInflater(), SettingsUtil.getGroupName(requireContext(), group), newName -> {
-                                renameGroup(group, newName);
-                            }, null);
-
-                            break;
-                        case 1:
-                            new StyledDialogBuilder(requireContext())
-                                    .setTitle(R.string.group_delete_title)
-                                    .setMessage(R.string.group_delete_message)
-                                    .setPositiveButton(R.string.yes, (d, w) -> removeGroup(group))
-                                    .setNegativeButton(R.string.no, (d, w) -> {})
-                                    .show();
-                            break;
-                    }
-                })
-                .setNegativeButton(R.string.cancel, (dialog, which) -> {})
-                .show();
-    }
-
     private void loadGroups() {
         List<String> items = SettingsUtil.getGroups(requireContext());
 
@@ -114,7 +89,7 @@ public class MenuFragment extends NamedFragment {
 
         new StyledDialogBuilder(requireContext())
                 .setTitle(R.string.group_delete_title)
-                .setMessage("Delete selected groups?")
+                .setMessage(R.string.group_delete_message)
                 .setPositiveButton(R.string.yes, (d, w) -> {
                     for(GroupListItem item : groupListAdapter.getSelectedGroups()) {
                         removeGroup(item.getGroupId());

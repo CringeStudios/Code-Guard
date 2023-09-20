@@ -40,7 +40,7 @@ public class GroupListItem extends RecyclerView.ViewHolder {
         this.selected = selected;
 
         if(selected) {
-            binding.menuItemBackground.setBackground(new ColorDrawable(0xFFFF00FF));
+            binding.menuItemBackground.setBackground(new ColorDrawable(binding.getRoot().getContext().getResources().getColor(R.color.selected_highlight)));
         }else {
             binding.menuItemBackground.setBackground(null);
         }

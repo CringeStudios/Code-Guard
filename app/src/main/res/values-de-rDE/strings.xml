@@ -21,8 +21,8 @@
     <string name="qr_scanner_failed">Scannen fehlgeschlagen: %s</string>
     <string name="intro_video_failed">Abspielen des Videos fehlgeschlagen</string>
     <string name="edit_otp_title">OTP bearbeiten</string>
-    <string name="group_delete_title">Gruppe(n) löschen</string>
-    <string name="group_delete_message">Willst du die ausgewählte(n) Gruppe(n) löschen?\n\nHinweis: Dadurch werden alle darin enthaltenen OTPs gelöscht!</string>
+    <string name="group_delete_title">Gruppen löschen</string>
+    <string name="group_delete_message">Willst du die ausgewählten Gruppen löschen?\n\nHinweis: Dadurch werden alle darin enthaltenen OTPs gelöscht!</string>
     <string name="hotp_generated_new_code">Neuen Code generiert</string>
     <string name="uri_handler_failed_title">Hinzufügen des Codes fehlgeschlagen</string>
     <string name="code_input_title">Code eingeben</string>
@@ -30,7 +30,7 @@
     <string name="input_code_invalid_number">Ungültige Zahl</string>
     <string name="back">Zurück</string>
     <string name="otp_delete_title">OTP löschen</string>
-    <string name="otp_delete_message">Willst du das OTP löschen?</string>
+    <string name="otp_delete_message">Willst du die ausgewählten OTPs löschen?</string>
     <string name="edit_group_title">Gruppe bearbeiten</string>
     <string name="settings_enable_intro_video">Intro-Video zeigen</string>
     <string name="settings_biometric_lock">Biometrische Authentifizierung aktivieren</string>
