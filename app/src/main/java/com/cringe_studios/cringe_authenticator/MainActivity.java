@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
@@ -158,8 +159,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(NavigationUtil.getCurrentFragment(this) instanceof MenuFragment) {
-            getMenuInflater().inflate(R.menu.menu_groups, menu);
+        Fragment fragment = NavigationUtil.getCurrentFragment(this);
+        if(fragment instanceof MenuFragment) {
+            MenuFragment frag = (MenuFragment) fragment;
+            getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_groups_edit : R.menu.menu_groups, menu);
+            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_group);
             return true;
         }
 
@@ -184,7 +188,16 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if(!(NavigationUtil.getCurrentFragment(this) instanceof HomeFragment)) {
+        Fragment fragment = NavigationUtil.getCurrentFragment(this);
+        if(fragment instanceof MenuFragment) {
+            MenuFragment menuFragment = (MenuFragment) fragment;
+            if(menuFragment.isEditing()) {
+                menuFragment.finishEditing();
+                return;
+            }
+        }
+
+        if(!(fragment instanceof HomeFragment)) {
             NavigationUtil.navigate(this, HomeFragment.class, null);
         }
     }
@@ -256,12 +269,24 @@ public class MainActivity extends BaseActivity {
     }
 
     public void addGroup(MenuItem item) {
-        DialogUtil.showCreateGroupDialog(getLayoutInflater(), null, group -> {
-            Fragment frag = NavigationUtil.getCurrentFragment(this);
-            if(frag instanceof MenuFragment) {
-                ((MenuFragment) frag).addGroup(group);
-            }
-        }, null);
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof MenuFragment) {
+            ((MenuFragment) frag).addGroup();
+        }
+    }
+
+    public void editGroup(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof MenuFragment) {
+            ((MenuFragment) frag).editGroup();
+        }
+    }
+
+    public void deleteGroup(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof MenuFragment) {
+            ((MenuFragment) frag).removeSelectedGroups();
+        }
     }
 
     @Override

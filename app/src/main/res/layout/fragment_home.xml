@@ -17,6 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/cringeauth_white" />
+        app:srcCompat="@drawable/cringeauth_white"
+        app:tint="?android:attr/textColor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

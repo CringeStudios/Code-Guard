@@ -77,12 +77,8 @@ public class SettingsFragment extends NamedFragment {
 
         binding.settingsEnableEncryption.setChecked(SettingsUtil.isDatabaseEncrypted(requireContext()));
         binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
-            if(!OTPDatabase.isDatabaseLoaded()) {
-                // TODO: prompt user
-            }
-
             if(checked) {
-                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                 DialogUtil.showInputPasswordDialog(requireContext(), password -> {
                     CryptoParameters params = CryptoParameters.createNew();
                     Log.d("Crypto", "Created new crypto params");
 

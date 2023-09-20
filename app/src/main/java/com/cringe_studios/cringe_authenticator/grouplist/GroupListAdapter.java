@@ -1,5 +1,7 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -7,18 +9,28 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cringe_studios.cringe_authenticator.BaseActivity;
+import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
+import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
+import org.bouncycastle.jcajce.provider.symmetric.ARC4;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
     private Context context;
+
+    private RecyclerView recyclerView;
 
     private LayoutInflater inflater;
 
@@ -28,15 +40,20 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
     private Consumer<String> navigateToGroup;
 
-    private Consumer<String> showMenuCallback;
+    private Runnable saveGroups;
 
-    public GroupListAdapter(Context context, Consumer<String> navigateToGroup, Consumer<String> showMenuCallback) {
+    private boolean editing;
+
+    public GroupListAdapter(Context context, RecyclerView recyclerView, Consumer<String> navigateToGroup, Runnable saveGroups) {
         this.context = context;
+        this.recyclerView = recyclerView;
         this.navigateToGroup = navigateToGroup;
-        this.showMenuCallback = showMenuCallback;
+        this.saveGroups = saveGroups;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
+
+        attachTouchHelper(recyclerView);
     }
 
     @NonNull
@@ -50,11 +67,30 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
     public void onBindViewHolder(@NonNull GroupListItem holder, int position) {
         String group = items.get(position);
 
+        holder.setGroupId(group);
+
         holder.getBinding().button.setText(SettingsUtil.getGroupName(context, group));
 
-        holder.getBinding().button.setOnClickListener(view -> navigateToGroup.accept(group));
-        holder.getBinding().button.setOnLongClickListener(view -> {
+        holder.getBinding().button.setOnClickListener(view -> {
+            if(!editing) {
+                navigateToGroup.accept(group);
+            }else {
+                holder.setSelected(!holder.isSelected());
+                if(getSelectedGroups().isEmpty()) editing = false;
+                ((BaseActivity) context).invalidateMenu();
+            }
+        });
+        /*holder.getBinding().button.setOnLongClickListener(view -> {
             showMenuCallback.accept(group);
+            return true;
+        });*/
+
+        holder.getBinding().button.setOnLongClickListener(view -> {
+            if(editing) return true;
+
+            holder.setSelected(true);
+            editing = true;
+            ((BaseActivity) context).invalidateMenu();
             return true;
         });
     }
@@ -62,6 +98,10 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public List<String> getItems() {
+        return items;
     }
 
     public void add(String group) {
@@ -80,6 +120,59 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
         int index = items.indexOf(group);
         if(index == -1) return;
         notifyItemChanged(index);
+    }
+
+    public boolean isEditing() {
+        return editing;
+    }
+
+    public void finishEditing() {
+        if(!editing) return;
+
+        editing = false;
+        for(GroupListItem item : getSelectedGroups()) {
+            item.setSelected(false);
+        }
+
+        ((BaseActivity) context).invalidateMenu();
+    }
+
+    public List<GroupListItem> getSelectedGroups() {
+        List<GroupListItem> selected = new ArrayList<>();
+        for(int i = 0; i < items.size(); i++) {
+            GroupListItem vh = (GroupListItem) recyclerView.findViewHolderForAdapterPosition(i);
+            if(vh == null) continue;
+            if(vh.isSelected()) selected.add(vh);
+        }
+        return selected;
+    }
+
+    private void attachTouchHelper(RecyclerView view) {
+        new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(view);
+    }
+
+    private class TouchHelperCallback extends ItemTouchHelper.Callback {
+
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            Collections.swap(items, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            saveGroups.run();
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return editing;
+        }
     }
 
 }

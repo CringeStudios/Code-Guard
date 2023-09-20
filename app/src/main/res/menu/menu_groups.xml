@@ -5,9 +5,10 @@
     <item
         android:id="@+id/action_new_group"
         android:orderInCategory="100"
+        android:icon="@drawable/baseline_add_24"
         android:title="@string/action_new_group"
-        app:showAsAction="never"
-        android:onClick="addGroup" />
+        android:onClick="addGroup"
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

@@ -21,8 +21,8 @@
     <string name="qr_scanner_failed">Scannen fehlgeschlagen: %s</string>
     <string name="intro_video_failed">Abspielen des Videos fehlgeschlagen</string>
     <string name="edit_otp_title">OTP bearbeiten</string>
-    <string name="group_delete_title">Gruppe löschen</string>
-    <string name="group_delete_message">Willst du die Gruppe löschen\n\nHinweis: Dadurch werden alle OTPs in der Gruppe gelöscht!</string>
+    <string name="group_delete_title">Gruppe(n) löschen</string>
+    <string name="group_delete_message">Willst du die ausgewählte(n) Gruppe(n) löschen?\n\nHinweis: Dadurch werden alle darin enthaltenen OTPs gelöscht!</string>
     <string name="hotp_generated_new_code">Neuen Code generiert</string>
     <string name="uri_handler_failed_title">Hinzufügen des Codes fehlgeschlagen</string>
     <string name="code_input_title">Code eingeben</string>

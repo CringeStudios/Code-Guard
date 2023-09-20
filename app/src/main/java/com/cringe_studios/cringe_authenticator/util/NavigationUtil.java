@@ -21,6 +21,7 @@ public class NavigationUtil {
         ActionBar bar = activity.getSupportActionBar();
         navigate(manager, fragment, () -> {
             if(bar != null) bar.setTitle(fragment.getName());
+            activity.invalidateMenu();
         });
     }
 
@@ -45,10 +46,6 @@ public class NavigationUtil {
 
     public static Fragment getCurrentFragment(AppCompatActivity activity) {
         return getCurrentFragment(activity.getSupportFragmentManager());
-    }
-
-    public static Fragment getCurrentFragment(Fragment currentFragment) {
-        return getCurrentFragment(currentFragment.getParentFragment().getChildFragmentManager());
     }
 
     public static Fragment getCurrentFragment(FragmentManager manager) {

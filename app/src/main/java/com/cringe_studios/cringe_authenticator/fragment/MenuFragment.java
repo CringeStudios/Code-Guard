@@ -7,10 +7,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListAdapter;
+import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
@@ -36,12 +40,11 @@ public class MenuFragment extends NamedFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentMenuBinding.inflate(inflater);
 
-        groupListAdapter = new GroupListAdapter(requireContext(), group -> {
+        groupListAdapter = new GroupListAdapter(requireContext(), binding.menuItems, group -> {
             Bundle bundle = new Bundle();
             bundle.putString(GroupFragment.BUNDLE_GROUP, group);
             NavigationUtil.navigate(this, GroupFragment.class, bundle);
-        }, this::showGroupDialog);
-
+        }, () -> SettingsUtil.setGroups(requireContext(), groupListAdapter.getItems()));
         binding.menuItems.setAdapter(groupListAdapter);
 
         loadGroups();
@@ -84,10 +87,43 @@ public class MenuFragment extends NamedFragment {
         }
     }
 
-    public void addGroup(String groupName) {
-        String id = UUID.randomUUID().toString();
-        SettingsUtil.addGroup(requireContext(), id, groupName);
-        groupListAdapter.add(id);
+    public void addGroup() {
+        DialogUtil.showCreateGroupDialog(getLayoutInflater(), null, groupName -> {
+            String id = UUID.randomUUID().toString();
+            SettingsUtil.addGroup(requireContext(), id, groupName);
+            groupListAdapter.add(id);
+        }, null);
+    }
+
+    public void editGroup() {
+        if(!groupListAdapter.isEditing()) return;
+
+        List<GroupListItem> items = groupListAdapter.getSelectedGroups();
+        if(items.size() != 1) return;
+
+        String group = items.get(0).getGroupId();
+
+        DialogUtil.showCreateGroupDialog(getLayoutInflater(), SettingsUtil.getGroupName(requireContext(), group), newName -> { // TODO: edit group dialog (with "Edit Group" title)
+            renameGroup(group, newName);
+            groupListAdapter.finishEditing();
+        }, null);
+    }
+
+    public void removeSelectedGroups() {
+        if(!groupListAdapter.isEditing()) return;
+
+        new StyledDialogBuilder(requireContext())
+                .setTitle(R.string.group_delete_title)
+                .setMessage("Delete selected groups?")
+                .setPositiveButton(R.string.yes, (d, w) -> {
+                    for(GroupListItem item : groupListAdapter.getSelectedGroups()) {
+                        removeGroup(item.getGroupId());
+                    }
+
+                    groupListAdapter.finishEditing();
+                })
+                .setNegativeButton(R.string.no, (d, w) -> {})
+                .show();
     }
 
     public void removeGroup(String group) {
@@ -98,6 +134,18 @@ public class MenuFragment extends NamedFragment {
     public void renameGroup(String group, String newName) {
         SettingsUtil.setGroupName(requireContext(), group, newName);
         groupListAdapter.update(group);
+    }
+
+    public boolean isEditing() {
+        return groupListAdapter.isEditing();
+    }
+
+    public void finishEditing() {
+        groupListAdapter.finishEditing();
+    }
+
+    public boolean hasSelectedMultipleItems() {
+        return groupListAdapter.getSelectedGroups().size() > 1;
     }
 
     @Override

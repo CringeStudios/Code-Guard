@@ -10,8 +10,8 @@
         <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
+            <option value="/mnt/sshd/Files/Desktop/testing/android/Cringe-Authenticator" />
+            <option value="/mnt/sshd/Files/Desktop/testing/android/Cringe-Authenticator/app" />
           </set>
         </option>
       </GradleProjectSettings>

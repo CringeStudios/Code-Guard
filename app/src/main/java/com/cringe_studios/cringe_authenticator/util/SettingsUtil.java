@@ -47,6 +47,15 @@ public class SettingsUtil {
         return Arrays.asList(GSON.fromJson(prefs.getString("groups", "[]"), String[].class));
     }
 
+    /**
+     * Only for reordering groups. Don't add/delete groups with this!
+     * @param groups Groups
+     */
+    public static void setGroups(Context ctx, List<String> groups) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("groups", GSON.toJson(groups)).apply();
+    }
+
     public static void addGroup(Context ctx, String group, String groupName) {
         List<String> groups = new ArrayList<>(getGroups(ctx));
         groups.add(group);

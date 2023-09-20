@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menu_item_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="5dp"
-    android:background="@drawable/button_themed" >
+    android:padding="5dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:clickable="true"
+    android:focusable="true" >
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
@@ -13,8 +18,8 @@
         android:background="@drawable/button_themed"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
-        android:text="Button"
         android:textAllCaps="false"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        tools:text="Menu Item" />
 
 </LinearLayout>

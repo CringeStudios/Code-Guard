@@ -21,8 +21,8 @@
     <string name="qr_scanner_failed">Scan failed: %s</string>
     <string name="intro_video_failed">Failed to play video</string>
     <string name="edit_otp_title">Edit OTP</string>
-    <string name="group_delete_title">Delete Group</string>
-    <string name="group_delete_message">Do you want to delete the group?\n\nNote: This will delete all of the OTPs in the group!</string>
+    <string name="group_delete_title">Delete Group(s)</string>
+    <string name="group_delete_message">Do you want to delete the group(s)?\n\nNote: This will delete all of the contained OTPs!</string>
     <string name="hotp_generated_new_code">Generated new code</string>
     <string name="uri_handler_failed_title">Failed to add code</string>
     <string name="code_input_title">Input Code</string>
