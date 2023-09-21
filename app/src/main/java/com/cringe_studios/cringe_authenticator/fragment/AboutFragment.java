@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentAboutBinding;
 
 public class AboutFragment extends NamedFragment {
@@ -16,7 +17,7 @@ public class AboutFragment extends NamedFragment {
 
     @Override
     public String getName() {
-        return "About";
+        return requireActivity().getString(R.string.fragment_about);
     }
 
     @Nullable

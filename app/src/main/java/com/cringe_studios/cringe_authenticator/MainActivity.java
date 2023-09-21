@@ -157,8 +157,6 @@ public class MainActivity extends BaseActivity {
         }else {
             NavigationUtil.navigate(this, HomeFragment.class, null);
         }
-
-        new MenuDrawerFragment().show(getSupportFragmentManager(), null);
     }
 
     @Override

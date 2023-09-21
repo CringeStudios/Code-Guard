@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentHomeBinding;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 
@@ -16,7 +17,7 @@ public class HomeFragment extends NamedFragment {
 
     @Override
     public String getName() {
-        return "Home";
+        return requireActivity().getString(R.string.fragment_home);
     }
 
     @Override

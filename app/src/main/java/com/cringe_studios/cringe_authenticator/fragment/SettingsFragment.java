@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.biometric.BiometricManager;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
+import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
@@ -41,7 +42,7 @@ public class SettingsFragment extends NamedFragment {
 
     @Override
     public String getName() {
-        return "Settings";
+        return requireActivity().getString(R.string.fragment_settings);
     }
 
     @Nullable
