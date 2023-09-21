@@ -7,12 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.cringe_studios.cringe_authenticator.R;
-import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuBinding;
+import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuDrawerBinding;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListAdapter;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
@@ -20,38 +17,43 @@ import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
 import java.util.UUID;
 
-public class MenuFragment extends NamedFragment {
+public class MenuDrawerFragment extends BottomSheetDialogFragment {
 
-    private FragmentMenuBinding binding;
+    private FragmentMenuDrawerBinding binding;
 
     private GroupListAdapter groupListAdapter;
-
-    @Override
-    public String getName() {
-        return "Menu";
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentMenuBinding.inflate(inflater);
+        binding = FragmentMenuDrawerBinding.inflate(inflater);
 
         groupListAdapter = new GroupListAdapter(requireContext(), binding.menuItems, group -> {
             Bundle bundle = new Bundle();
             bundle.putString(GroupFragment.BUNDLE_GROUP, group);
             NavigationUtil.navigate(this, GroupFragment.class, bundle);
-        }, () -> SettingsUtil.setGroups(requireContext(), groupListAdapter.getItems()), requireActivity()::invalidateMenu);
+            getParentFragmentManager().beginTransaction().remove(this).commit();
+        }, () -> SettingsUtil.setGroups(requireContext(), groupListAdapter.getItems()), this::updateToolbarOptions);
         binding.menuItems.setAdapter(groupListAdapter);
 
-        loadGroups();
+        binding.menuAdd.setOnClickListener(view -> this.addGroup());
+        binding.menuEdit.setOnClickListener(view -> this.editGroup());
+        binding.menuDelete.setOnClickListener(view -> this.removeSelectedGroups());
 
-        FabUtil.hideFabs(requireActivity());
+        loadGroups();
+        updateToolbarOptions();
 
         return binding.getRoot();
+    }
+
+    private void updateToolbarOptions() {
+        binding.menuEdit.setVisibility(isEditing() && !hasSelectedMultipleItems() ? View.VISIBLE : View.GONE);
+        binding.menuDelete.setVisibility(isEditing() ? View.VISIBLE : View.GONE);
     }
 
     private void loadGroups() {

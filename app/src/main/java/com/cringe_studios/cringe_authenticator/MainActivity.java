@@ -27,6 +27,7 @@ import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoice
 import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
+import com.cringe_studios.cringe_authenticator.fragment.MenuDrawerFragment;
 import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
@@ -143,7 +144,8 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null));
+        //binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null)); TODO: remove old menu
+        binding.fabMenu.setOnClickListener(view -> NavigationUtil.openMenu(this, null));
         binding.fabScan.setOnClickListener(view -> scanCode());
         binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage());
         binding.fabInput.setOnClickListener(view -> inputCode());
@@ -155,6 +157,8 @@ public class MainActivity extends BaseActivity {
         }else {
             NavigationUtil.navigate(this, HomeFragment.class, null);
         }
+
+        new MenuDrawerFragment().show(getSupportFragmentManager(), null);
     }
 
     @Override

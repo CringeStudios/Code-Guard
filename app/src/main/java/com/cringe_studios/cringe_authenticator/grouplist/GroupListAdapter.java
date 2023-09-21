@@ -42,13 +42,16 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
     private Runnable saveGroups;
 
+    private Runnable updateToolbarOptions;
+
     private boolean editing;
 
-    public GroupListAdapter(Context context, RecyclerView recyclerView, Consumer<String> navigateToGroup, Runnable saveGroups) {
+    public GroupListAdapter(Context context, RecyclerView recyclerView, Consumer<String> navigateToGroup, Runnable saveGroups, Runnable updateToolbarOptions) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.navigateToGroup = navigateToGroup;
         this.saveGroups = saveGroups;
+        this.updateToolbarOptions = updateToolbarOptions;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
@@ -78,7 +81,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
             }else {
                 holder.setSelected(!holder.isSelected());
                 if(getSelectedGroups().isEmpty()) editing = false;
-                ((BaseActivity) context).invalidateMenu();
+                updateToolbarOptions.run();
             }
         });
 
@@ -87,7 +90,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
             holder.setSelected(true);
             editing = true;
-            ((BaseActivity) context).invalidateMenu();
+            updateToolbarOptions.run();
             return true;
         });
     }
@@ -131,7 +134,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
             item.setSelected(false);
         }
 
-        ((BaseActivity) context).invalidateMenu();
+        updateToolbarOptions.run();
     }
 
     public List<GroupListItem> getSelectedGroups() {

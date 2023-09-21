@@ -6,8 +6,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.fragment.MenuDrawerFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 
 public class NavigationUtil {
@@ -23,6 +25,13 @@ public class NavigationUtil {
             if(bar != null) bar.setTitle(fragment.getName());
             activity.invalidateMenu();
         });
+    }
+
+    public static void openMenu(AppCompatActivity activity, Bundle args) {
+        FragmentManager manager = activity.getSupportFragmentManager();
+        MenuDrawerFragment fragment = instantiateFragment(manager, MenuDrawerFragment.class, args);
+
+        fragment.show(manager, null);
     }
 
     public static void navigate(Fragment currentFragment, Class<? extends NamedFragment> fragmentClass, Bundle args) {
