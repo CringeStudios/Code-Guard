@@ -1,5 +1,7 @@
 package com.cringe_studios.cringe_authenticator.otplist;
 
+import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 import androidx.annotation.NonNull;
@@ -52,7 +54,10 @@ public class OTPListItem extends RecyclerView.ViewHolder {
         this.selected = selected;
 
         if(selected) {
-            binding.otpCodeBackground.setBackground(new ColorDrawable(binding.getRoot().getContext().getResources().getColor(R.color.selected_highlight)));
+            TypedArray array = binding.getRoot().getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.colorTheme1 });
+            int color = array.getColor(0, 0xFFFF00FF);
+            color = Color.argb(0x55, Color.red(color), Color.green(color), Color.blue(color));
+            binding.otpCodeBackground.setBackground(new ColorDrawable(color));
         }else {
             binding.otpCodeBackground.setBackground(null);
         }

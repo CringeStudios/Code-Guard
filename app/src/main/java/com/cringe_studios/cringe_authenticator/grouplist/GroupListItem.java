@@ -1,6 +1,7 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
 import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -40,7 +41,10 @@ public class GroupListItem extends RecyclerView.ViewHolder {
         this.selected = selected;
 
         if(selected) {
-            binding.menuItemBackground.setBackground(new ColorDrawable(binding.getRoot().getContext().getResources().getColor(R.color.selected_highlight)));
+            TypedArray array = binding.getRoot().getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.colorTheme1 });
+            int color = array.getColor(0, 0xFFFF00FF);
+            color = Color.argb(0x55, Color.red(color), Color.green(color), Color.blue(color));
+            binding.menuItemBackground.setBackground(new ColorDrawable(color));
         }else {
             binding.menuItemBackground.setBackground(null);
         }
