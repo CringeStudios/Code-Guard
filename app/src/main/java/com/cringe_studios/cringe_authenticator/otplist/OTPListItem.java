@@ -55,9 +55,13 @@ public class OTPListItem extends RecyclerView.ViewHolder {
 
         if(selected) {
             TypedArray array = binding.getRoot().getContext().getTheme().obtainStyledAttributes(new int[] { R.attr.colorTheme1 });
-            int color = array.getColor(0, 0xFFFF00FF);
-            color = Color.argb(0x55, Color.red(color), Color.green(color), Color.blue(color));
-            binding.otpCodeBackground.setBackground(new ColorDrawable(color));
+            try {
+                int color = array.getColor(0, 0xFFFF00FF);
+                color = Color.argb(0x55, Color.red(color), Color.green(color), Color.blue(color));
+                binding.otpCodeBackground.setBackground(new ColorDrawable(color));
+            } finally {
+                array.close();
+            }
         }else {
             binding.otpCodeBackground.setBackground(null);
         }
