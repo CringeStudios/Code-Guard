@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_blue_green"
     android:padding="16dp">
 
     <TextView
@@ -13,30 +14,29 @@
         android:text="@string/unlock_cringe_authenticator"
         android:textSize="21sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/unlock_password_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/unlock_password_text"
         android:layout_width="0dp"
         android:layout_height="19dp"
-        android:layout_marginTop="32dp"
         android:text="@string/password"
+        app:layout_constraintBottom_toTopOf="@+id/unlock_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unlock_title" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/unlock_password"
         android:layout_width="0dp"
         android:layout_height="45dp"
-        android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="textPassword"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unlock_password_text" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/unlock_button"
@@ -68,10 +68,10 @@
         android:layout_height="0dp"
         android:scaleX="0.5"
         android:scaleY="0.5"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/unlock_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unlock_biometrics"
-        app:srcCompat="@drawable/fingerprint" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_lock_open_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
