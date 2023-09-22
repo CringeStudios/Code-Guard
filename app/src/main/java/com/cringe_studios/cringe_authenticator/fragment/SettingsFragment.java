@@ -3,6 +3,7 @@ package com.cringe_studios.cringe_authenticator.fragment;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import android.location.SettingInjectorService;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,7 @@ import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator.util.Theme;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -57,7 +59,7 @@ public class SettingsFragment extends NamedFragment {
             localeNames[i] = locales[i].getDisplayName(locales[i]);
         }
 
-        binding.settingsLanguage.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, localeNames));
+        binding.settingsLanguage.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, localeNames));
         binding.settingsLanguage.setSelection(Arrays.asList(locales).indexOf(SettingsUtil.getLocale(requireContext())));
         binding.settingsLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -79,7 +81,7 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsEnableEncryption.setChecked(SettingsUtil.isDatabaseEncrypted(requireContext()));
         binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
             if(checked) {
-                 DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
                     CryptoParameters params = CryptoParameters.createNew();
                     Log.d("Crypto", "Created new crypto params");
 
@@ -89,6 +91,10 @@ public class SettingsFragment extends NamedFragment {
                         OTPDatabase.encrypt(requireContext(), key, params);
                         SettingsUtil.enableEncryption(requireContext(), params);
                         Log.d("Crypto", "DB encryption enabled");
+
+                        if(BiometricUtil.isSupported(requireContext())) {
+                            binding.settingsBiometricLock.setEnabled(true);
+                        }
                     } catch (CryptoException | OTPDatabaseException e) {
                         throw new RuntimeException(e); // TODO
                     }
@@ -98,18 +104,16 @@ public class SettingsFragment extends NamedFragment {
                     OTPDatabase.decrypt(requireContext());
                     SettingsUtil.disableEncryption(requireContext());
                     Log.d("Crypto", "DB encryption disabled");
+
+                    binding.settingsBiometricLock.setChecked(false);
+                    binding.settingsBiometricLock.setEnabled(false);
                 } catch (OTPDatabaseException | CryptoException e) {
                     throw new RuntimeException(e); // TODO
                 }
             }
         });
 
-        binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
-        binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
-
-        if(SettingsUtil.isDatabaseEncrypted(requireContext())
-                && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                && BiometricManager.from(requireContext()).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+        if(SettingsUtil.isDatabaseEncrypted(requireContext()) && BiometricUtil.isSupported(requireContext())) {
             binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricEncryption(requireContext()));
             binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> {
                 if(checked) {
@@ -140,20 +144,32 @@ public class SettingsFragment extends NamedFragment {
             // TODO: inform user
         }
 
-        binding.settingsTheme.setAdapter(new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, SettingsUtil.THEME_NAMES.toArray(new String[0])));
-        binding.settingsTheme.setSelection(SettingsUtil.THEME_NAMES.indexOf(SettingsUtil.getTheme(requireContext())));
+        binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
+        binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
+
+        binding.settingsScreenSecurity.setChecked(SettingsUtil.isScreenSecurity(requireContext()));
+        binding.settingsScreenSecurity.setOnCheckedChangeListener((view, checked) -> {
+            SettingsUtil.setScreenSecurity(requireContext(), checked);
+            requireActivity().recreate();
+        });
+
+        binding.settingsHideCodes.setChecked(SettingsUtil.isHideCodes(requireContext())); // TODO: implement functionality
+        binding.settingsHideCodes.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setHideCodes(requireContext(), checked));
+
+        String[] themeNames = new String[Theme.values().length];
+        for(int i = 0; i < Theme.values().length; i++) {
+            themeNames[i] = getResources().getString(Theme.values()[i].getName());
+        }
+
+        binding.settingsTheme.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, themeNames));
+        binding.settingsTheme.setSelection(SettingsUtil.getTheme(requireContext()).ordinal());
         binding.settingsTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String theme = SettingsUtil.THEME_NAMES.get(position);
-                if(theme.equals(SettingsUtil.getTheme(requireContext()))) return;
+                Theme theme = Theme.values()[position];
+                if(theme == SettingsUtil.getTheme(requireContext())) return;
 
                 SettingsUtil.setTheme(requireContext(), theme);
-
-                Integer themeID = SettingsUtil.THEMES.get(theme);
-                if(themeID == null) return;
-
-                requireActivity().setTheme(themeID);
                 requireActivity().recreate();
             }
 

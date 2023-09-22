@@ -4,6 +4,7 @@ import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRON
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executor;
 public class BiometricUtil {
 
     public static boolean isSupported(Context context) {
-        return BiometricManager.from(context).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.from(context).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
     }
 
     public static void promptBiometricAuth(FragmentActivity context, Runnable success, Runnable failure) {

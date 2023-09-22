@@ -8,12 +8,8 @@ import com.cringe_studios.cringe_authenticator.R;
 public class ThemeUtil {
 
     public static void loadTheme(AppCompatActivity activity) {
-        Integer themeID = SettingsUtil.THEMES.get(SettingsUtil.getTheme(activity));
-        if(themeID != null) {
-            activity.setTheme(themeID);
-        }else {
-            activity.setTheme(R.style.Theme_CringeAuthenticator_Blue_Green);
-        }
+        Theme theme = SettingsUtil.getTheme(activity);
+        activity.setTheme(theme.getStyle());
 
         // TODO: use settings
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

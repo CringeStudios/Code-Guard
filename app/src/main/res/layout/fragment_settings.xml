@@ -30,25 +30,25 @@
             android:text="@string/enable_encryption" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/settings_enable_intro_video"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_enable_intro_video" />
-
-        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_biometric_lock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_biometric_lock" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/screen_security"
+            android:id="@+id/settings_enable_intro_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_enable_intro_video" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_screen_security"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/screen_security" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/hide_codes"
+            android:id="@+id/settings_hide_codes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/hide_codes" />
@@ -66,7 +66,6 @@
             android:paddingBottom="10dp" />
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/appearance" />

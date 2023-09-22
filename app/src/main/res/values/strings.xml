@@ -76,4 +76,10 @@
         <item>Rename</item>
         <item>Delete</item>
     </string-array>
+    <string name="theme_blue_green">Blue/Green</string>
+    <string name="theme_red_blue">Red/Blue</string>
+    <string name="theme_pink_green">Pink/Green</string>
+    <string name="theme_blue_yellow">Blue/Yellow</string>
+    <string name="theme_green_yellow">Green/Yellow</string>
+    <string name="theme_orange_turquoise">Orange/Turquoise</string>
 </resources>

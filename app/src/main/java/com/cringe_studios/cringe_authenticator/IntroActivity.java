@@ -13,9 +13,9 @@ import com.cringe_studios.cringe_authenticator.databinding.ActivityIntroBinding;
 import com.cringe_studios.cringe_authenticator.unlock.UnlockActivity;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends BaseActivity {
 
-    private static ActivityIntroBinding binding;
+    private ActivityIntroBinding binding;
 
     private MediaPlayer mMediaPlayer;
 

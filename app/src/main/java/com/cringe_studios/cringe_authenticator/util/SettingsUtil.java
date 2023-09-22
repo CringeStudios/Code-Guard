@@ -6,6 +6,7 @@ import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.google.gson.Gson;
 
@@ -20,21 +21,6 @@ import java.util.Locale;
 import java.util.Map;
 
 public class SettingsUtil {
-
-    public static final Map<String, Integer> THEMES;
-    public static final List<String> THEME_NAMES;
-
-    static {
-        Map<String, Integer> themes = new LinkedHashMap<>();
-        themes.put("Blue/Green", R.style.Theme_CringeAuthenticator_Blue_Green);
-        themes.put("Red/Blue", R.style.Theme_CringeAuthenticator_Red_Blue);
-        themes.put("Pink/Green", R.style.Theme_CringeAuthenticator_Pink_Green);
-        themes.put("Blue/Yellow", R.style.Theme_CringeAuthenticator_Blue_Yellow);
-        themes.put("Green/Yellow", R.style.Theme_CringeAuthenticator_Green_Yellow);
-        themes.put("Orange/Turquoise", R.style.Theme_CringeAuthenticator_Orange_Turquoise);
-        THEMES = Collections.unmodifiableMap(themes);
-        THEME_NAMES = Collections.unmodifiableList(new ArrayList<>(THEMES.keySet()));
-    }
 
     public static String
             GROUPS_PREFS_NAME = "groups",
@@ -130,8 +116,6 @@ public class SettingsUtil {
         ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit()
                 .putBoolean("encryption", false)
                 .remove("encryption.parameters")
-                .remove("encryption.biometric")
-                .remove("encryption.biometric.key")
                 .apply();
     }
 
@@ -172,13 +156,36 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableIntroVideo", true);
     }
 
-    public static void setTheme(Context ctx, String theme) {
+    public static void setScreenSecurity(Context ctx, boolean screenSecurity) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString("theme", theme).apply();
+        prefs.edit().putBoolean("screenSecurity", screenSecurity).apply();
     }
 
-    public static String getTheme(Context ctx) {
-        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("theme", THEME_NAMES.get(0));
+    public static boolean isScreenSecurity(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("screenSecurity", true);
+    }
+
+    public static void setHideCodes(Context ctx, boolean hideCodes) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("hideCodes", hideCodes).apply();
+    }
+
+    public static boolean isHideCodes(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("hideCodes", false);
+    }
+
+    public static void setTheme(Context ctx, Theme theme) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("theme", theme.name()).apply();
+    }
+
+    public static Theme getTheme(Context ctx) {
+        String themeId = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("theme", Theme.BLUE_GREEN.name());
+        try {
+            return Theme.valueOf(themeId);
+        }catch(IllegalArgumentException e) {
+            return Theme.BLUE_GREEN;
+        }
     }
 
     public static void setLocale(Context ctx, Locale locale) {

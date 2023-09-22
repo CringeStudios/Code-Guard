@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.security.KeyStoreParameter;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProtection;
+import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +18,7 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 
+import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
@@ -40,7 +43,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-public class UnlockActivity extends AppCompatActivity {
+public class UnlockActivity extends BaseActivity {
 
     private static final long LOCK_TIMEOUT = 10000;
 
@@ -49,8 +52,6 @@ public class UnlockActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ThemeUtil.loadTheme(this);
 
         if(!SettingsUtil.isDatabaseEncrypted(this)) {
             success();
@@ -76,6 +77,8 @@ public class UnlockActivity extends AppCompatActivity {
 
             binding.unlockBiometrics.setOnClickListener(view -> BiometricUtil.promptBiometricAuth(this, onSuccess, () -> {}));
             BiometricUtil.promptBiometricAuth(this, onSuccess, () -> {});
+        }else {
+            binding.unlockBiometrics.setVisibility(View.GONE);
         }
 
         binding.unlockButton.setOnClickListener(view -> {
