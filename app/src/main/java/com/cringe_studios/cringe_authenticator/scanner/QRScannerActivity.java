@@ -27,6 +27,7 @@ import androidx.camera.core.SurfaceOrientedMeteringPointFactory;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
+import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
@@ -42,7 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class QRScannerActivity extends AppCompatActivity {
+public class QRScannerActivity extends BaseActivity {
 
     public static final int RESULT_ERROR = -2;
 
@@ -63,7 +64,7 @@ public class QRScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234);
+            requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234); // TODO: handle denied
         }
 
         binding = ActivityQrScannerBinding.inflate(getLayoutInflater());

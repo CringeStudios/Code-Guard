@@ -71,10 +71,6 @@ public class OTPDatabase {
             return;
         }
 
-        if(!(ctx instanceof BaseActivity)) {
-            throw new RuntimeException("NOT BASEACTIVITY");
-        }
-
         if(!SettingsUtil.isDatabaseEncrypted(ctx)) {
             try {
                 loadDatabase(ctx, null);
@@ -85,17 +81,6 @@ public class OTPDatabase {
             return;
         }
 
-        /*DialogUtil.showInputPasswordDialog(ctx, password -> {
-            try {
-                SecretKey key = Crypto.generateKey(SettingsUtil.getCryptoParameters(ctx), password);
-                loadDatabase(ctx, key);
-                if (success != null) success.run();
-            }catch(CryptoException e) {
-                DialogUtil.showErrorDialog(ctx, "Failed to load database: Invalid password or database corrupted", failure);
-            } catch (OTPDatabaseException e) {
-                DialogUtil.showErrorDialog(ctx, "Failed to load database: " + e, failure);
-            }
-        }, failure);*/
         ((BaseActivity) ctx).promptUnlock(success, failure);
     }
 

@@ -172,10 +172,9 @@ public class OTPParser {
         }
 
         try {
-            // 0 or null for defaults (handled by Cringe-Authenticator-Library)
-            OTPAlgorithm fAlgorithm = algorithm == null ? null : OTPAlgorithm.valueOf(algorithm.toUpperCase());
-            int fDigits = digits == null ? 0 : Integer.parseInt(digits);
-            int fPeriod = period == null ? 0 : Integer.parseInt(period);
+            OTPAlgorithm fAlgorithm = algorithm == null ? OTPAlgorithm.SHA1 : OTPAlgorithm.valueOf(algorithm.toUpperCase());
+            int fDigits = digits == null ? 6 : Integer.parseInt(digits);
+            int fPeriod = period == null ? 30 : Integer.parseInt(period);
             int fCounter = counter == null ? 0 : Integer.parseInt(counter);
             boolean fChecksum = false;
             if(checksum != null) {

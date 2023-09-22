@@ -338,9 +338,11 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
+        // OTPDatabase.unloadDatabase();
     }
 
     @Override
