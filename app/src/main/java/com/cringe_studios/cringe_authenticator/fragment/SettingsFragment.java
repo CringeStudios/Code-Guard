@@ -24,6 +24,7 @@ import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
+import com.cringe_studios.cringe_authenticator.util.Appearance;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
@@ -170,6 +171,27 @@ public class SettingsFragment extends NamedFragment {
                 if(theme == SettingsUtil.getTheme(requireContext())) return;
 
                 SettingsUtil.setTheme(requireContext(), theme);
+                requireActivity().recreate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        String[] appearanceNames = new String[Appearance.values().length];
+        for(int i = 0; i < Appearance.values().length; i++) {
+            appearanceNames[i] = getResources().getString(Appearance.values()[i].getName());
+        }
+
+        binding.settingsAppearance.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, appearanceNames));
+        binding.settingsAppearance.setSelection(SettingsUtil.getAppearance(requireContext()).ordinal());
+        binding.settingsAppearance.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Appearance appearance = Appearance.values()[position];
+                if(appearance == SettingsUtil.getAppearance(requireContext())) return;
+
+                SettingsUtil.setAppearance(requireContext(), appearance);
                 requireActivity().recreate();
             }
 

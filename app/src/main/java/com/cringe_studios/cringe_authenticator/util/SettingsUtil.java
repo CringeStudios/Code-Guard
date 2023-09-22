@@ -188,6 +188,20 @@ public class SettingsUtil {
         }
     }
 
+    public static void setAppearance(Context ctx, Appearance appearance) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString("appearance", appearance.name()).apply();
+    }
+
+    public static Appearance getAppearance(Context ctx) {
+        String themeId = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("appearance", Appearance.FOLLOW_SYSTEM.name());
+        try {
+            return Appearance.valueOf(themeId);
+        }catch(IllegalArgumentException e) {
+            return Appearance.FOLLOW_SYSTEM;
+        }
+    }
+
     public static void setLocale(Context ctx, Locale locale) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("locale", locale.getLanguage()).apply();

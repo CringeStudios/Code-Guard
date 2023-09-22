@@ -1,5 +1,7 @@
 package com.cringe_studios.cringe_authenticator.util;
 
+import android.annotation.SuppressLint;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -11,8 +13,7 @@ public class ThemeUtil {
         Theme theme = SettingsUtil.getTheme(activity);
         activity.setTheme(theme.getStyle());
 
-        // TODO: use settings
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        AppCompatDelegate.setDefaultNightMode(SettingsUtil.getAppearance(activity).getValue());
     }
 
 }

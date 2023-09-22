@@ -80,4 +80,7 @@
     <string name="theme_blue_yellow">Blau/Gelb</string>
     <string name="theme_green_yellow">Grün/Gelb</string>
     <string name="theme_orange_turquoise">Orange/Türkis</string>
+    <string name="appearance_follow_system">System folgen</string>
+    <string name="appearance_light">Hell</string>
+    <string name="appearance_dark">Dunkel</string>
 </resources>
