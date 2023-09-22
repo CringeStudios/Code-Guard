@@ -70,6 +70,7 @@
     <string name="unlock_using_biometrics">Mit Biometrie ensperren</string>
     <string name="add_code">Code hinzufügen</string>
     <string name="settings">Einstellungen</string>
+    <string name="appearance">Aussehen</string>
     <string name="developed_by">Developed by Cringe Studios and JG-Cody</string>
     <string name="fragment_home">Zuhause</string>
     <string name="fragment_settings">Einstellungen</string>
