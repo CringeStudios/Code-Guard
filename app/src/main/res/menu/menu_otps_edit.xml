@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_view_otp"
         android:orderInCategory="100"
-        android:icon="@drawable/baseline_compare_24"
+        android:icon="@drawable/baseline_preview_24"
         android:title="View OTP"
         android:onClick="viewOTP"
         app:showAsAction="always" />
@@ -18,7 +18,7 @@
     <item
         android:id="@+id/action_move_otp"
         android:orderInCategory="100"
-        android:icon="@drawable/baseline_qr_code_scanner_24"
+        android:icon="@drawable/baseline_drive_file_move_rtl_24"
         android:title="Move OTP"
         android:onClick="moveOTP"
         app:showAsAction="always" />
