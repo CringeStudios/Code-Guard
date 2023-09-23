@@ -1,26 +1,20 @@
 package com.cringe_studios.cringe_authenticator;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
@@ -28,8 +22,6 @@ import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoice
 import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
-import com.cringe_studios.cringe_authenticator.fragment.MenuDrawerFragment;
-import com.cringe_studios.cringe_authenticator.fragment.MenuFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
@@ -40,12 +32,10 @@ import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
@@ -159,17 +149,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
-        if(fragment instanceof MenuFragment) {
-            MenuFragment frag = (MenuFragment) fragment;
-            getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_groups_edit : R.menu.menu_groups, menu);
-            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_group);
-            return true;
-        }
-
         if(fragment instanceof GroupFragment) {
             GroupFragment frag = (GroupFragment) fragment;
             getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_otps_edit : R.menu.menu_otps, menu);
-            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_group);
+            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_otp);
             return true;
         }
 
@@ -195,14 +178,6 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
-        if(fragment instanceof MenuFragment) {
-            MenuFragment menuFragment = (MenuFragment) fragment;
-            if(menuFragment.isEditing()) {
-                menuFragment.finishEditing();
-                return;
-            }
-        }
-
         if(fragment instanceof GroupFragment) {
             GroupFragment groupFragment = (GroupFragment) fragment;
             if(groupFragment.isEditing()) {
@@ -282,27 +257,6 @@ public class MainActivity extends BaseActivity {
         }, false);
     }
 
-    public void addGroup(MenuItem item) {
-        Fragment frag = NavigationUtil.getCurrentFragment(this);
-        if(frag instanceof MenuFragment) {
-            ((MenuFragment) frag).addGroup();
-        }
-    }
-
-    public void editGroup(MenuItem item) {
-        Fragment frag = NavigationUtil.getCurrentFragment(this);
-        if(frag instanceof MenuFragment) {
-            ((MenuFragment) frag).editGroup();
-        }
-    }
-
-    public void deleteGroup(MenuItem item) {
-        Fragment frag = NavigationUtil.getCurrentFragment(this);
-        if(frag instanceof MenuFragment) {
-            ((MenuFragment) frag).removeSelectedGroups();
-        }
-    }
-
     public void addOTP(MenuItem item) {
         Fragment frag = NavigationUtil.getCurrentFragment(this);
         if(frag instanceof GroupFragment) {
@@ -338,11 +292,21 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void lockApp(MenuItem item) {
+        OTPDatabase.unloadDatabase();
+        OTPDatabase.promptLoadDatabase(this, () -> {}, () -> {});
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        // OTPDatabase.unloadDatabase();
+        OTPDatabase.unloadDatabase();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        OTPDatabase.promptLoadDatabase(this, () -> {}, () -> {});
     }
 
     @Override

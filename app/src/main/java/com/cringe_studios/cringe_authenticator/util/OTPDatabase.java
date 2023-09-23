@@ -67,7 +67,7 @@ public class OTPDatabase {
 
     public static void promptLoadDatabase(Activity ctx, Runnable success, Runnable failure) {
         if(isDatabaseLoaded()) {
-            success.run();
+            if(success != null) success.run();
             return;
         }
 
