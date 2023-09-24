@@ -134,6 +134,7 @@ public class MainActivity extends BaseActivity {
 
     private void launchApp() {
         fullyLaunched = true;
+        lockOnPause = true;
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -306,6 +307,12 @@ public class MainActivity extends BaseActivity {
     public void lockApp(MenuItem item) {
         OTPDatabase.unloadDatabase();
         OTPDatabase.promptLoadDatabase(this, () -> {}, () -> {});
+    }
+
+    @Override
+    public void recreate() {
+        lockOnPause = false;
+        super.recreate();
     }
 
     @Override
