@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentHomeBinding;
-import com.cringe_studios.cringe_authenticator.util.FabUtil;
 
 public class HomeFragment extends NamedFragment {
 
@@ -23,7 +22,6 @@ public class HomeFragment extends NamedFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        FabUtil.hideFabs(requireActivity());
         return binding.getRoot();
 
     }

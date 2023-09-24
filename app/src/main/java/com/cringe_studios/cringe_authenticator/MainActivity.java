@@ -142,11 +142,7 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        //binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null)); TODO: remove old menu
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.openMenu(this, null));
-        binding.fabScan.setOnClickListener(view -> scanCode(null));
-        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage(null));
-        binding.fabInput.setOnClickListener(view -> inputCode(null));
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
         if(fragment instanceof NamedFragment) {

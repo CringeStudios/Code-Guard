@@ -1,10 +1,5 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
-import android.location.SettingInjectorService;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +10,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.biometric.BiometricManager;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
@@ -27,7 +21,6 @@ import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBindi
 import com.cringe_studios.cringe_authenticator.util.Appearance;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
-import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
@@ -35,7 +28,6 @@ import com.cringe_studios.cringe_authenticator.util.Theme;
 
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
@@ -198,8 +190,6 @@ public class SettingsFragment extends NamedFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
-
-        FabUtil.hideFabs(requireActivity());
 
         return binding.getRoot();
     }

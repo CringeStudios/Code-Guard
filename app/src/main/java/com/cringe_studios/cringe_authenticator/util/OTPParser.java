@@ -163,10 +163,6 @@ public class OTPParser {
             throw new IllegalArgumentException("Failed to parse OTP parameters");
         }
 
-        if(fType == OTPType.HOTP && counter == null) {
-            throw new IllegalArgumentException("Missing required parameters");
-        }
-
         if(accountName.length() == 0 || (issuer != null && issuer.length() == 0)) {
             throw new IllegalArgumentException("Missing required parameters");
         }

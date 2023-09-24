@@ -1,33 +1,26 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
-import android.content.ClipData;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentGroupBinding;
-import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
-import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.List;
@@ -62,8 +55,6 @@ public class GroupFragment extends NamedFragment {
         binding = FragmentGroupBinding.inflate(inflater, container, false);
 
         groupID = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
-
-        //FabUtil.showFabs(requireActivity());
 
         otpListAdapter = new OTPListAdapter(requireContext(), binding.itemList);
         binding.itemList.setAdapter(otpListAdapter);
