@@ -102,13 +102,7 @@ public class OTPDatabase {
                 fileBuffer.put(buffer, 0, len);
             }
 
-            if(key == null) {
-                loadedDatabase = loadFromBytes(fileBuffer.array());
-                loadedKey = null;
-                return loadedDatabase;
-            }
-
-            loadedDatabase = loadFromBytes(Crypto.decrypt(SettingsUtil.getCryptoParameters(context), fileBuffer.array(), key));
+            loadedDatabase = loadFromEncryptedBytes(fileBuffer.array(), key, SettingsUtil.getCryptoParameters(context));
             loadedKey = key;
             return loadedDatabase;
         }catch(IOException e) {
@@ -134,6 +128,14 @@ public class OTPDatabase {
         }
     }
 
+    public static OTPDatabase loadFromEncryptedBytes(byte[] bytes, SecretKey key, CryptoParameters parameters) throws CryptoException, OTPDatabaseException {
+        if(key != null) {
+            bytes = Crypto.decrypt(parameters, bytes, key);
+        }
+
+        return loadFromBytes(bytes);
+    }
+
     private static byte[] convertToBytes(OTPDatabase db) {
         JsonObject object = new JsonObject();
         for(Map.Entry<String, List<OTPData>> en : db.otps.entrySet()) {
@@ -142,15 +144,21 @@ public class OTPDatabase {
         return object.toString().getBytes(StandardCharsets.UTF_8);
     }
 
-    public static void saveDatabase(Context ctx, CryptoParameters parameters) throws OTPDatabaseException, CryptoException {
-        if(!isDatabaseLoaded()) throw new IllegalStateException("Database is not loaded");
-        File file = new File(ctx.getFilesDir(), DB_FILE_NAME);
-
+    public static byte[] convertToEncryptedBytes(OTPDatabase db, SecretKey key, CryptoParameters parameters) throws CryptoException {
         byte[] dbBytes = convertToBytes(loadedDatabase);
 
-        if(loadedKey != null) {
-            dbBytes = Crypto.encrypt(parameters, dbBytes, loadedKey);
+        if(key != null) {
+            dbBytes = Crypto.encrypt(parameters, dbBytes, key);
         }
+
+        return dbBytes;
+    }
+
+    public static void saveDatabase(Context ctx, CryptoParameters parameters) throws OTPDatabaseException, CryptoException {
+        if(!isDatabaseLoaded()) throw new OTPDatabaseException("Database is not loaded");
+        File file = new File(ctx.getFilesDir(), DB_FILE_NAME);
+
+        byte[] dbBytes = convertToEncryptedBytes(loadedDatabase, loadedKey, parameters);
 
         try(FileOutputStream fOut = new FileOutputStream(file)) {
             fOut.write(dbBytes);
@@ -172,13 +180,13 @@ public class OTPDatabase {
     }
 
     public static void encrypt(Context ctx, SecretKey key, CryptoParameters parameters) throws OTPDatabaseException, CryptoException {
-        if(!isDatabaseLoaded()) throw new IllegalStateException("Database is not loaded");
+        if(!isDatabaseLoaded()) throw new OTPDatabaseException("Database is not loaded");
         loadedKey = key;
         saveDatabase(ctx, parameters);
     }
 
     public static void decrypt(Context ctx) throws OTPDatabaseException, CryptoException {
-        if(!isDatabaseLoaded()) throw new IllegalStateException("Database is not loaded");
+        if(!isDatabaseLoaded()) throw new OTPDatabaseException("Database is not loaded");
         loadedKey = null;
         saveDatabase(ctx, null);
     }

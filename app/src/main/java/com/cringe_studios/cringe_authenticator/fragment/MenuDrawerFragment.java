@@ -9,12 +9,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentMenuDrawerBinding;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListAdapter;
 import com.cringe_studios.cringe_authenticator.grouplist.GroupListItem;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.FabUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
+import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -104,8 +108,16 @@ public class MenuDrawerFragment extends BottomSheetDialogFragment {
     }
 
     public void removeGroup(String group) {
-        SettingsUtil.removeGroup(requireContext(), group);
-        groupListAdapter.remove(group);
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            try {
+                OTPDatabase.getLoadedDatabase().removeOTPs(group);
+                OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                SettingsUtil.removeGroup(requireContext(), group);
+                groupListAdapter.remove(group);
+            } catch (OTPDatabaseException | CryptoException e) {
+                DialogUtil.showErrorDialog(requireContext(), e.toString());
+            }
+        }, null);
     }
 
     public void renameGroup(String group, String newName) {

@@ -63,7 +63,7 @@ public class GroupFragment extends NamedFragment {
 
         groupID = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
 
-        FabUtil.showFabs(requireActivity());
+        //FabUtil.showFabs(requireActivity());
 
         otpListAdapter = new OTPListAdapter(requireContext(), binding.itemList);
         binding.itemList.setAdapter(otpListAdapter);

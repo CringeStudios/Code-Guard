@@ -25,8 +25,7 @@
             android:paddingLeft="10dp"
             android:paddingEnd="10dp"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/cringeauth_white"
-            tools:srcCompat="@drawable/cringeauth_white" />
+            app:srcCompat="@drawable/cringeauth_white" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -6,8 +6,31 @@
         android:orderInCategory="100"
         android:icon="@drawable/baseline_add_24"
         android:title="@string/action_new_group"
-        android:onClick="addOTP"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_otp_input"
+                android:orderInCategory="100"
+                android:icon="@drawable/baseline_edit_24"
+                android:title="Input manually"
+                android:onClick="inputCode"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/action_otp_scan"
+                android:orderInCategory="100"
+                android:icon="@drawable/baseline_qr_code_scanner_24"
+                android:title="Scan QR code"
+                android:onClick="scanCode"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/action_otp_scan_image"
+                android:orderInCategory="100"
+                android:icon="@drawable/baseline_compare_24"
+                android:title="Scan image"
+                android:onClick="scanCodeFromImage"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

@@ -144,9 +144,9 @@ public class MainActivity extends BaseActivity {
 
         //binding.fabMenu.setOnClickListener(view -> NavigationUtil.navigate(this, MenuFragment.class, null)); TODO: remove old menu
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.openMenu(this, null));
-        binding.fabScan.setOnClickListener(view -> scanCode());
-        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage());
-        binding.fabInput.setOnClickListener(view -> inputCode());
+        binding.fabScan.setOnClickListener(view -> scanCode(null));
+        binding.fabScanImage.setOnClickListener(view -> scanCodeFromImage(null));
+        binding.fabInput.setOnClickListener(view -> inputCode(null));
 
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
         if(fragment instanceof NamedFragment) {
@@ -210,18 +210,18 @@ public class MainActivity extends BaseActivity {
         NavigationUtil.navigate(this, AboutFragment.class, null);
     }
 
-    public void scanCode() {
+    public void scanCode(MenuItem item) {
         lockOnPause = false;
         startQRCodeScan.launch(null);
     }
 
-    public void scanCodeFromImage() {
+    public void scanCodeFromImage(MenuItem item) {
         pickQRCodeImage.launch(new PickVisualMediaRequest.Builder()
                 .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
                 .build());
     }
 
-    public void inputCode() {
+    public void inputCode(MenuItem item) {
         DialogInputCodeChoiceBinding binding = DialogInputCodeChoiceBinding.inflate(getLayoutInflater());
 
         String[] options = new String[2];
