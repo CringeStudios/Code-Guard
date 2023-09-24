@@ -121,7 +121,7 @@ public class GroupFragment extends NamedFragment {
             if(vh == null) continue;
             try {
                 vh.getBinding().otpCode.setText(OTPListItem.formatCode(vh.getOTPData().getPin()));
-            } catch (OTPException e) {
+            } catch (Exception e) {
                 DialogUtil.showErrorDialog(requireContext(), e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
             }
 
@@ -135,6 +135,7 @@ public class GroupFragment extends NamedFragment {
 
     public void addOTP() {
         // TODO
+        requireActivity().openOptionsMenu();
     }
 
     public void viewOTP() {

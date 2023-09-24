@@ -50,6 +50,8 @@ public class MainActivity extends BaseActivity {
 
     private boolean fullyLaunched;
 
+    private boolean lockOnPause = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,8 @@ public class MainActivity extends BaseActivity {
         qrScanner = new QRScanner();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
+            lockOnPause = true;
+
             if(obj == null) return; // Cancelled
 
             if(!obj.isSuccess()) {
@@ -204,6 +208,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void scanCode() {
+        lockOnPause = false;
         startQRCodeScan.launch(null);
     }
 
@@ -304,7 +309,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        OTPDatabase.unloadDatabase();
+        if(lockOnPause) OTPDatabase.unloadDatabase();
     }
 
     @Override
