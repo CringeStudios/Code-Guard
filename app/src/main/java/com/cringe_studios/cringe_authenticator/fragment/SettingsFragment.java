@@ -200,7 +200,7 @@ public class SettingsFragment extends NamedFragment {
 
         binding.settingsCreateBackup.setOnClickListener(view -> {
             new StyledDialogBuilder(requireContext())
-                    .setItems(new String[]{"Create with current password", "Create with custom password"}, (d, which) -> {
+                    .setItems(R.array.backup_create, (d, which) -> {
                         switch(which) {
                             case 0:
                                 OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
