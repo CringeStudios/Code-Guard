@@ -46,7 +46,7 @@
     <string name="otp_add_error">Hinzufügen des OTP-Codes fehlgeschlagen: %s</string>
     <string name="otp_add_issuer">Aussteller (optional)</string>
     <string name="otp_add_missing_name">Name fehlt</string>
-    <string name="qr_scanner_migration_title">OTP-Migration</string>
+    <string name="qr_scanner_migration_title">OTP migrieren</string>
     <string name="qr_scanner_migration_message">Du scheinst zu versuchen, Codes aus einer anderen App zu importieren. Willst du alle Codes in diese Gruppe importieren?</string>
     <string name="qr_scanner_migration_part">Code %d von %d gescannt</string>
     <string-array name="view_edit_move_delete">
@@ -72,7 +72,7 @@
     <string name="settings">Einstellungen</string>
     <string name="appearance">Aussehen</string>
     <string name="developed_by">Developed by Cringe Studios and JG-Cody</string>
-    <string name="fragment_home">Zuhause</string>
+    <string name="fragment_home">Startseite</string>
     <string name="fragment_settings">Einstellungen</string>
     <string name="fragment_about">Über</string>
     <string name="theme_blue_green">Blau/Grün</string>
@@ -81,7 +81,7 @@
     <string name="theme_blue_yellow">Blau/Gelb</string>
     <string name="theme_green_yellow">Grün/Gelb</string>
     <string name="theme_orange_turquoise">Orange/Türkis</string>
-    <string name="appearance_follow_system">System folgen</string>
+    <string name="appearance_follow_system">Systemstandard</string>
     <string name="appearance_light">Hell</string>
     <string name="appearance_dark">Dunkel</string>
 </resources>
