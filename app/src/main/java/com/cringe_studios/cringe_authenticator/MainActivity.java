@@ -159,7 +159,10 @@ public class MainActivity extends BaseActivity {
         if(fragment instanceof GroupFragment) {
             GroupFragment frag = (GroupFragment) fragment;
             getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_otps_edit : R.menu.menu_otps, menu);
-            if(frag.isEditing() && frag.hasSelectedMultipleItems()) menu.removeItem(R.id.action_edit_otp);
+            if(frag.isEditing() && frag.hasSelectedMultipleItems()) {
+                menu.removeItem(R.id.action_view_otp);
+                menu.removeItem(R.id.action_edit_otp);
+            }
             return true;
         }
 

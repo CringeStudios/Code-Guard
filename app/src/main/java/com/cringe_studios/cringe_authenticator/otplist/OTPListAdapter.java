@@ -38,14 +38,19 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     private Handler handler;
 
+    private Runnable saveOTPs;
+
     private boolean editing;
 
-    public OTPListAdapter(Context context, RecyclerView recyclerView) {
+    public OTPListAdapter(Context context, RecyclerView recyclerView, Runnable saveOTPs) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
         this.handler = new Handler(Looper.getMainLooper());
+        this.saveOTPs = saveOTPs;
+
+        attachTouchHelper(recyclerView);
     }
 
     @NonNull
@@ -61,6 +66,12 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         holder.setOTPData(data);
         holder.setSelected(false);
+
+        try {
+            holder.getBinding().otpCode.setText(OTPListItem.formatCode(data.getPin()));
+        } catch (OTPException e) {
+            DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
+        }
 
         holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.INVISIBLE);
@@ -172,7 +183,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
             Collections.swap(items, viewHolder.getAdapterPosition(), target.getAdapterPosition());
             notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-            //saveGroups.run();
+            saveOTPs.run();
             return true;
         }
 

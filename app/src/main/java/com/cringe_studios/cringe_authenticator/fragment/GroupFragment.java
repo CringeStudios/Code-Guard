@@ -56,7 +56,7 @@ public class GroupFragment extends NamedFragment {
 
         groupID = requireArguments().getString(GroupFragment.BUNDLE_GROUP);
 
-        otpListAdapter = new OTPListAdapter(requireContext(), binding.itemList);
+        otpListAdapter = new OTPListAdapter(requireContext(), binding.itemList, this::saveOTPs);
         binding.itemList.setAdapter(otpListAdapter);
 
         loadOTPs();
@@ -67,7 +67,7 @@ public class GroupFragment extends NamedFragment {
             handler.postDelayed(refreshCodes, 1000L);
         };
 
-        handler.post(refreshCodes);
+        handler.postDelayed(refreshCodes, 1000L);
 
         return binding.getRoot();
     }
@@ -122,11 +122,6 @@ public class GroupFragment extends NamedFragment {
                 vh.getBinding().progress.setImageLevel((int) (progress * 10_000));
             }
         }
-    }
-
-    public void addOTP() {
-        // TODO
-        requireActivity().openOptionsMenu();
     }
 
     public void viewOTP() {
