@@ -32,6 +32,12 @@
         </menu>
     </item>
     <item
+        android:id="@+id/action_lock"
+        android:orderInCategory="100"
+        android:title="Lock"
+        app:showAsAction="never"
+        android:onClick="lockApp" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
@@ -43,10 +49,4 @@
         android:title="@string/action_about"
         app:showAsAction="never"
         android:onClick="openAbout" />
-    <item
-        android:id="@+id/action_lock"
-        android:orderInCategory="100"
-        android:title="Lock"
-        app:showAsAction="never"
-        android:onClick="lockApp" />
 </menu>

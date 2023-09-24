@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_view_otp"
         android:orderInCategory="100"
-        android:icon="@drawable/baseline_preview_24"
+        android:icon="@drawable/baseline_visibility_24"
         android:title="View OTP"
         android:onClick="viewOTP"
         app:showAsAction="always" />
@@ -18,7 +18,7 @@
     <item
         android:id="@+id/action_move_otp"
         android:orderInCategory="100"
-        android:icon="@drawable/baseline_drive_file_move_rtl_24"
+        android:icon="@drawable/baseline_drive_file_move_24"
         android:title="Move OTP"
         android:onClick="moveOTP"
         app:showAsAction="always" />
@@ -29,6 +29,12 @@
         android:title="Delete OTP"
         android:onClick="deleteOTP"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_lock"
+        android:orderInCategory="100"
+        android:title="Lock"
+        app:showAsAction="never"
+        android:onClick="lockApp" />
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
@@ -41,10 +47,4 @@
         android:title="@string/action_about"
         app:showAsAction="never"
         android:onClick="openAbout" />
-    <item
-        android:id="@+id/action_lock"
-        android:orderInCategory="100"
-        android:title="Lock"
-        app:showAsAction="never"
-        android:onClick="lockApp" />
 </menu>
