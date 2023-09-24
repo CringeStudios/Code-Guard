@@ -43,6 +43,6 @@
     </style>
 
     <style name="ActionPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:popupBackground">@drawable/dialog_themed</item>
+        <item name="android:popupBackground">@drawable/menu_themed</item>
     </style>
 </resources>

@@ -8,7 +8,7 @@
                 android:endColor="?attr/colorTheme2" />
             <corners
                 android:bottomLeftRadius="20dp"
-                android:bottomRightRadius="0dp"
+                android:bottomRightRadius="20dp"
                 android:topLeftRadius="20dp"
                 android:topRightRadius="0dp" />
         </shape>
@@ -23,7 +23,7 @@
                 android:color="?attr/colorOnBackground" />
             <corners
                 android:bottomLeftRadius="20dp"
-                android:bottomRightRadius="0dp"
+                android:bottomRightRadius="20dp"
                 android:topLeftRadius="20dp"
                 android:topRightRadius="0dp" />
         </shape>
