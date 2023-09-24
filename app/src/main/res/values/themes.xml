@@ -10,6 +10,7 @@
         <item name="colorTheme2">#000000</item>
         <item name="android:textColor">@color/black</item>
         <item name="colorOnBackground">@color/background_light_grey</item>
+        <item name="actionOverflowMenuStyle">@style/ActionPopupMenuStyle</item>
     </style>
 
     <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator" />
@@ -39,5 +40,9 @@
     <style name="Theme.CringeAuthenticator.Orange_Turquoise">
         <item name="colorTheme1">@color/color_orange</item>
         <item name="colorTheme2">@color/color_turquoise</item>
+    </style>
+
+    <style name="ActionPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@drawable/dialog_themed</item>
     </style>
 </resources>
