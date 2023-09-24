@@ -111,15 +111,9 @@ public class GroupFragment extends NamedFragment {
             OTPListItem vh = (OTPListItem) binding.itemList.findViewHolderForAdapterPosition(i);
             if(vh == null) continue;
             try {
-                vh.getBinding().otpCode.setText(OTPListItem.formatCode(vh.getOTPData().getPin()));
+                vh.refresh();
             } catch (Exception e) {
                 DialogUtil.showErrorDialog(requireContext(), e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
-            }
-
-            if(vh.getOTPData().getType() == OTPType.TOTP) {
-                long timeDiff = vh.getOTPData().getNextDueTime() - System.currentTimeMillis() / 1000;
-                double progress = 1 - ((double) timeDiff / vh.getOTPData().getPeriod());
-                vh.getBinding().progress.setImageLevel((int) (progress * 10_000));
             }
         }
     }

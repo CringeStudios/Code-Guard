@@ -1,13 +1,12 @@
 package com.cringe_studios.cringe_authenticator.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 
 public class IOUtil {
 
@@ -22,6 +21,17 @@ public class IOUtil {
 
             return fileBuffer.array();
         }
+    }
+
+    public static byte[] readBytes(InputStream in) throws IOException {
+        ByteArrayOutputStream bOut = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = in.read(buffer)) > 0) {
+            bOut.write(buffer, 0, len);
+        }
+
+        return bOut.toByteArray();
     }
 
     public static void writeBytes(File file, byte[] bytes) throws IOException {

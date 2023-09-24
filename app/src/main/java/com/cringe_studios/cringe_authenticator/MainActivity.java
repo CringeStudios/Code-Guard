@@ -1,6 +1,7 @@
 package com.cringe_studios.cringe_authenticator;
 
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
@@ -46,6 +48,14 @@ public class MainActivity extends BaseActivity {
     private ActivityResultLauncher<Void> startQRCodeScan;
 
     private ActivityResultLauncher<PickVisualMediaRequest> pickQRCodeImage;
+
+    private ActivityResultLauncher<String> pickBackupFileSave;
+
+    private Consumer<Uri> pickBackupFileSaveCallback;
+
+    private ActivityResultLauncher<String[]> pickBackupFileLoad;
+
+    private Consumer<Uri> pickBackupFileLoadCallback;
 
     private QRScanner qrScanner;
 
@@ -113,6 +123,20 @@ public class MainActivity extends BaseActivity {
                 }, error -> DialogUtil.showErrorDialog(this, "Failed to detect code: " + error));
             } catch (IOException e) {
                 DialogUtil.showErrorDialog(this, "Failed to read image: " + e);
+            }
+        });
+
+        pickBackupFileSave = registerForActivityResult(new ActivityResultContracts.CreateDocument("application/json"), doc -> {
+            if(pickBackupFileSaveCallback != null) {
+                pickBackupFileSaveCallback.accept(doc);
+                pickBackupFileSaveCallback = null;
+            }
+        });
+
+        pickBackupFileLoad = registerForActivityResult(new ActivityResultContracts.OpenDocument(), doc -> {
+            if(pickBackupFileLoadCallback != null) {
+                pickBackupFileLoadCallback.accept(doc);
+                pickBackupFileLoadCallback = null;
             }
         });
 
@@ -306,6 +330,24 @@ public class MainActivity extends BaseActivity {
     public void lockApp(MenuItem item) {
         OTPDatabase.unloadDatabase();
         OTPDatabase.promptLoadDatabase(this, () -> {}, () -> {});
+    }
+
+    public void promptPickBackupFileSave(String name, Consumer<Uri> callback) {
+        this.lockOnPause = false;
+        this.pickBackupFileSaveCallback = uri -> {
+            lockOnPause = true;
+            callback.accept(uri);
+        };
+        pickBackupFileSave.launch(name);
+    }
+
+    public void promptPickBackupFileLoad(Consumer<Uri> callback) {
+        this.lockOnPause = false;
+        this.pickBackupFileLoadCallback = uri -> {
+            lockOnPause = true;
+            callback.accept(uri);
+        };
+        pickBackupFileLoad.launch(new String[]{"application/json"});
     }
 
     @Override

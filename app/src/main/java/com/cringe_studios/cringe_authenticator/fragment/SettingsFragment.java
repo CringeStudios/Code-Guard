@@ -1,5 +1,6 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +20,19 @@ import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
 import com.cringe_studios.cringe_authenticator.util.Appearance;
+import com.cringe_studios.cringe_authenticator.util.BackupException;
+import com.cringe_studios.cringe_authenticator.util.BackupUtil;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
+import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.Theme;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -74,7 +81,7 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsEnableEncryption.setChecked(SettingsUtil.isDatabaseEncrypted(requireContext()));
         binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
             if(checked) {
-                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                DialogUtil.showSetPasswordDialog(requireContext(), password -> {
                     CryptoParameters params = CryptoParameters.createNew();
                     Log.d("Crypto", "Created new crypto params");
 
@@ -191,7 +198,81 @@ public class SettingsFragment extends NamedFragment {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        binding.settingsCreateBackup.setOnClickListener(view -> {
+            new StyledDialogBuilder(requireContext())
+                    .setItems(new String[]{"Create with current password", "Create with custom password"}, (d, which) -> {
+                        switch(which) {
+                            case 0:
+                                OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+                                    SecretKey key = OTPDatabase.getLoadedKey();
+                                    CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
+                                    createBackup(key, parameters);
+                                }, null);
+                                break;
+                            case 1:
+                                DialogUtil.showSetPasswordDialog(requireContext(), password -> {
+                                    CryptoParameters parameters = CryptoParameters.createNew();
+                                    try {
+                                        SecretKey key = Crypto.generateKey(parameters, password);
+                                        createBackup(key, parameters);
+                                    } catch (CryptoException e) {
+                                        DialogUtil.showErrorDialog(requireContext(), e.toString());
+                                    }
+                                }, null);
+                                break;
+                        }
+                    })
+                    .show();
+        });
+
+        binding.settingsLoadBackup.setOnClickListener(view -> {
+            ((MainActivity) requireActivity()).promptPickBackupFileLoad(uri -> {
+                if(uri == null || uri.getPath() == null) return;
+
+                loadBackup(uri);
+            });
+        });
+
         return binding.getRoot();
+    }
+
+    private void createBackup(SecretKey key, CryptoParameters parameters) {
+        ((MainActivity) requireActivity()).promptPickBackupFileSave(BackupUtil.getBackupName(), uri -> {
+            if(uri == null || uri.getPath() == null) return;
+
+            try {
+                BackupUtil.saveBackup(requireContext(), uri, key, parameters);
+            } catch (BackupException | CryptoException e) {
+                DialogUtil.showErrorDialog(requireContext(), e.toString());
+            }
+        });
+    }
+
+    private void loadBackup(Uri uri) {
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            try {
+                SecretKey key = OTPDatabase.getLoadedKey();
+                CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
+                loadBackup(uri, key, parameters);
+            } catch (CryptoException e) {
+                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                    try {
+                        CryptoParameters parameters = BackupUtil.loadParametersFromBackup(requireContext(), uri);
+                        SecretKey key = Crypto.generateKey(parameters, password);
+                        loadBackup(uri, key, parameters);
+                    } catch (BackupException | OTPDatabaseException | CryptoException e2) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e2);
+                    }
+                }, null);
+            } catch(BackupException | OTPDatabaseException e) {
+                DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+            }
+        }, null);
+    }
+
+    private void loadBackup(Uri uri, SecretKey key, CryptoParameters parameters) throws BackupException, OTPDatabaseException, CryptoException {
+        OTPDatabase db = BackupUtil.loadBackup(requireContext(), uri, key, parameters);
+        DialogUtil.showErrorDialog(requireContext(), "Success: " + db);
     }
 
     @Override

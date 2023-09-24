@@ -84,4 +84,10 @@
     <string name="appearance_follow_system">Systemstandard</string>
     <string name="appearance_light">Hell</string>
     <string name="appearance_dark">Dunkel</string>
+    <string name="backup_create_title">Backup erstellen</string>
+    <string-array name="backup_create">
+        <item>Mit aktuellem Passwort erstellen</item>
+        <item>Mit neuem Passwort erstellen</item>
+    </string-array>
+    <string name="backup_load_title">Backup laden</string>
 </resources>

@@ -77,5 +77,28 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Backups" />
+        
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/settings_create_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_themed"
+            android:text="Create backup"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/settings_load_backup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_themed"
+            android:text="Load backup"
+            android:layout_marginTop="10dp"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

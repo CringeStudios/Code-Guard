@@ -94,15 +94,10 @@ public class OTPDatabase {
             }
         }
 
-        try(FileInputStream fIn = new FileInputStream(file)) {
-            ByteBuffer fileBuffer = ByteBuffer.allocate((int) file.length());
-            byte[] buffer = new byte[1024];
-            int len;
-            while((len = fIn.read(buffer)) > 0) {
-                fileBuffer.put(buffer, 0, len);
-            }
+        try {
+            byte[] bytes = IOUtil.readBytes(file);
 
-            loadedDatabase = loadFromEncryptedBytes(fileBuffer.array(), key, SettingsUtil.getCryptoParameters(context));
+            loadedDatabase = loadFromEncryptedBytes(bytes, key, SettingsUtil.getCryptoParameters(context));
             loadedKey = key;
             return loadedDatabase;
         }catch(IOException e) {

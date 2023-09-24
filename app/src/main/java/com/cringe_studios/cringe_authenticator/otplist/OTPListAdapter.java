@@ -68,7 +68,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         holder.setSelected(false);
 
         try {
-            holder.getBinding().otpCode.setText(OTPListItem.formatCode(data.getPin()));
+            holder.refresh();
         } catch (OTPException e) {
             DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
         }
@@ -87,7 +87,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
                 data.incrementCounter();
 
                 try {
-                    holder.getBinding().otpCode.setText(OTPListItem.formatCode(data.getPin()));
+                    holder.refresh();
                 } catch (OTPException e) {
                     DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
                     return;

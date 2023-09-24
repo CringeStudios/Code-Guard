@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator_library.OTPException;
+import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 public class OTPListItem extends RecyclerView.ViewHolder {
 
@@ -34,6 +36,16 @@ public class OTPListItem extends RecyclerView.ViewHolder {
 
     public OTPData getOTPData() {
         return otpData;
+    }
+
+    public void refresh() throws OTPException {
+        binding.otpCode.setText(OTPListItem.formatCode(otpData.getPin()));
+
+        if(otpData.getType() == OTPType.TOTP) {
+            long timeDiff = otpData.getNextDueTime() - System.currentTimeMillis() / 1000;
+            double progress = 1 - ((double) timeDiff / otpData.getPeriod());
+            binding.progress.setImageLevel((int) (progress * 10_000));
+        }
     }
 
     public static String formatCode(String code) {

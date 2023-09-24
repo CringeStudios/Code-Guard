@@ -16,6 +16,7 @@ import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.DialogCreateGroupBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogSetPasswordBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
@@ -56,7 +57,11 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage) {
-        showErrorDialog(context, errorMessage, null);
+        showErrorDialog(context, errorMessage, (Runnable) null);
+    }
+
+    public static void showErrorDialog(Context context, String errorMessage, Exception exception) {
+        showErrorDialog(context, errorMessage + ": " + exception.toString(), (Runnable) null); // TODO: exception details button
     }
 
     public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, boolean view) {
@@ -262,6 +267,40 @@ public class DialogUtil {
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onDismiss != null) onDismiss.run(); })
                 .setOnCancelListener(d -> { if(onDismiss != null) onDismiss.run(); })
                 .create();
+
+        dialog.show();
+    }
+
+    public static void showSetPasswordDialog(Context context, Consumer<String> callback, Runnable onCancel) {
+        DialogSetPasswordBinding binding = DialogSetPasswordBinding.inflate(LayoutInflater.from(context));
+
+        AlertDialog dialog = new StyledDialogBuilder(context)
+                .setTitle(R.string.set_password)
+                .setView(binding.getRoot())
+                .setPositiveButton("Ok", (d, which) -> {})
+                .setNegativeButton(R.string.cancel, (d, which) -> { if(onCancel != null) onCancel.run(); })
+                .setOnCancelListener(d -> { if(onCancel != null) onCancel.run(); })
+                .create();
+
+        dialog.setOnShowListener(d -> {
+            Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            okButton.setOnClickListener(v -> {
+                if(binding.setPassword.getText().length() == 0) {
+                    DialogUtil.showErrorDialog(context, "You need to enter a password");
+                    return;
+                }
+
+                String pass = binding.setPassword.getText().toString();
+                String confirm = binding.confirmPassword.getText().toString();
+                if(!pass.equals(confirm)) {
+                    DialogUtil.showErrorDialog(context, "The passwords do not match");
+                    return;
+                }
+
+                dialog.dismiss();
+                callback.accept(pass);
+            });
+        });
 
         dialog.show();
     }
