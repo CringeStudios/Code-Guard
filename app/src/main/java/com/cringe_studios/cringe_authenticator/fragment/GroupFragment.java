@@ -191,6 +191,7 @@ public class GroupFragment extends NamedFragment {
                     }
 
                     saveOTPs();
+                    finishEditing();
                 })
                 .setNegativeButton(R.string.no, (d, w) -> {})
                 .show();

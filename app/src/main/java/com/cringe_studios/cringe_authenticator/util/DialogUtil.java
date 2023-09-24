@@ -172,7 +172,7 @@ public class DialogUtil {
                 int counter = Integer.parseInt(binding.inputCounter.getText().toString());
                 boolean checksum = binding.inputChecksum.isChecked();
 
-                OTPData data = new OTPData(name, issuer, OTPType.TOTP, secret, algorithm, digits, 0, counter, checksum);
+                OTPData data = new OTPData(name, issuer, OTPType.HOTP, secret, algorithm, digits, 0, counter, checksum);
 
                 String errorMessage = data.validate();
                 if(errorMessage != null) {
