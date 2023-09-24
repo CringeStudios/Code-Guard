@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_blue_green"
+    android:id="@+id/app_background"
     android:padding="16dp">
 
     <TextView

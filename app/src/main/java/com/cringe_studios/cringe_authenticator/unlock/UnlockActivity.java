@@ -60,6 +60,7 @@ public class UnlockActivity extends BaseActivity {
 
         binding = ActivityUnlockBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        ThemeUtil.loadBackground(this);
 
         if(SettingsUtil.isBiometricEncryption(this) && BiometricUtil.isSupported(this)) {
             Runnable onSuccess = () -> {
