@@ -236,6 +236,7 @@ public class SettingsFragment extends NamedFragment {
                                 break;
                         }
                     })
+                    .setNegativeButton(R.string.cancel, (d, which) -> {})
                     .show();
         });
 
