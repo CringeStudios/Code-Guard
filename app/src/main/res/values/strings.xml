@@ -91,4 +91,7 @@
         <item>Create with new password</item>
     </string-array>
     <string name="backup_load_title">Load backup</string>
+    <string name="backups">Backups</string>
+    <string name="create_backup">Create backup</string>
+    <string name="load_backup">Load backup</string>
 </resources>

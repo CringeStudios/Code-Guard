@@ -156,6 +156,24 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableIntroVideo", true);
     }
 
+    public static void setEnableThemedBackground(Context ctx, boolean enableThemedBackground) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("enableThemedBackground", enableThemedBackground).apply();
+    }
+
+    public static boolean isThemedBackgroundEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableThemedBackground", true);
+    }
+
+    public static void setEnableMinimalistTheme(Context ctx, boolean enableMinimalistTheme) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("enableMinimalistTheme", enableMinimalistTheme).apply();
+    }
+
+    public static boolean isMinimalistThemeEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("enableMinimalistTheme", false);
+    }
+
     public static void setScreenSecurity(Context ctx, boolean screenSecurity) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putBoolean("screenSecurity", screenSecurity).apply();

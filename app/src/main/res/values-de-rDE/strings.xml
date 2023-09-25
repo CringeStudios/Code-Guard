@@ -90,4 +90,7 @@
         <item>Mit neuem Passwort erstellen</item>
     </string-array>
     <string name="backup_load_title">Backup laden</string>
+    <string name="backups">Backups</string>
+    <string name="create_backup">Backup erstellen</string>
+    <string name="load_backup">Backup laden</string>
 </resources>

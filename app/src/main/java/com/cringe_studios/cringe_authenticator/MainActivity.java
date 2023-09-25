@@ -67,8 +67,6 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setLocale(SettingsUtil.getLocale(this));
-
         qrScanner = new QRScanner();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
@@ -147,13 +145,6 @@ public class MainActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         qrScanner.close();
-    }
-
-    public void setLocale(Locale locale) {
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     private void launchApp() {

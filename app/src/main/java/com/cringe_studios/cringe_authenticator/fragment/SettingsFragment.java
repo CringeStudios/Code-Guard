@@ -1,5 +1,6 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
+import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,7 +69,7 @@ public class SettingsFragment extends NamedFragment {
                 if(locale.equals(SettingsUtil.getLocale(requireContext()))) return;
 
                 SettingsUtil.setLocale(requireContext(), locale);
-                ((MainActivity) requireActivity()).setLocale(locale);
+                //((MainActivity) requireActivity()).setLocale(locale);
                 requireActivity().recreate();
             }
 
@@ -144,9 +145,6 @@ public class SettingsFragment extends NamedFragment {
             // TODO: inform user
         }
 
-        binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
-        binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
-
         binding.settingsScreenSecurity.setChecked(SettingsUtil.isScreenSecurity(requireContext()));
         binding.settingsScreenSecurity.setOnCheckedChangeListener((view, checked) -> {
             SettingsUtil.setScreenSecurity(requireContext(), checked);
@@ -160,6 +158,15 @@ public class SettingsFragment extends NamedFragment {
         for(int i = 0; i < Theme.values().length; i++) {
             themeNames[i] = getResources().getString(Theme.values()[i].getName());
         }
+
+        binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
+        binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
+
+        binding.settingsEnableThemedBackground.setChecked(SettingsUtil.isThemedBackgroundEnabled(requireContext()));
+        binding.settingsEnableThemedBackground.setOnCheckedChangeListener((view, checked) -> {
+            SettingsUtil.setEnableThemedBackground(requireContext(), checked);
+            requireActivity().recreate();
+        });
 
         binding.settingsTheme.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, themeNames));
         binding.settingsTheme.setSelection(SettingsUtil.getTheme(requireContext()).ordinal());
@@ -175,6 +182,12 @@ public class SettingsFragment extends NamedFragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        binding.settingsEnableMinimalistTheme.setChecked(SettingsUtil.isMinimalistThemeEnabled(requireContext()));
+        binding.settingsEnableMinimalistTheme.setOnCheckedChangeListener((view, checked) -> {
+            SettingsUtil.setEnableMinimalistTheme(requireContext(), checked);
+            requireActivity().recreate();
         });
 
         String[] appearanceNames = new String[Appearance.values().length];
@@ -200,6 +213,7 @@ public class SettingsFragment extends NamedFragment {
 
         binding.settingsCreateBackup.setOnClickListener(view -> {
             new StyledDialogBuilder(requireContext())
+                    .setTitle(R.string.create_backup)
                     .setItems(R.array.backup_create, (d, which) -> {
                         switch(which) {
                             case 0:

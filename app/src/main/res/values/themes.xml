@@ -11,6 +11,9 @@
         <item name="android:textColor">@color/black</item>
         <item name="colorOnBackground">@color/background_light_grey</item>
         <item name="actionOverflowMenuStyle">@style/ActionPopupMenuStyle</item>
+        <item name="dialogBackground">@drawable/dialog_themed</item>
+        <item name="menuBackground">@drawable/menu_themed</item>
+        <item name="buttonBackground">@drawable/button_themed</item>
     </style>
 
     <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator" />
@@ -41,8 +44,13 @@
         <item name="colorTheme1">@color/color_orange</item>
         <item name="colorTheme2">@color/color_turquoise</item>
     </style>
+    <style name="Theme.CringeAuthenticator.Minimalist" parent="">
+        <item name="dialogBackground">?android:attr/colorBackground</item>
+        <item name="menuBackground">?android:attr/colorBackground</item>
+        <item name="buttonBackground">@drawable/button_simple</item>
+    </style>
 
     <style name="ActionPopupMenuStyle" parent="Widget.AppCompat.PopupMenu">
-        <item name="android:popupBackground">@drawable/menu_themed</item>
+        <item name="android:popupBackground">?attr/menuBackground</item>
     </style>
 </resources>

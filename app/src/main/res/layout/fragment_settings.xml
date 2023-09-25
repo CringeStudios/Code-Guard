@@ -23,6 +23,12 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/background_light_grey"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_encryption"
             android:layout_width="match_parent"
@@ -36,12 +42,6 @@
             android:text="@string/settings_biometric_lock" />
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/settings_enable_intro_video"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_enable_intro_video" />
-
-        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_screen_security"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,6 +52,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/hide_codes" />
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/background_light_grey"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_enable_intro_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_enable_intro_video" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_enable_themed_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Use themed background" />
 
         <TextView
             android:layout_width="match_parent"
@@ -65,6 +83,12 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_enable_minimalist_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Use minimalist theme" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -77,17 +101,23 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/background_light_grey"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Backups" />
+            android:text="@string/backups" />
         
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_create_backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_themed"
-            android:text="Create backup"
+            android:background="?attr/buttonBackground"
+            android:text="@string/create_backup"
             android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 
@@ -95,8 +125,8 @@
             android:id="@+id/settings_load_backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_themed"
-            android:text="Load backup"
+            android:background="?attr/buttonBackground"
+            android:text="@string/load_backup"
             android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 

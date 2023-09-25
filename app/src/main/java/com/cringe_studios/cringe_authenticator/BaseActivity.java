@@ -1,5 +1,6 @@
 package com.cringe_studios.cringe_authenticator;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cringe_studios.cringe_authenticator.unlock.UnlockContract;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
+
+import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         ThemeUtil.loadTheme(this);
+        setLocale(SettingsUtil.getLocale(this));
     }
 
     private void registerCallbacks() {
@@ -41,6 +45,13 @@ public class BaseActivity extends AppCompatActivity {
         unlockSuccess = success;
         unlockFailure = failure;
         startUnlockActivity.launch(null);
+    }
+
+    public void setLocale(Locale locale) {
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
 }

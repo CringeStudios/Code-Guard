@@ -15,10 +15,16 @@ public class ThemeUtil {
         Theme theme = SettingsUtil.getTheme(activity);
         activity.setTheme(theme.getStyle());
 
+        if(SettingsUtil.isMinimalistThemeEnabled(activity)) {
+            activity.getTheme().applyStyle(R.style.Theme_CringeAuthenticator_Minimalist, true);
+        }
+
         AppCompatDelegate.setDefaultNightMode(SettingsUtil.getAppearance(activity).getValue());
     }
 
     public static void loadBackground(AppCompatActivity activity) {
+        if(!SettingsUtil.isThemedBackgroundEnabled(activity)) return;
+
         Theme theme = SettingsUtil.getTheme(activity);
         Appearance appearance = SettingsUtil.getAppearance(activity);
 

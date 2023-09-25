@@ -2,4 +2,7 @@
 <resources>
     <attr name="colorTheme1" format="color" />
     <attr name="colorTheme2" format="color" />
+    <attr name="dialogBackground" format="reference|color" />
+    <attr name="menuBackground" format="reference|color" />
+    <attr name="buttonBackground" format="reference|color" />
 </resources>
