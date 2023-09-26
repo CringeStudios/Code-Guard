@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.backup.BackupGroup;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
@@ -42,6 +43,19 @@ public class SettingsUtil {
         prefs.edit().putString("groups", GSON.toJson(groups)).apply();
     }
 
+    public static void restoreGroups(Context ctx, BackupGroup[] groups) {
+        List<String> oldGroups = getGroups(ctx);
+        for(String group : oldGroups) removeGroup(ctx, group);
+
+        List<String> newGroups = new ArrayList<>();
+        for(BackupGroup group : groups) {
+            newGroups.add(group.getId());
+            setGroupName(ctx, group.getId(), group.getName());
+        }
+
+        setGroups(ctx, newGroups);
+    }
+
     public static void addGroup(Context ctx, String group, String groupName) {
         List<String> groups = new ArrayList<>(getGroups(ctx));
         groups.add(group);
@@ -61,28 +75,6 @@ public class SettingsUtil {
 
         deleteGroupData(ctx, group);
     }
-
-    /*public static List<OTPData> getOTPs(Context ctx, String group) {
-        String currentOTPs = ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".otps", "[]");
-        return Arrays.asList(GSON.fromJson(currentOTPs, OTPData[].class));
-    }
-
-    public static void addOTP(Context ctx, String group, @NonNull OTPData data) {
-        // TODO: check for code with same name
-
-        List<OTPData> otps = new ArrayList<>(getOTPs(ctx, group));
-        otps.add(data);
-
-        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putString("group." + group + ".otps", GSON.toJson(otps.toArray(new OTPData[0])))
-                .apply();
-    }
-
-    public static void updateOTPs(Context ctx, String group, List<OTPData> otps) {
-        ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putString("group." + group + ".otps", GSON.toJson(otps.toArray(new OTPData[0])))
-                .apply();
-    }*/
 
     public static String getGroupName(Context ctx, String group) {
         return ctx.getSharedPreferences(GROUPS_PREFS_NAME, Context.MODE_PRIVATE).getString("group." + group + ".name", group);

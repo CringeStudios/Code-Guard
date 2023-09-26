@@ -166,6 +166,10 @@ public class OTPDatabase {
         loadedDatabase = null;
     }
 
+    public static void setLoadedDatabase(OTPDatabase loadedDatabase) {
+        OTPDatabase.loadedDatabase = loadedDatabase;
+    }
+
     public static OTPDatabase getLoadedDatabase() {
         return loadedDatabase;
     }

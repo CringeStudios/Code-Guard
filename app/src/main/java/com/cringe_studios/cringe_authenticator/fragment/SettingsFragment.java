@@ -1,6 +1,5 @@
 package com.cringe_studios.cringe_authenticator.fragment;
 
-import android.app.AlertDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.backup.BackupData;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
@@ -22,7 +22,7 @@ import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
 import com.cringe_studios.cringe_authenticator.util.Appearance;
 import com.cringe_studios.cringe_authenticator.util.BackupException;
-import com.cringe_studios.cringe_authenticator.util.BackupUtil;
+import com.cringe_studios.cringe_authenticator.backup.BackupUtil;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
@@ -31,9 +31,6 @@ import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.Theme;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -265,29 +262,46 @@ public class SettingsFragment extends NamedFragment {
 
     private void loadBackup(Uri uri) {
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-            try {
-                SecretKey key = OTPDatabase.getLoadedKey();
-                CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
-                loadBackup(uri, key, parameters);
-            } catch (CryptoException e) {
-                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
-                    try {
-                        CryptoParameters parameters = BackupUtil.loadParametersFromBackup(requireContext(), uri);
-                        SecretKey key = Crypto.generateKey(parameters, password);
-                        loadBackup(uri, key, parameters);
-                    } catch (BackupException | OTPDatabaseException | CryptoException e2) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e2);
-                    }
-                }, null);
-            } catch(BackupException | OTPDatabaseException e) {
-                DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+            if(SettingsUtil.isDatabaseEncrypted(requireContext())) {
+                try {
+                    SecretKey key = OTPDatabase.getLoadedKey();
+                    CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
+                    loadBackup(uri, key, parameters);
+                } catch (CryptoException ignored) { // Load with password
+                } catch (BackupException | OTPDatabaseException e) {
+                    DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+                    return;
+                }
             }
+
+            DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                try {
+                    CryptoParameters parameters = BackupUtil.loadParametersFromBackup(requireContext(), uri);
+                    SecretKey key = Crypto.generateKey(parameters, password);
+                    loadBackup(uri, key, parameters);
+                } catch (BackupException | OTPDatabaseException | CryptoException e2) {
+                    DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e2);
+                }
+            }, null);
         }, null);
     }
 
     private void loadBackup(Uri uri, SecretKey key, CryptoParameters parameters) throws BackupException, OTPDatabaseException, CryptoException {
-        OTPDatabase db = BackupUtil.loadBackup(requireContext(), uri, key, parameters);
-        DialogUtil.showErrorDialog(requireContext(), "Success: " + db);
+        BackupData data = BackupUtil.loadBackup(requireContext(), uri);
+        OTPDatabase db = data.loadDatabase(key, parameters);
+        //DialogUtil.showErrorDialog(requireContext(), "Success: " + db);
+        // TODO: prompt user that all current data will be deleted
+        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+            OTPDatabase oldDatabase = OTPDatabase.getLoadedDatabase();
+            try {
+                SettingsUtil.restoreGroups(requireContext(), data.getGroups());
+                OTPDatabase.setLoadedDatabase(db);
+                OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+            } catch (OTPDatabaseException | CryptoException e) {
+                OTPDatabase.setLoadedDatabase(oldDatabase);
+                throw new RuntimeException(e);
+            }
+        }, null);
     }
 
     @Override

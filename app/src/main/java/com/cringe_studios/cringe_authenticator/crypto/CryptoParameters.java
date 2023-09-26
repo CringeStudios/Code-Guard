@@ -75,6 +75,19 @@ public class CryptoParameters {
         return encryptionSaltLength;
     }
 
+    public boolean isValid() {
+        return hashType != null
+                && argon2Version > 0
+                && argon2Iterations > 0
+                && argon2Memory > 0
+                && argon2Parallelism > 0
+                && encryptionAlgorithm != null
+                && encryptionGCMTagLength > 0
+                && encryptionIVLength > 0
+                && encryptionAESKeyLength > 0
+                && encryptionSaltLength > 0;
+    }
+
     public static CryptoParameters createNew() {
         CryptoParameters params = new CryptoParameters();
         byte[] salt = Crypto.generateSalt(params);
