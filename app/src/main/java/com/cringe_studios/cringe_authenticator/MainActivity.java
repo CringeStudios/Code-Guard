@@ -31,12 +31,14 @@ import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class MainActivity extends BaseActivity {
 
@@ -128,6 +130,11 @@ public class MainActivity extends BaseActivity {
                 pickBackupFileLoadCallback = null;
             }
         });
+
+        if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
+            SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
+            SettingsUtil.setFirstLaunch(this, false);
+        }
 
         OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
     }

@@ -176,6 +176,15 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("hideCodes", false);
     }
 
+    public static void setFirstLaunch(Context ctx, boolean firstLaunch) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("firstLaunch", firstLaunch).apply();
+    }
+
+    public static boolean isFirstLaunch(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("firstLaunch", true);
+    }
+
     public static void setTheme(Context ctx, Theme theme) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("theme", theme.name()).apply();
