@@ -97,4 +97,6 @@
     <string name="enter_password">Enter Password</string>
     <string name="disable_encryption_title">Disable encryption</string>
     <string name="disable_encryption_message">Do you really want to disable encryption?</string>
+    <string name="load_backup_title">Load backup</string>
+    <string name="backup_load_message">Do you want to load this backup?\n\nThis will delete ALL of the current data in the app and replace it with the data from the backup!</string>
 </resources>

@@ -2,7 +2,6 @@ package com.cringe_studios.cringe_authenticator;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -330,7 +329,7 @@ public class MainActivity extends BaseActivity {
             lockOnStop = true;
             callback.accept(uri);
         };
-        pickBackupFileLoad.launch(new String[]{"application/json"});
+        pickBackupFileLoad.launch(new String[]{"application/json", "*/*"});
     }
 
     @Override
@@ -342,7 +341,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d("STOP", lockOnStop+"");
         if(lockOnStop) OTPDatabase.unloadDatabase();
     }
 

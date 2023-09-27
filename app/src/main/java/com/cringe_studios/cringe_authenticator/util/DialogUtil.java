@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Consumer;
 
 import com.cringe_studios.cringe_authenticator.R;
+import com.cringe_studios.cringe_authenticator.backup.BackupData;
 import com.cringe_studios.cringe_authenticator.databinding.DialogCreateGroupBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
@@ -277,7 +278,7 @@ public class DialogUtil {
         AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle(R.string.set_password)
                 .setView(binding.getRoot())
-                .setPositiveButton("Ok", (d, which) -> {})
+                .setPositiveButton(R.string.ok, (d, which) -> {})
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onCancel != null) onCancel.run(); })
                 .setOnCancelListener(d -> { if(onCancel != null) onCancel.run(); })
                 .create();
@@ -310,8 +311,8 @@ public class DialogUtil {
 
         AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle("Input Password")
-                .setView(binding.inputPassword)
-                .setPositiveButton("Ok", (d, which) -> {})
+                .setView(binding.getRoot())
+                .setPositiveButton(R.string.ok, (d, which) -> {})
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onCancel != null) onCancel.run(); })
                 .setOnCancelListener(d -> { if(onCancel != null) onCancel.run(); })
                 .create();
@@ -369,6 +370,16 @@ public class DialogUtil {
 
     public static void showYesNoCancel(Context context, @StringRes int title, @StringRes int message, Runnable yes, Runnable no, Runnable cancel) {
         showYesNoCancel(context, title, message, R.string.yes, R.string.no, R.string.cancel, yes, no, cancel);
+    }
+
+    public static void showBackupLoadedDialog(Context context, BackupData data) {
+        AlertDialog dialog = new StyledDialogBuilder(context)
+                .setTitle("Backup loaded")
+                .setMessage(String.format("Successfully loaded %s group(s) from the backup", data.getGroups().length))
+                .setPositiveButton(R.string.ok, (d, which) -> {})
+                .create();
+
+        dialog.show();
     }
 
 }

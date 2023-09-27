@@ -267,27 +267,32 @@ public class SettingsFragment extends NamedFragment {
     }
 
     private void loadBackup(Uri uri) {
-        OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-            if(SettingsUtil.isDatabaseEncrypted(requireContext())) {
-                try {
-                    SecretKey key = OTPDatabase.getLoadedKey();
-                    CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
-                    loadBackup(uri, key, parameters);
-                } catch (CryptoException ignored) { // Load with password
-                } catch (BackupException | OTPDatabaseException e) {
-                    DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
-                    return;
+        DialogUtil.showYesNo(requireContext(), R.string.load_backup_title, R.string.backup_load_message, () -> {
+            OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
+                if(SettingsUtil.isDatabaseEncrypted(requireContext())) {
+                    try {
+                        SecretKey key = OTPDatabase.getLoadedKey();
+                        CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
+                        loadBackup(uri, key, parameters);
+                        return;
+                    } catch (CryptoException ignored) { // Load with password
+                    } catch (BackupException | OTPDatabaseException e) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+                        return;
+                    }
                 }
-            }
 
-            DialogUtil.showInputPasswordDialog(requireContext(), password -> {
-                try {
-                    CryptoParameters parameters = BackupUtil.loadParametersFromBackup(requireContext(), uri);
-                    SecretKey key = Crypto.generateKey(parameters, password);
-                    loadBackup(uri, key, parameters);
-                } catch (BackupException | OTPDatabaseException | CryptoException e2) {
-                    DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e2);
-                }
+                DialogUtil.showInputPasswordDialog(requireContext(), password -> {
+                    try {
+                        CryptoParameters parameters = BackupUtil.loadParametersFromBackup(requireContext(), uri);
+                        SecretKey key = Crypto.generateKey(parameters, password);
+                        loadBackup(uri, key, parameters);
+                    } catch (CryptoException e) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup. Make sure the password is valid", e);
+                    } catch (BackupException | OTPDatabaseException e) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+                    }
+                }, null);
             }, null);
         }, null);
     }
@@ -302,6 +307,8 @@ public class SettingsFragment extends NamedFragment {
                 SettingsUtil.restoreGroups(requireContext(), data.getGroups());
                 OTPDatabase.setLoadedDatabase(db);
                 OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+
+                DialogUtil.showBackupLoadedDialog(requireContext(), data);
             } catch (OTPDatabaseException | CryptoException e) {
                 OTPDatabase.setLoadedDatabase(oldDatabase);
                 throw new RuntimeException(e);
