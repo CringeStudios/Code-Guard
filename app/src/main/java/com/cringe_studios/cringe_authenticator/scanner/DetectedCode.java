@@ -2,7 +2,6 @@ package com.cringe_studios.cringe_authenticator.scanner;
 
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;
-import com.cringe_studios.cringe_authenticator.proto.OTPMigration;
 
 public class DetectedCode {
 

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.cringe_studios.cringe_authenticator.databinding.ActivityIntroBinding;
 import com.cringe_studios.cringe_authenticator.unlock.UnlockActivity;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;

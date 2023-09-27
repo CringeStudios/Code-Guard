@@ -3,7 +3,6 @@ package com.cringe_studios.cringe_authenticator.scanner;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
 import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;

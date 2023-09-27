@@ -8,13 +8,11 @@ import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ExperimentalGetImage;
@@ -32,9 +30,7 @@ import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityQrScannerBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.model.OTPMigrationPart;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
+import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.common.InputImage;
 
@@ -157,22 +153,16 @@ public class QRScannerActivity extends BaseActivity {
             }
 
             if(part.getBatchIndex() == 0) {
-                new StyledDialogBuilder(this)
-                        .setTitle(R.string.qr_scanner_migration_title)
-                        .setMessage(R.string.qr_scanner_migration_message)
-                        .setPositiveButton(R.string.yes, (d, which) -> {
-                            if(part.getBatchSize() == 1) {
-                                success(part.getOTPs());
-                            }else {
-                                currentCodes.addAll(Arrays.asList(part.getOTPs()));
-                                lastPart = part;
-                                Toast.makeText(this, getString(R.string.qr_scanner_migration_part, part.getBatchIndex()+ 1, part.getBatchSize()), Toast.LENGTH_LONG).show();
-                                process = true;
-                            }
-                        })
-                        .setNegativeButton(R.string.no, (d, which) -> cancel())
-                        .show()
-                        .setCanceledOnTouchOutside(false);
+                DialogUtil.showYesNo(this, R.string.qr_scanner_migration_title, R.string.qr_scanner_migration_message, () -> {
+                    if(part.getBatchSize() == 1) {
+                        success(part.getOTPs());
+                    }else {
+                        currentCodes.addAll(Arrays.asList(part.getOTPs()));
+                        lastPart = part;
+                        Toast.makeText(this, getString(R.string.qr_scanner_migration_part, part.getBatchIndex()+ 1, part.getBatchSize()), Toast.LENGTH_LONG).show();
+                        process = true;
+                    }
+                }, null);
             }else {
                 currentCodes.addAll(Arrays.asList(part.getOTPs()));
                 Toast.makeText(this, getString(R.string.qr_scanner_migration_part, part.getBatchIndex()+ 1, part.getBatchSize()), Toast.LENGTH_LONG).show();

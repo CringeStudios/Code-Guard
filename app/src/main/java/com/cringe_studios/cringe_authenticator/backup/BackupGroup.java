@@ -1,7 +1,5 @@
 package com.cringe_studios.cringe_authenticator.backup;
 
-import org.jetbrains.annotations.Contract;
-
 public class BackupGroup {
 
     public String id;

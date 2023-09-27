@@ -94,4 +94,7 @@
     <string name="backups">Backups</string>
     <string name="create_backup">Create backup</string>
     <string name="load_backup">Load backup</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="disable_encryption_title">Disable encryption</string>
+    <string name="disable_encryption_message">Do you really want to disable encryption?</string>
 </resources>

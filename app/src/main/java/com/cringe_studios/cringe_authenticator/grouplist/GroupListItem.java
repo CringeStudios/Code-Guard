@@ -1,10 +1,8 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

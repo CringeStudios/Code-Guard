@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.backup.BackupData;
+import com.cringe_studios.cringe_authenticator.backup.BackupUtil;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
@@ -22,7 +23,6 @@ import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
 import com.cringe_studios.cringe_authenticator.util.Appearance;
 import com.cringe_studios.cringe_authenticator.util.BackupException;
-import com.cringe_studios.cringe_authenticator.backup.BackupUtil;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
@@ -66,7 +66,6 @@ public class SettingsFragment extends NamedFragment {
                 if(locale.equals(SettingsUtil.getLocale(requireContext()))) return;
 
                 SettingsUtil.setLocale(requireContext(), locale);
-                //((MainActivity) requireActivity()).setLocale(locale);
                 requireActivity().recreate();
             }
 
@@ -79,6 +78,8 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsEnableEncryption.setChecked(SettingsUtil.isDatabaseEncrypted(requireContext()));
         binding.settingsEnableEncryption.setOnCheckedChangeListener((view, checked) -> {
             if(checked) {
+                if(SettingsUtil.isDatabaseEncrypted(requireContext())) return;
+
                 DialogUtil.showSetPasswordDialog(requireContext(), password -> {
                     CryptoParameters params = CryptoParameters.createNew();
                     Log.d("Crypto", "Created new crypto params");
@@ -94,24 +95,29 @@ public class SettingsFragment extends NamedFragment {
                             binding.settingsBiometricLock.setEnabled(true);
                         }
                     } catch (CryptoException | OTPDatabaseException e) {
-                        throw new RuntimeException(e); // TODO
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to enable encryption", e);
                     }
-                }, null);
+                }, () -> view.setChecked(false));
             }else {
-                try {
-                    OTPDatabase.decrypt(requireContext());
-                    SettingsUtil.disableEncryption(requireContext());
-                    Log.d("Crypto", "DB encryption disabled");
+                if(!SettingsUtil.isDatabaseEncrypted(requireContext())) return;
 
-                    binding.settingsBiometricLock.setChecked(false);
-                    binding.settingsBiometricLock.setEnabled(false);
-                } catch (OTPDatabaseException | CryptoException e) {
-                    throw new RuntimeException(e); // TODO
-                }
+                DialogUtil.showYesNo(requireContext(), R.string.disable_encryption_title, R.string.disable_encryption_message, () -> {
+                    try {
+                        OTPDatabase.decrypt(requireContext());
+                        SettingsUtil.disableEncryption(requireContext());
+                        Log.d("Crypto", "DB encryption disabled");
+
+                        binding.settingsBiometricLock.setChecked(false);
+                        binding.settingsBiometricLock.setEnabled(false);
+                    } catch (OTPDatabaseException | CryptoException e) {
+                        DialogUtil.showErrorDialog(requireContext(), "Failed to disable encryption", e);
+                    }
+                }, () -> view.setChecked(true));
             }
         });
 
-        if(SettingsUtil.isDatabaseEncrypted(requireContext()) && BiometricUtil.isSupported(requireContext())) {
+        boolean biometricSupported = BiometricUtil.isSupported(requireContext());
+        if(SettingsUtil.isDatabaseEncrypted(requireContext()) && biometricSupported) {
             binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricEncryption(requireContext()));
             binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> {
                 if(checked) {
@@ -289,7 +295,6 @@ public class SettingsFragment extends NamedFragment {
     private void loadBackup(Uri uri, SecretKey key, CryptoParameters parameters) throws BackupException, OTPDatabaseException, CryptoException {
         BackupData data = BackupUtil.loadBackup(requireContext(), uri);
         OTPDatabase db = data.loadDatabase(key, parameters);
-        //DialogUtil.showErrorDialog(requireContext(), "Success: " + db);
         // TODO: prompt user that all current data will be deleted
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
             OTPDatabase oldDatabase = OTPDatabase.getLoadedDatabase();

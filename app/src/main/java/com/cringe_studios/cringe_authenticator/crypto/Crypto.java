@@ -1,15 +1,12 @@
 package com.cringe_studios.cringe_authenticator.crypto;
 
-import android.content.Context;
 import android.os.Build;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
 import org.bouncycastle.crypto.params.Argon2Parameters;
@@ -25,7 +22,6 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
-import java.util.Arrays;
 import java.util.UUID;
 
 import javax.crypto.BadPaddingException;

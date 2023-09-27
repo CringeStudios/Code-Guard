@@ -1,8 +1,6 @@
 package com.cringe_studios.cringe_authenticator.util;
 
-import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -6,7 +6,6 @@ import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public class OTPData implements Serializable {
 
@@ -100,19 +99,6 @@ public class OTPData implements Serializable {
         } catch (OTPException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OTPData otpData = (OTPData) o;
-        return digits == otpData.digits && period == otpData.period && counter == otpData.counter && checksum == otpData.checksum && Objects.equals(name, otpData.name) && Objects.equals(issuer, otpData.issuer) && type == otpData.type && Objects.equals(secret, otpData.secret) && algorithm == otpData.algorithm;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, issuer, type, secret, algorithm, digits, period, counter, checksum);
     }
 
 }

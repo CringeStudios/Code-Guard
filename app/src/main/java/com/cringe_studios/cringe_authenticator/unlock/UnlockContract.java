@@ -8,9 +8,6 @@ import androidx.activity.result.contract.ActivityResultContract;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.cringe_studios.cringe_authenticator.scanner.QRScannerActivity;
-import com.cringe_studios.cringe_authenticator.scanner.ScannerResult;
-
 public class UnlockContract extends ActivityResultContract<Void, Boolean> {
     @NonNull
     @Override

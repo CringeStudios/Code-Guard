@@ -93,4 +93,7 @@
     <string name="backups">Backups</string>
     <string name="create_backup">Backup erstellen</string>
     <string name="load_backup">Backup laden</string>
+    <string name="enter_password">Passwort eingeben</string>
+    <string name="disable_encryption_title">Verschlüsselung deaktivieren</string>
+    <string name="disable_encryption_message">Willst du wirklich die Verschlüsselung deaktivieren?</string>
 </resources>

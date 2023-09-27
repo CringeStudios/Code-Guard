@@ -1,14 +1,13 @@
 package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.util.Consumer;
 
@@ -16,6 +15,7 @@ import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.DialogCreateGroupBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogInputPasswordBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogSetPasswordBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
@@ -306,11 +306,11 @@ public class DialogUtil {
     }
 
     public static void showInputPasswordDialog(Context context, Consumer<String> callback, Runnable onCancel) {
-        EditText passwordField = new EditText(context);
-        passwordField.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        DialogInputPasswordBinding binding = DialogInputPasswordBinding.inflate(LayoutInflater.from(context));
+
         AlertDialog dialog = new StyledDialogBuilder(context)
                 .setTitle("Input Password")
-                .setView(passwordField) // TODO: better layout
+                .setView(binding.inputPassword)
                 .setPositiveButton("Ok", (d, which) -> {})
                 .setNegativeButton(R.string.cancel, (d, which) -> { if(onCancel != null) onCancel.run(); })
                 .setOnCancelListener(d -> { if(onCancel != null) onCancel.run(); })
@@ -319,17 +319,56 @@ public class DialogUtil {
         dialog.setOnShowListener(d -> {
             Button okButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             okButton.setOnClickListener(v -> {
-                if(passwordField.getText().length() == 0) {
+                if(binding.inputPassword.getText().length() == 0) {
                     DialogUtil.showErrorDialog(context, "You need to enter a password");
                     return;
                 }
 
                 dialog.dismiss();
-                callback.accept(passwordField.getText().toString());
+                callback.accept(binding.inputPassword.getText().toString());
             });
         });
 
         dialog.show();
+    }
+
+    public static void showYesNo(Context context, @StringRes int title, @StringRes int message, @StringRes int yesText, @StringRes int noText, Runnable yes, Runnable no) {
+        new StyledDialogBuilder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(yesText, (d, w) -> {
+                    if(yes != null) yes.run();
+                })
+                .setNegativeButton(noText, (d, w) -> {
+                    if(no != null) no.run();
+                })
+                .show()
+                .setCanceledOnTouchOutside(false);
+    }
+
+    public static void showYesNo(Context context, @StringRes int title, @StringRes int message, Runnable yes, Runnable no) {
+        showYesNo(context, title, message, R.string.yes, R.string.no, yes, no);
+    }
+
+    public static void showYesNoCancel(Context context, @StringRes int title, @StringRes int message, @StringRes int yesText, @StringRes int noText, @StringRes int cancelText, Runnable yes, Runnable no, Runnable cancel) {
+            new StyledDialogBuilder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(yesText, (d, w) -> {
+                    if(yes != null) yes.run();
+                })
+                .setNegativeButton(noText, (d, w) -> {
+                    if(no != null) no.run();
+                })
+                .setNeutralButton(cancelText, (d, w) -> d.cancel())
+                .setOnCancelListener(d -> {
+                    if(cancel != null) cancel.run();
+                })
+                .show();
+    }
+
+    public static void showYesNoCancel(Context context, @StringRes int title, @StringRes int message, Runnable yes, Runnable no, Runnable cancel) {
+        showYesNoCancel(context, title, message, R.string.yes, R.string.no, R.string.cancel, yes, no, cancel);
     }
 
 }

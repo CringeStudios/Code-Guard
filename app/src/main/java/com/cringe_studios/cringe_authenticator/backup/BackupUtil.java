@@ -9,21 +9,14 @@ import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.util.BackupException;
 import com.cringe_studios.cringe_authenticator.util.IOUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
-import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

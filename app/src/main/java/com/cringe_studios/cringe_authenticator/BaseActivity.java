@@ -2,7 +2,6 @@ package com.cringe_studios.cringe_authenticator;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -50,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
     public void setLocale(Locale locale) {
         Locale.setDefault(locale);
         Configuration config = new Configuration();
-        config.locale = locale;
+        config.setLocale(locale);
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 

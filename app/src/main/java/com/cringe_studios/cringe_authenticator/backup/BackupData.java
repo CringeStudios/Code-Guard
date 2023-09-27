@@ -1,16 +1,12 @@
 package com.cringe_studios.cringe_authenticator.backup;
 
 import android.util.Base64;
-import android.util.Log;
 
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
-import com.cringe_studios.cringe_authenticator.model.OTPData;
-import com.cringe_studios.cringe_authenticator.proto.OTPMigration;
 import com.cringe_studios.cringe_authenticator.util.BackupException;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
 import javax.crypto.SecretKey;
 

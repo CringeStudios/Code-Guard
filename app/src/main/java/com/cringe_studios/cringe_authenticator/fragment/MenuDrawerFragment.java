@@ -18,7 +18,6 @@ import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.List;
@@ -91,18 +90,13 @@ public class MenuDrawerFragment extends BottomSheetDialogFragment {
     public void removeSelectedGroups() {
         if(!groupListAdapter.isEditing()) return;
 
-        new StyledDialogBuilder(requireContext())
-                .setTitle(R.string.group_delete_title)
-                .setMessage(R.string.group_delete_message)
-                .setPositiveButton(R.string.yes, (d, w) -> {
-                    for(GroupListItem item : groupListAdapter.getSelectedGroups()) {
-                        removeGroup(item.getGroupId());
-                    }
+        DialogUtil.showYesNo(requireContext(), R.string.group_delete_title, R.string.group_delete_message, () -> {
+            for(GroupListItem item : groupListAdapter.getSelectedGroups()) {
+                removeGroup(item.getGroupId());
+            }
 
-                    groupListAdapter.finishEditing();
-                })
-                .setNegativeButton(R.string.no, (d, w) -> {})
-                .show();
+            groupListAdapter.finishEditing();
+        }, null);
     }
 
     public void removeGroup(String group) {

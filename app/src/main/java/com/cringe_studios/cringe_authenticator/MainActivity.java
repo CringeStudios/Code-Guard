@@ -1,8 +1,8 @@
 package com.cringe_studios.cringe_authenticator;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,14 +32,12 @@ import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
-import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.io.IOException;
-import java.util.Locale;
 
 public class MainActivity extends BaseActivity {
 
@@ -61,7 +59,7 @@ public class MainActivity extends BaseActivity {
 
     private boolean fullyLaunched;
 
-    private boolean lockOnPause = true;
+    private boolean lockOnStop = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +68,7 @@ public class MainActivity extends BaseActivity {
         qrScanner = new QRScanner();
 
         startQRCodeScan = registerForActivityResult(new QRScannerContract(), obj -> {
-            lockOnPause = true;
+            lockOnStop = true;
 
             if(obj == null) return; // Cancelled
 
@@ -98,19 +96,13 @@ public class MainActivity extends BaseActivity {
                     }
 
                     if(code.isMigrationPart()) {
-                        new StyledDialogBuilder(this) // TODO: duplicated from QRScannerActivity
-                                .setTitle(R.string.qr_scanner_migration_title)
-                                .setMessage(R.string.qr_scanner_migration_message)
-                                .setPositiveButton(R.string.yes, (d, which) -> {
-                                    Fragment fragment = NavigationUtil.getCurrentFragment(this);
-                                    if (fragment instanceof GroupFragment) {
-                                        GroupFragment frag = (GroupFragment) fragment;
-                                        for (OTPData dt : code.getOTPs()) frag.addOTP(dt);
-                                    }
-                                })
-                                .setNegativeButton(R.string.no, (d, which) -> {})
-                                .show()
-                                .setCanceledOnTouchOutside(false);
+                        DialogUtil.showYesNo(this, R.string.qr_scanner_migration_title, R.string.qr_scanner_migration_message, () -> {
+                            Fragment fragment = NavigationUtil.getCurrentFragment(this);
+                            if (fragment instanceof GroupFragment) {
+                                GroupFragment frag = (GroupFragment) fragment;
+                                for (OTPData dt : code.getOTPs()) frag.addOTP(dt);
+                            }
+                        }, null);
                     }else {
                         Fragment fragment = NavigationUtil.getCurrentFragment(this);
                         if (fragment instanceof GroupFragment) {
@@ -149,7 +141,7 @@ public class MainActivity extends BaseActivity {
 
     private void launchApp() {
         fullyLaunched = true;
-        lockOnPause = true;
+        lockOnStop = true;
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -225,7 +217,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void scanCode(MenuItem item) {
-        lockOnPause = false;
+        lockOnStop = false;
         startQRCodeScan.launch(null);
     }
 
@@ -324,18 +316,18 @@ public class MainActivity extends BaseActivity {
     }
 
     public void promptPickBackupFileSave(String name, Consumer<Uri> callback) {
-        this.lockOnPause = false;
+        this.lockOnStop = false;
         this.pickBackupFileSaveCallback = uri -> {
-            lockOnPause = true;
+            lockOnStop = true;
             callback.accept(uri);
         };
         pickBackupFileSave.launch(name);
     }
 
     public void promptPickBackupFileLoad(Consumer<Uri> callback) {
-        this.lockOnPause = false;
+        this.lockOnStop = false;
         this.pickBackupFileLoadCallback = uri -> {
-            lockOnPause = true;
+            lockOnStop = true;
             callback.accept(uri);
         };
         pickBackupFileLoad.launch(new String[]{"application/json"});
@@ -343,14 +335,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void recreate() {
-        lockOnPause = false;
+        lockOnStop = false;
         super.recreate();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if(lockOnPause) OTPDatabase.unloadDatabase();
+        Log.d("STOP", lockOnStop+"");
+        if(lockOnStop) OTPDatabase.unloadDatabase();
     }
 
     @Override

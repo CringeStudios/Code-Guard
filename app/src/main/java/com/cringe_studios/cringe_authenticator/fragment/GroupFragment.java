@@ -20,8 +20,6 @@ import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.util.List;
 
@@ -153,11 +151,12 @@ public class GroupFragment extends NamedFragment {
                     for(OTPListItem item : items) {
                         OTPData data = item.getOTPData();
                         OTPDatabase.getLoadedDatabase().addOTP(group, data);
-                        OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
                         otpListAdapter.remove(data);
                     }
 
+                    OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
                     saveOTPs();
+                    otpListAdapter.finishEditing();
                 } catch (OTPDatabaseException | CryptoException e) {
                     DialogUtil.showErrorDialog(requireContext(), e.toString());
                 }
@@ -171,19 +170,14 @@ public class GroupFragment extends NamedFragment {
 
         List<OTPListItem> items = otpListAdapter.getSelectedCodes();
 
-        new StyledDialogBuilder(requireContext())
-                .setTitle(R.string.otp_delete_title)
-                .setMessage(R.string.otp_delete_message)
-                .setPositiveButton(R.string.yes, (d, w) -> {
-                    for(OTPListItem item : items) {
-                        otpListAdapter.remove(item.getOTPData());
-                    }
+        DialogUtil.showYesNoCancel(requireContext(), R.string.otp_delete_title, R.string.otp_delete_message, () -> {
+            for(OTPListItem item : items) {
+                otpListAdapter.remove(item.getOTPData());
+            }
 
-                    saveOTPs();
-                    finishEditing();
-                })
-                .setNegativeButton(R.string.no, (d, w) -> {})
-                .show();
+            saveOTPs();
+            finishEditing();
+        }, null, null);
     }
 
     public boolean isEditing() {

@@ -1,7 +1,5 @@
 package com.cringe_studios.cringe_authenticator.grouplist;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -9,18 +7,12 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.cringe_studios.cringe_authenticator.BaseActivity;
-import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
-import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
-
-import org.bouncycastle.jcajce.provider.symmetric.ARC4;
 
 import java.util.ArrayList;
 import java.util.Collections;

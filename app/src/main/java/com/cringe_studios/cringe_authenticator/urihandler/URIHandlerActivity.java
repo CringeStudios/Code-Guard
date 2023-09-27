@@ -3,26 +3,21 @@ package com.cringe_studios.cringe_authenticator.urihandler;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
-import com.cringe_studios.cringe_authenticator.unlock.UnlockContract;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.OTPParser;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 
 public class URIHandlerActivity extends BaseActivity {
 

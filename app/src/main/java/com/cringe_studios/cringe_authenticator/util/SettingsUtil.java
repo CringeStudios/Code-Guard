@@ -2,24 +2,16 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Base64;
 
-import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.backup.BackupGroup;
 import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
-import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.google.gson.Gson;
 
-import org.bouncycastle.jcajce.provider.symmetric.ARC4;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class SettingsUtil {
 

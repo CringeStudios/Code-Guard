@@ -2,25 +2,18 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 
 import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
-import com.cringe_studios.cringe_authenticator.unlock.UnlockContract;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
