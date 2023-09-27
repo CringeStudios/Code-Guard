@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -21,9 +22,12 @@ public class OTPListItem extends RecyclerView.ViewHolder {
 
     private boolean selected;
 
+    private boolean codeShown;
+
     public OTPListItem(OtpCodeBinding binding) {
         super(binding.getRoot());
         this.binding = binding;
+        this.codeShown = !SettingsUtil.isHideCodes(binding.getRoot().getContext());
     }
 
     public @NonNull OtpCodeBinding getBinding() {
@@ -38,8 +42,16 @@ public class OTPListItem extends RecyclerView.ViewHolder {
         return otpData;
     }
 
+    public void setCodeShown(boolean codeShown) {
+        this.codeShown = codeShown;
+    }
+
+    public boolean isCodeShown() {
+        return codeShown;
+    }
+
     public void refresh() throws OTPException {
-        binding.otpCode.setText(OTPListItem.formatCode(otpData.getPin()));
+        binding.otpCode.setText(formatCode(otpData.getPin()));
 
         if(otpData.getType() == OTPType.TOTP) {
             long timeDiff = otpData.getNextDueTime() - System.currentTimeMillis() / 1000;
@@ -48,7 +60,7 @@ public class OTPListItem extends RecyclerView.ViewHolder {
         }
     }
 
-    public static String formatCode(String code) {
+    private String formatCode(String code) {
         // TODO: add setting for group size (and enable/disable grouping)
         StringBuilder b = new StringBuilder();
         for(int i = 0; i < code.length(); i++) {
@@ -56,7 +68,12 @@ public class OTPListItem extends RecyclerView.ViewHolder {
                 b.append(' ');
             }
 
-            char c = code.charAt(i);
+            char c;
+            if(codeShown) {
+                c = code.charAt(i);
+            }else {
+                c = '\u2022';
+            }
             b.append(c);
         }
         return b.toString();

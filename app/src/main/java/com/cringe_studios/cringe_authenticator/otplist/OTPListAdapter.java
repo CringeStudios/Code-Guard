@@ -78,11 +78,17 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
             if(!editing) {
                 if (!view.isClickable()) return;
 
-                if (data.getType() != OTPType.HOTP) return;
+                if(!holder.isCodeShown()) holder.setCodeShown(true);
 
-                // Click delay for HOTP
-                view.setClickable(false);
-                data.incrementCounter();
+                if (data.getType() == OTPType.HOTP) {
+                    // Click delay for HOTP
+                    view.setClickable(false);
+                    data.incrementCounter();
+
+                    Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
+
+                    handler.postDelayed(() -> view.setClickable(true), 5000);
+                }
 
                 try {
                     holder.refresh();
@@ -90,10 +96,6 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
                     DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
                     return;
                 }
-
-                Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
-
-                handler.postDelayed(() -> view.setClickable(true), 5000);
             }else {
                 holder.setSelected(!holder.isSelected());
                 if(getSelectedCodes().isEmpty()) editing = false;
