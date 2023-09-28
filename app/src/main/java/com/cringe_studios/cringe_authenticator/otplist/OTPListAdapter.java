@@ -84,6 +84,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
                     // Click delay for HOTP
                     view.setClickable(false);
                     data.incrementCounter();
+                    saveOTPs.run();
 
                     Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
 
@@ -94,7 +95,6 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
                     holder.refresh();
                 } catch (OTPException e) {
                     DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
-                    return;
                 }
             }else {
                 holder.setSelected(!holder.isSelected());
