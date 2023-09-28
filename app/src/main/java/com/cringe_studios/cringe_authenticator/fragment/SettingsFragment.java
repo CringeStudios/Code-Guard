@@ -154,7 +154,7 @@ public class SettingsFragment extends NamedFragment {
             requireActivity().recreate();
         });
 
-        binding.settingsHideCodes.setChecked(SettingsUtil.isHideCodes(requireContext())); // TODO: implement functionality
+        binding.settingsHideCodes.setChecked(SettingsUtil.isHideCodes(requireContext()));
         binding.settingsHideCodes.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setHideCodes(requireContext(), checked));
 
         String[] themeNames = new String[Theme.values().length];
@@ -300,7 +300,6 @@ public class SettingsFragment extends NamedFragment {
     private void loadBackup(Uri uri, SecretKey key, CryptoParameters parameters) throws BackupException, OTPDatabaseException, CryptoException {
         BackupData data = BackupUtil.loadBackup(requireContext(), uri);
         OTPDatabase db = data.loadDatabase(key, parameters);
-        // TODO: prompt user that all current data will be deleted
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
             OTPDatabase oldDatabase = OTPDatabase.getLoadedDatabase();
             try {

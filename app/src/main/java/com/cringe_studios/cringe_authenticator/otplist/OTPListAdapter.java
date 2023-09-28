@@ -72,23 +72,32 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         }
 
         holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
-        holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.INVISIBLE);
+        holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);
+        holder.getBinding().refresh.setVisibility(data.getType() == OTPType.HOTP ? View.VISIBLE : View.GONE);
+
+        holder.getBinding().refresh.setOnClickListener(view -> {
+            if (data.getType() != OTPType.HOTP) return;
+
+            if(!holder.isCodeShown()) {
+                showCode(holder);
+            }
+
+            // Click delay for HOTP
+            view.setEnabled(false);
+            data.incrementCounter();
+            saveOTPs.run();
+
+            Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
+
+            handler.postDelayed(() -> view.setEnabled(true), 5000);
+        });
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
             if(!editing) {
-                if (!view.isClickable()) return;
-
-                if(!holder.isCodeShown()) holder.setCodeShown(true);
-
-                if (data.getType() == OTPType.HOTP) {
-                    // Click delay for HOTP
-                    view.setClickable(false);
-                    data.incrementCounter();
-                    saveOTPs.run();
-
-                    Toast.makeText(view.getContext(), R.string.hotp_generated_new_code, Toast.LENGTH_SHORT).show();
-
-                    handler.postDelayed(() -> view.setClickable(true), 5000);
+                if(!holder.isCodeShown()) {
+                    showCode(holder);
+                }else {
+                    holder.setCodeShown(false);
                 }
 
                 try {
@@ -166,6 +175,31 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
             if(vh.isSelected()) selected.add(vh);
         }
         return selected;
+    }
+
+    private void showCode(OTPListItem item) {
+        for(OTPListItem h : getCodes()) {
+            if(h.isCodeShown()) {
+                h.setCodeShown(false);
+                try {
+                    h.refresh();
+                } catch (OTPException e) {
+                    DialogUtil.showErrorDialog(context, e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
+                }
+            }
+        }
+
+        item.setCodeShown(true);
+    }
+
+    private List<OTPListItem> getCodes() {
+        List<OTPListItem> is = new ArrayList<>();
+        for(int i = 0; i < items.size(); i++) {
+            OTPListItem vh = (OTPListItem) recyclerView.findViewHolderForAdapterPosition(i);
+            if(vh == null) continue;
+            is.add(vh);
+        }
+        return is;
     }
 
     private void attachTouchHelper(RecyclerView view) {

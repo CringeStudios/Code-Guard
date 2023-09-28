@@ -70,6 +70,13 @@
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/progress_circle" />
 
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/refresh"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@null"
+                    app:srcCompat="@drawable/baseline_refresh_24" />
+
             </LinearLayout>
 
         </LinearLayout>
