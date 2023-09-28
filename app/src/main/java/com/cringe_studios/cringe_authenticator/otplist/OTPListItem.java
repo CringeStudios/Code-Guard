@@ -72,7 +72,7 @@ public class OTPListItem extends RecyclerView.ViewHolder {
             if(codeShown) {
                 c = code.charAt(i);
             }else {
-                c = '\u2022';
+                c = '\u2731';
             }
             b.append(c);
         }
