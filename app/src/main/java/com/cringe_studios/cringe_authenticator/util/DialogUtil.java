@@ -14,6 +14,7 @@ import androidx.core.util.Consumer;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.backup.BackupData;
 import com.cringe_studios.cringe_authenticator.databinding.DialogCreateGroupBinding;
+import com.cringe_studios.cringe_authenticator.databinding.DialogErrorBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeHotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeTotpBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputPasswordBinding;
@@ -48,13 +49,36 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showErrorDialog(Context context, String errorMessage, Runnable closed) {
-        new StyledDialogBuilder(context)
+    public static void showErrorDialog(Context context, String errorMessage, String details, Runnable closed) {
+        DialogErrorBinding binding = DialogErrorBinding.inflate(LayoutInflater.from(context));
+
+        binding.errorMessage.setText(errorMessage);
+
+        AlertDialog.Builder b = new StyledDialogBuilder(context)
                 .setTitle(R.string.failed_title)
-                .setMessage(errorMessage)
+                .setView(binding.getRoot())
                 .setPositiveButton(R.string.ok, (d, which) -> {})
-                .setOnDismissListener(d -> { if(closed != null) closed.run(); })
-                .show();
+                .setOnDismissListener(d -> { if(closed != null) closed.run(); });
+
+        if(details != null) {
+            binding.errorDetailsText.setText(details);
+            b.setNeutralButton("Details", (d, which) -> {});
+        }
+
+        AlertDialog dialog = b.create();
+
+        if(details != null) {
+            dialog.setOnShowListener(d -> {
+                Button detailsButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+                detailsButton.setOnClickListener(v -> binding.errorDetails.setVisibility(binding.errorDetails.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE));
+            });
+        }
+
+        dialog.show();
+    }
+
+    public static void showErrorDialog(Context context, String errorMessage, Runnable closed) {
+        showErrorDialog(context, errorMessage, null, closed);
     }
 
     public static void showErrorDialog(Context context, String errorMessage) {
@@ -62,7 +86,22 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage, Exception exception) {
-        showErrorDialog(context, errorMessage + ": " + exception.toString(), (Runnable) null); // TODO: exception details button
+        showErrorDialog(context, errorMessage, stackTraceToString(exception), (Runnable) null);
+    }
+
+    private static String stackTraceToString(Throwable t) {
+        StringBuilder b = new StringBuilder();
+
+        b.append(t.toString()).append('\n');
+        for(StackTraceElement e : t.getStackTrace()) {
+            b.append("    ").append(e.toString()).append('\n');
+        }
+
+        if(t.getCause() != null) {
+            b.append("Caused by: ").append(stackTraceToString(t.getCause()));
+        }
+
+        return b.toString().trim();
     }
 
     public static void showTOTPDialog(LayoutInflater inflater, OTPData initialData, Consumer<OTPData> callback, boolean view) {
