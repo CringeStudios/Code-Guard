@@ -32,11 +32,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/error_details_text"
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Lorem ipsum dolor sit amet something went wrong and we don't know why" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/error_details_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="Lorem ipsum dolor sit amet something went wrong and we don't know why" />
+
+            </androidx.core.widget.NestedScrollView>
         </HorizontalScrollView>
 
     </LinearLayout>
