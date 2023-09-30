@@ -2,16 +2,26 @@ package com.cringe_studios.cringe_authenticator.icon;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.util.Base64;
 
+import androidx.core.util.Consumer;
+
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGImageView;
+import com.caverock.androidsvg.SVGParseException;
+import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.IOUtil;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +39,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class IconUtil {
+
+    private static final int ICON_SIZE = 128;
 
     // Source: https://sashamaps.net/docs/resources/20-colors/
     private static final List<Integer> DISTINCT_COLORS = Collections.unmodifiableList(Arrays.asList(
@@ -189,16 +201,17 @@ public class IconUtil {
         return entryBytes;
     }
 
-    public static Bitmap generateCodeImage(String issuer) {
-        int imageSize = 128;
+    public static Bitmap generateCodeImage(String issuer, String name) {
+        if(issuer == null || issuer.isEmpty()) issuer = name;
+        if(issuer == null || issuer.isEmpty()) issuer = "?";
 
-        Bitmap b = Bitmap.createBitmap(imageSize, imageSize, Bitmap.Config.ARGB_8888);
+        Bitmap b = Bitmap.createBitmap(ICON_SIZE, ICON_SIZE, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
 
         Paint p = new Paint();
         p.setColor(DISTINCT_COLORS.get(Math.abs(issuer.hashCode()) % DISTINCT_COLORS.size()));
         p.setStyle(Paint.Style.FILL);
-        c.drawCircle(imageSize / 2, imageSize / 2, imageSize / 2, p);
+        c.drawCircle(ICON_SIZE / 2, ICON_SIZE / 2, ICON_SIZE / 2, p);
 
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
@@ -207,7 +220,83 @@ public class IconUtil {
         String text = issuer.substring(0, 1);
         Rect r = new Rect();
         p.getTextBounds(text, 0, text.length(), r);
-        c.drawText(text, imageSize / 2 - r.exactCenterX(), imageSize / 2 - r.exactCenterY(), p);
+        c.drawText(text, ICON_SIZE / 2 - r.exactCenterX(), ICON_SIZE / 2 - r.exactCenterY(), p);
+
+        return b;
+    }
+
+    public static void loadEffectiveImage(Context context, String imageData, String issuer, String name, SVGImageView view, Consumer<String> setOTPImage) {
+        List<IconPack> packs = IconUtil.loadAllIconPacks(context);
+
+        byte[] imageBytes = null;
+        if(!OTPData.IMAGE_DATA_NONE.equals(imageData)) {
+            if (imageData == null) {
+                for (IconPack pack : packs) {
+                    Icon ic = pack.findIconForIssuer(issuer);
+                    if (ic != null) {
+                        imageBytes = ic.getBytes();
+                        if(setOTPImage != null) {
+                            setOTPImage.accept(Base64.encodeToString(imageBytes, Base64.DEFAULT));
+                        }
+                        break;
+                    }
+                }
+            } else {
+                try {
+                    imageBytes = Base64.decode(imageData, Base64.DEFAULT);
+                }catch(IllegalArgumentException ignored) {
+                    // Just use default icon
+                }
+            }
+        }
+
+        if(imageBytes == null) {
+            view.setImageBitmap(IconUtil.generateCodeImage(issuer, name));
+        }else {
+            Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            if(bm != null) {
+                view.setImageBitmap(bm);
+            }else {
+                try {
+                    SVG svg = SVG.getFromInputStream(new ByteArrayInputStream(imageBytes));
+                    view.setSVG(svg);
+                }catch(SVGParseException e) {
+                    view.setImageBitmap(IconUtil.generateCodeImage(issuer, name));
+                }
+            }
+        }
+    }
+
+    public static void loadEffectiveImage(Context context, OTPData data, SVGImageView view, Runnable saveOTP) {
+        loadEffectiveImage(context, data.getImageData(), data.getIssuer(), data.getName(), view, saveOTP == null ? null : newData -> {
+            data.setImageData(newData);
+            saveOTP.run();
+        });
+    }
+
+    public static Bitmap cutToIcon(Bitmap bitmap) {
+        Bitmap b = Bitmap.createBitmap(ICON_SIZE, ICON_SIZE, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(b);
+
+        double sourceRatio = bitmap.getWidth() / (double) bitmap.getHeight();
+        int newWidth, newHeight, offsetX, offsetY;
+        if(sourceRatio < 1) {
+            newWidth = ICON_SIZE;
+            newHeight = (int) (newWidth / sourceRatio);
+            offsetX = 0;
+            offsetY = (ICON_SIZE - newHeight) / 2;
+        }else {
+            newHeight = ICON_SIZE;
+            newWidth = (int) (newHeight * sourceRatio);
+            offsetX = (ICON_SIZE - newWidth) / 2;
+            offsetY = 0;
+        }
+
+        Paint p = new Paint();
+        Path path = new Path();
+        path.addCircle(ICON_SIZE / 2, ICON_SIZE / 2, ICON_SIZE / 2, Path.Direction.CW);
+        c.clipPath(path);
+        c.drawBitmap(bitmap, null, new Rect(offsetX, offsetY, offsetX + newWidth, offsetY + newHeight), p);
 
         return b;
     }

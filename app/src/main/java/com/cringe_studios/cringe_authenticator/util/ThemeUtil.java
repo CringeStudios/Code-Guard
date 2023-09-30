@@ -1,8 +1,10 @@
 package com.cringe_studios.cringe_authenticator.util;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.view.View;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -21,12 +23,13 @@ public class ThemeUtil {
         AppCompatDelegate.setDefaultNightMode(SettingsUtil.getAppearance(activity).getValue());
     }
 
-    public static void loadBackground(AppCompatActivity activity) {
-        if(!SettingsUtil.isThemedBackgroundEnabled(activity)) return;
+    @DrawableRes
+    public static int getBackground(Context context) {
+        if(!SettingsUtil.isThemedBackgroundEnabled(context)) return 0;
 
-        Theme theme = SettingsUtil.getTheme(activity);
+        Theme theme = SettingsUtil.getTheme(context);
 
-        int nightMode = activity.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        int nightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         boolean isNightMode;
         switch(nightMode) {
             case Configuration.UI_MODE_NIGHT_NO:
@@ -38,9 +41,16 @@ public class ThemeUtil {
                 break;
         }
 
+        return !isNightMode ? theme.getLightBackground() : theme.getDarkBackground();
+    }
+
+    public static void loadBackground(AppCompatActivity activity) {
+        if(!SettingsUtil.isThemedBackgroundEnabled(activity)) return;
+
+        int background = getBackground(activity);
         View v = activity.findViewById(R.id.app_background);
         if(v != null) {
-            v.setBackgroundResource(!isNightMode ? theme.getLightBackground() : theme.getDarkBackground());
+            v.setBackgroundResource(background);
         }
     }
 

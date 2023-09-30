@@ -15,15 +15,22 @@ public class NavigationUtil {
 
     // TODO: check if this still works after changes
 
+    private static void updateActivity(AppCompatActivity activity, NamedFragment newFragment) {
+        ActionBar bar = activity.getSupportActionBar();
+        if(newFragment == null) newFragment = (NamedFragment) getCurrentFragment(activity.getSupportFragmentManager());
+        if(bar != null) bar.setTitle(newFragment.getName());
+        activity.invalidateMenu();
+    }
+
+    public static void navigate(AppCompatActivity activity, NamedFragment fragment) {
+        FragmentManager manager = activity.getSupportFragmentManager();
+        navigate(manager, fragment, () -> updateActivity(activity, fragment));
+    }
+
     public static void navigate(AppCompatActivity activity, Class<? extends NamedFragment> fragmentClass, Bundle args) {
         FragmentManager manager = activity.getSupportFragmentManager();
         NamedFragment fragment = instantiateFragment(manager, fragmentClass, args);
-
-        ActionBar bar = activity.getSupportActionBar();
-        navigate(manager, fragment, () -> {
-            if(bar != null) bar.setTitle(fragment.getName());
-            activity.invalidateMenu();
-        });
+        navigate(activity, fragment);
     }
 
     public static void openMenu(AppCompatActivity activity, Bundle args) {
@@ -35,6 +42,26 @@ public class NavigationUtil {
 
     public static void navigate(Fragment currentFragment, Class<? extends NamedFragment> fragmentClass, Bundle args) {
         navigate((AppCompatActivity) currentFragment.requireActivity(), fragmentClass, args);
+    }
+
+    public static void openOverlay(Fragment currentFragment, NamedFragment overlay) {
+        AppCompatActivity activity = (AppCompatActivity) currentFragment.requireActivity();
+        FragmentManager manager = activity.getSupportFragmentManager();
+        manager.beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.nav_host_fragment_content_main, overlay)
+                .runOnCommit(() -> updateActivity(activity, overlay))
+                .commit();
+    }
+
+    public static void closeOverlay(Fragment currentFragment) {
+        AppCompatActivity activity = (AppCompatActivity) currentFragment.requireActivity();
+        FragmentManager manager = activity.getSupportFragmentManager();
+        manager.beginTransaction()
+                .setReorderingAllowed(true)
+                .remove(currentFragment)
+                .runOnCommit(() -> updateActivity(activity, null))
+                .commit();
     }
 
     @SuppressWarnings("unchecked")

@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.cringe_studios.cringe_authenticator.databinding.ActivityMainBinding;
 import com.cringe_studios.cringe_authenticator.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.cringe_authenticator.fragment.AboutFragment;
+import com.cringe_studios.cringe_authenticator.fragment.EditOTPFragment;
 import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
@@ -60,6 +61,10 @@ public class MainActivity extends BaseActivity {
     private Consumer<Uri> pickBackupFileLoadCallback;
 
     private ActivityResultLauncher<String[]> pickIconPackFileLoad;
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickIconImage;
+
+    private Consumer<Uri> pickIconImageCallback;
 
     private QRScanner qrScanner;
 
@@ -137,12 +142,21 @@ public class MainActivity extends BaseActivity {
         });
 
         pickIconPackFileLoad = registerForActivityResult(new ActivityResultContracts.OpenDocument(), doc -> {
+            lockOnStop = true;
+
             try {
                 if(doc == null) return;
                 IconPackMetadata meta = IconUtil.importIconPack(this, doc);
                 DialogUtil.showErrorDialog(this, "Icon pack contains " + meta.getIcons().length + " icons");
             } catch (IconPackException e) {
                 DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+            }
+        });
+
+        pickIconImage = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), img -> {
+            if(pickIconImageCallback != null) {
+                pickIconImageCallback.accept(img);
+                pickIconImageCallback = null;
             }
         });
 
@@ -194,6 +208,11 @@ public class MainActivity extends BaseActivity {
             return true;
         }
 
+        if(fragment instanceof EditOTPFragment) {
+            getMenuInflater().inflate(R.menu.menu_edit_otp, menu);
+            return true;
+        }
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -222,6 +241,11 @@ public class MainActivity extends BaseActivity {
                 groupFragment.finishEditing();
                 return;
             }
+        }
+
+        if(fragment instanceof EditOTPFragment) {
+            ((EditOTPFragment) fragment).cancel();
+            return;
         }
 
         if(!(fragment instanceof HomeFragment)) {
@@ -331,6 +355,20 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    public void saveOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof EditOTPFragment) {
+            ((EditOTPFragment) frag).save();
+        }
+    }
+
+    public void cancelEditingOTP(MenuItem item) {
+        Fragment frag = NavigationUtil.getCurrentFragment(this);
+        if(frag instanceof EditOTPFragment) {
+            ((EditOTPFragment) frag).cancel();
+        }
+    }
+
     public void lockApp(MenuItem item) {
         OTPDatabase.unloadDatabase();
         OTPDatabase.promptLoadDatabase(this, () -> {}, () -> {});
@@ -357,6 +395,17 @@ public class MainActivity extends BaseActivity {
     public void promptPickIconPackLoad() {
         this.lockOnStop = false;
         pickIconPackFileLoad.launch(new String[]{"application/zip", "*/*"});
+    }
+
+    public void promptPickIconImage(Consumer<Uri> callback) {
+        this.lockOnStop = false;
+        this.pickIconImageCallback = uri -> {
+            lockOnStop = true;
+            callback.accept(uri);
+        };
+        pickIconImage.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 
     @Override

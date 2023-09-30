@@ -17,6 +17,7 @@ import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListAdapter;
 import com.cringe_studios.cringe_authenticator.otplist.OTPListItem;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
+import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabase;
 import com.cringe_studios.cringe_authenticator.util.OTPDatabaseException;
 import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
@@ -133,11 +134,11 @@ public class GroupFragment extends NamedFragment {
         if(items.size() != 1) return;
 
         OTPData data = items.get(0).getOTPData();
-        DialogUtil.showEditCodeDialog(getLayoutInflater(), data, newData -> {
+        NavigationUtil.openOverlay(this, new EditOTPFragment(data, false, newData -> {
             otpListAdapter.replace(data, newData);
             saveOTPs();
             otpListAdapter.finishEditing();
-        });
+        }));
     }
 
     public void moveOTP() {
