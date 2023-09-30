@@ -3,7 +3,7 @@ package com.cringe_studios.cringe_authenticator.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.util.Log;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -27,10 +27,11 @@ public class StyledDialogBuilder extends AlertDialog.Builder {
 
         TypedArray arr = dialog.getContext().obtainStyledAttributes(new int[] {R.attr.dialogBackground});
         try {
-            Log.d("WINDOW", dialog.getWindow().getClass().toString());
             dialog.getWindow().setBackgroundDrawable(arr.getDrawable(0));
-            //dialog.getWindow().getContext().getResources().obtainAttributes().getDrawable()
-            //R.attr.dialogBackground;
+
+            if(SettingsUtil.isScreenSecurity(getContext())) {
+                dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+            }
         }finally {
             arr.close();
         }

@@ -25,6 +25,9 @@ import com.cringe_studios.cringe_authenticator.fragment.GroupFragment;
 import com.cringe_studios.cringe_authenticator.fragment.HomeFragment;
 import com.cringe_studios.cringe_authenticator.fragment.NamedFragment;
 import com.cringe_studios.cringe_authenticator.fragment.SettingsFragment;
+import com.cringe_studios.cringe_authenticator.icon.IconPackException;
+import com.cringe_studios.cringe_authenticator.icon.IconPackMetadata;
+import com.cringe_studios.cringe_authenticator.icon.IconUtil;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.scanner.QRScanner;
 import com.cringe_studios.cringe_authenticator.scanner.QRScannerContract;
@@ -55,6 +58,8 @@ public class MainActivity extends BaseActivity {
     private ActivityResultLauncher<String[]> pickBackupFileLoad;
 
     private Consumer<Uri> pickBackupFileLoadCallback;
+
+    private ActivityResultLauncher<String[]> pickIconPackFileLoad;
 
     private QRScanner qrScanner;
 
@@ -128,6 +133,16 @@ public class MainActivity extends BaseActivity {
             if(pickBackupFileLoadCallback != null) {
                 pickBackupFileLoadCallback.accept(doc);
                 pickBackupFileLoadCallback = null;
+            }
+        });
+
+        pickIconPackFileLoad = registerForActivityResult(new ActivityResultContracts.OpenDocument(), doc -> {
+            try {
+                if(doc == null) return;
+                IconPackMetadata meta = IconUtil.importIconPack(this, doc);
+                DialogUtil.showErrorDialog(this, "Icon pack contains " + meta.getIcons().length + " icons");
+            } catch (IconPackException e) {
+                DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
             }
         });
 
@@ -337,6 +352,11 @@ public class MainActivity extends BaseActivity {
             callback.accept(uri);
         };
         pickBackupFileLoad.launch(new String[]{"application/json", "*/*"});
+    }
+
+    public void promptPickIconPackLoad() {
+        this.lockOnStop = false;
+        pickIconPackFileLoad.launch(new String[]{"application/zip", "*/*"});
     }
 
     @Override

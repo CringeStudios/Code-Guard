@@ -9,6 +9,8 @@ import java.io.Serializable;
 
 public class OTPData implements Serializable {
 
+    public static final String IMAGE_DATA_NONE = "none";
+
     private String name;
     private String issuer;
     private OTPType type;
@@ -18,6 +20,7 @@ public class OTPData implements Serializable {
     private int period;
     private long counter;
     private boolean checksum;
+    private String imageData;
 
     // Cached
     private transient OTP otp;
@@ -68,6 +71,14 @@ public class OTPData implements Serializable {
 
     public boolean hasChecksum() {
         return checksum;
+    }
+
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getImageData() {
+        return imageData;
     }
 
     public String getPin() throws OTPException {

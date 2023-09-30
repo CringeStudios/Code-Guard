@@ -18,14 +18,14 @@
         android:paddingBottom="5dp"
         android:background="?attr/buttonBackground">
 
-        <ImageView
-            android:id="@+id/imageView5"
+        <com.caverock.androidsvg.SVGImageView
+            android:id="@+id/otp_code_icon"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingEnd="10dp"
             android:scaleType="centerInside"
-            app:srcCompat="@drawable/cringeauth_white" />
+            android:src="@drawable/cringeauth_white" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -1,8 +1,11 @@
 package com.cringe_studios.cringe_authenticator.otplist;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.caverock.androidsvg.SVG;
+import com.caverock.androidsvg.SVGParseException;
 import com.cringe_studios.cringe_authenticator.BaseActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
+import com.cringe_studios.cringe_authenticator.icon.Icon;
+import com.cringe_studios.cringe_authenticator.icon.IconPack;
+import com.cringe_studios.cringe_authenticator.icon.IconUtil;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,6 +83,46 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);
         holder.getBinding().refresh.setVisibility(data.getType() == OTPType.HOTP ? View.VISIBLE : View.GONE);
+
+        List<IconPack> packs = IconUtil.loadAllIconPacks(context);
+
+        byte[] imageBytes = null;
+        String imageData = holder.getOTPData().getImageData();
+        if(!OTPData.IMAGE_DATA_NONE.equals(imageData)) {
+            if (imageData == null) {
+                for (IconPack pack : packs) {
+                    Icon ic = pack.findIconForIssuer(holder.getOTPData().getIssuer());
+                    if (ic != null) {
+                        imageBytes = ic.getBytes();
+                        // TODO: save new icon
+                        break;
+                    }
+                }
+            } else {
+                try {
+                    imageBytes = Base64.decode(imageData, Base64.DEFAULT);
+                }catch(IllegalArgumentException ignored) {
+                    // Just use default icon
+                }
+            }
+        }
+
+        if(imageBytes == null) {
+            String issuer = data.getIssuer() != null ? data.getIssuer() : data.getName();
+            holder.getBinding().otpCodeIcon.setImageBitmap(IconUtil.generateCodeImage(issuer));
+        }else {
+            Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+            if(bm != null) {
+                holder.getBinding().otpCodeIcon.setImageBitmap(bm);
+            }else {
+                try {
+                    SVG svg = SVG.getFromInputStream(new ByteArrayInputStream(imageBytes));
+                    holder.getBinding().otpCodeIcon.setSVG(svg);
+                }catch(SVGParseException e) {
+                    holder.getBinding().otpCodeIcon.setImageBitmap(IconUtil.generateCodeImage(data.getIssuer()));
+                }
+            }
+        }
 
         holder.getBinding().refresh.setOnClickListener(view -> {
             if (data.getType() != OTPType.HOTP) return;
