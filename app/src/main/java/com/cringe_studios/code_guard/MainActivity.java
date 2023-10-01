@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity {
                                 break;
                             case 2: // Rename imported
                                 try {
-                                    IconUtil.importIconPack(this, doc, meta.getName() + "(" + meta.getVersion() + ")", UUID.randomUUID().toString());
+                                    IconUtil.importIconPack(this, doc, meta.getName() + " (" + meta.getVersion() + ")", UUID.randomUUID().toString());
                                     Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
                                 } catch (IconPackException e) {
                                     DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
