@@ -41,7 +41,13 @@ public class IconPackListAdapter extends RecyclerView.Adapter<IconPackItem> {
         holder.getBinding().iconPackName.setText(pack.getMetadata().getName());
 
         holder.getBinding().iconPackDelete.setOnClickListener(view -> {
-            DialogUtil.showYesNo(context, R.string.delete_pack_title, R.string.delete_pack_message, () -> IconUtil.removeIconPack(context, pack.getMetadata().getUuid()), null);
+            DialogUtil.showYesNo(context, R.string.delete_pack_title, R.string.delete_pack_message, () -> {
+                IconUtil.removeIconPack(context, pack.getMetadata().getUuid());
+
+                int idx = packs.indexOf(pack);
+                packs.remove(idx);
+                notifyItemRemoved(idx);
+            }, null);
         });
     }
 

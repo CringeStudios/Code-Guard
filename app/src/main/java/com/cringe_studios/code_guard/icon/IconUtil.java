@@ -17,13 +17,15 @@ import com.caverock.androidsvg.SVG;
 import com.caverock.androidsvg.SVGImageView;
 import com.caverock.androidsvg.SVGParseException;
 import com.cringe_studios.code_guard.model.OTPData;
-import com.cringe_studios.code_guard.util.DialogUtil;
 import com.cringe_studios.code_guard.util.IOUtil;
 import com.cringe_studios.code_guard.util.SettingsUtil;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +40,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class IconUtil {
 
@@ -79,10 +82,9 @@ public class IconUtil {
         return iconPacksDir;
     }
 
-    public static IconPackMetadata importIconPack(Context context, Uri uri) throws IconPackException {
+    public static void importIconPack(Context context, Uri uri) throws IconPackException {
         IconPackMetadata meta = loadPackMetadata(context, uri);
 
-        // TODO: check for existing icon pack
         File iconPackFile = new File(getIconPacksDir(context), meta.getUuid());
 
         try {
@@ -90,7 +92,7 @@ public class IconUtil {
                 iconPackFile.createNewFile();
             }
 
-            try (OutputStream out = new FileOutputStream(iconPackFile);
+            try (OutputStream out = new BufferedOutputStream(new FileOutputStream(iconPackFile));
                  InputStream in = context.getContentResolver().openInputStream(uri)) {
                 if(in == null) throw new IconPackException("Failed to read icon pack");
                 byte[] bytes = IOUtil.readBytes(in);
@@ -99,8 +101,54 @@ public class IconUtil {
         }catch(IOException e) {
             throw new IconPackException("Failed to import icon pack", e);
         }
+    }
 
-        return meta;
+    public static void importIconPack(Context context, Uri uri, String newName, String newUUID) throws IconPackException {
+        IconPackMetadata meta = loadPackMetadata(context, uri);
+        meta.setName(newName);
+        meta.setUuid(newUUID);
+
+        File iconPackFile = new File(getIconPacksDir(context), meta.getUuid());
+
+        try {
+            if (!iconPackFile.exists()) {
+                iconPackFile.createNewFile();
+            }
+
+            try (InputStream in = context.getContentResolver().openInputStream(uri)) {
+                if(in == null) throw new IconPackException("Failed to read icon pack");
+                writeRenamedPack(in, iconPackFile, meta);
+            }
+        }catch(IOException e) {
+            throw new IconPackException("Failed to import icon pack", e);
+        }
+    }
+
+    public static void renameIconPack(Context context, IconPack pack, String newName, String newUUID) throws IconPackException {
+        File packFile = new File(getIconPacksDir(context), pack.getMetadata().getUuid());
+        if(!packFile.exists()) return;
+
+        File newPackFile = new File(getIconPacksDir(context), newUUID);
+
+        String oldName = pack.getMetadata().getName();
+        String oldUUID = pack.getMetadata().getUuid();
+
+
+        loadedPacks.remove(oldUUID);
+
+        pack.getMetadata().setName(newName);
+        pack.getMetadata().setUuid(newUUID);
+
+        try {
+            writeRenamedPack(new BufferedInputStream(new FileInputStream(packFile)), newPackFile, pack.getMetadata());
+            packFile.delete();
+        }catch(IconPackException e) {
+            pack.getMetadata().setName(oldName);
+            pack.getMetadata().setUuid(oldUUID);
+            throw e;
+        } catch (FileNotFoundException e) {
+            throw new IconPackException(e);
+        }
     }
 
     public static void removeIconPack(Context context, String uuid) {
@@ -109,12 +157,14 @@ public class IconUtil {
         loadedPacks.remove(uuid);
     }
 
-    private static IconPackMetadata loadPackMetadata(Context context, Uri uri) throws IconPackException {
+    public static IconPackMetadata loadPackMetadata(Context context, Uri uri) throws IconPackException {
         try(InputStream in = context.getContentResolver().openInputStream(uri)) {
             if(in == null) throw new IconPackException("Failed to read icon pack");
             try(ZipInputStream zIn = new ZipInputStream(in)) {
                 ZipEntry en;
                 while((en = zIn.getNextEntry()) != null) {
+                    if(en.isDirectory()) continue;
+
                     if(en.getName().equals("pack.json")) {
                         byte[] entryBytes = readEntry(zIn, en);
                         return SettingsUtil.GSON.fromJson(new String(entryBytes, StandardCharsets.UTF_8), IconPackMetadata.class); // TODO: validate metadata
@@ -126,6 +176,28 @@ public class IconUtil {
         }
 
         throw new IconPackException("No pack.json");
+    }
+
+    private static void writeRenamedPack(InputStream oldFile, File newFile, IconPackMetadata meta) throws IconPackException {
+        try(ZipInputStream in = new ZipInputStream(oldFile);
+            ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(newFile)))) {
+            ZipEntry en;
+            while((en = in.getNextEntry()) != null) {
+                if(en.isDirectory()) continue;
+
+                byte[] entryBytes = readEntry(in, en);
+                if(en.getName().equals("pack.json")) {
+                    out.putNextEntry(new ZipEntry("pack.json"));
+                    out.write(SettingsUtil.GSON.toJson(meta).getBytes(StandardCharsets.UTF_8));
+                    continue;
+                }
+
+                out.putNextEntry(new ZipEntry(en.getName()));
+                out.write(entryBytes);
+            }
+        }catch(IOException e) {
+            throw new IconPackException(e);
+        }
     }
 
     public static Map<String, List<Icon>> loadAllIcons(Context context) {
@@ -148,7 +220,7 @@ public class IconUtil {
         return icons;
     }
 
-    public static List<IconPack> loadAllIconPacks(Context context) {
+    public static List<IconPack> loadAllIconPacks(Context context, Consumer<String> brokenPack) {
         File iconPacksDir = getIconPacksDir(context);
 
         String[] packIDs = iconPacksDir.list();
@@ -157,13 +229,22 @@ public class IconUtil {
         List<IconPack> packs = new ArrayList<>();
         for(String pack : packIDs) {
             try {
-                packs.add(loadIconPack(context, pack));
+                IconPack p = loadIconPack(context, pack);
+                if(p == null) continue;
+                if(!p.getMetadata().getUuid().equals(pack)) throw new IconPackException("Invalid metadata");
+                packs.add(p);
             }catch(IconPackException e) {
-                DialogUtil.showErrorDialog(context, "An icon pack failed to load", e);
+                e.printStackTrace();
+                if(brokenPack != null) brokenPack.accept(pack);
+                //DialogUtil.showErrorDialog(context, "An icon pack failed to load", e);
             }
         }
 
         return packs;
+    }
+
+    public static List<IconPack> loadAllIconPacks(Context context) {
+        return loadAllIconPacks(context, null);
     }
 
     public static IconPack loadIconPack(Context context, String uuid) throws IconPackException {
@@ -179,12 +260,14 @@ public class IconUtil {
     private static IconPack loadIconPack(File file) throws IconPackException {
         if(!file.exists()) return null;
 
-        try(ZipInputStream in = new ZipInputStream(new FileInputStream(file))) {
+        try(ZipInputStream in = new ZipInputStream(new BufferedInputStream(new FileInputStream(file)))) {
             IconPackMetadata metadata = null;
             Map<String, byte[]> files = new HashMap<>();
 
             ZipEntry en;
             while((en = in.getNextEntry()) != null) {
+                if(en.isDirectory()) continue;
+
                 byte[] entryBytes = readEntry(in, en);
 
                 if(en.getName().equals("pack.json")) {
@@ -214,18 +297,11 @@ public class IconUtil {
     }
 
     private static byte[] readEntry(ZipInputStream in, ZipEntry en) throws IOException {
-        if (en.getSize() < 0 || en.getSize() > Integer.MAX_VALUE) {
+        if (en.getSize() > Integer.MAX_VALUE) {
             throw new IOException("Invalid ZIP entry");
         }
 
-        byte[] entryBytes = new byte[(int) en.getSize()];
-
-        int totalRead = 0;
-        while (totalRead < entryBytes.length) {
-            totalRead += in.read(entryBytes, totalRead, entryBytes.length - totalRead);
-        }
-
-        return entryBytes;
+        return IOUtil.readBytes(in);
     }
 
     public static Bitmap generateCodeImage(String issuer, String name) {

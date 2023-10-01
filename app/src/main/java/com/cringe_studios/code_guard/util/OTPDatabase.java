@@ -11,9 +11,11 @@ import com.cringe_studios.code_guard.model.OTPData;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -148,7 +150,7 @@ public class OTPDatabase {
 
         byte[] dbBytes = convertToEncryptedBytes(loadedDatabase, loadedKey, parameters);
 
-        try(FileOutputStream fOut = new FileOutputStream(file)) {
+        try(OutputStream fOut = new BufferedOutputStream(new FileOutputStream(file))) {
             fOut.write(dbBytes);
         } catch (IOException e) {
             throw new OTPDatabaseException(e);

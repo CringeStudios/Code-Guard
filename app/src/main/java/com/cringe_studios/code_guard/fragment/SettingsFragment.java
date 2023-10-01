@@ -37,6 +37,7 @@ import com.cringe_studios.code_guard.util.SettingsUtil;
 import com.cringe_studios.code_guard.util.StyledDialogBuilder;
 import com.cringe_studios.code_guard.util.Theme;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -264,7 +265,17 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsLoadIconPack.setOnClickListener(v -> ((MainActivity) requireActivity()).promptPickIconPackFile());
 
         binding.settingsManageIconPacks.setOnClickListener(v -> {
-            List<IconPack> packs = IconUtil.loadAllIconPacks(requireContext());
+            List<String> brokenPacks = new ArrayList<>();
+            List<IconPack> packs = IconUtil.loadAllIconPacks(requireContext(), brokenPacks::add);
+
+            if(!brokenPacks.isEmpty()) {
+                DialogUtil.showYesNo(requireContext(), R.string.broken_icon_packs_title, R.string.broken_icon_packs_message, () -> {
+                    for(String pack : brokenPacks) {
+                        IconUtil.removeIconPack(requireContext(), pack);
+                    }
+                }, null);
+            }
+
             if(packs.isEmpty()) {
                 Toast.makeText(requireContext(), R.string.no_icon_packs_installed, Toast.LENGTH_LONG).show();
                 return;

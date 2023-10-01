@@ -19,6 +19,7 @@ import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.code_guard.databinding.ActivityMainBinding;
+import com.cringe_studios.code_guard.databinding.DialogIconPackExistsBinding;
 import com.cringe_studios.code_guard.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.code_guard.fragment.AboutFragment;
 import com.cringe_studios.code_guard.fragment.EditOTPFragment;
@@ -26,6 +27,7 @@ import com.cringe_studios.code_guard.fragment.GroupFragment;
 import com.cringe_studios.code_guard.fragment.HomeFragment;
 import com.cringe_studios.code_guard.fragment.NamedFragment;
 import com.cringe_studios.code_guard.fragment.SettingsFragment;
+import com.cringe_studios.code_guard.icon.IconPack;
 import com.cringe_studios.code_guard.icon.IconPackException;
 import com.cringe_studios.code_guard.icon.IconPackMetadata;
 import com.cringe_studios.code_guard.icon.IconUtil;
@@ -146,7 +148,9 @@ public class MainActivity extends BaseActivity {
 
             try {
                 if(doc == null) return;
-                IconPackMetadata meta = IconUtil.importIconPack(this, doc);
+                IconPackMetadata meta = IconUtil.loadPackMetadata(this, doc);
+
+                IconPack existingIconPack = IconUtil.loadIconPack(this, meta.getUuid());
 
                 if(!meta.validate()) {
                     DialogUtil.showErrorDialog(this, getString(R.string.error_icon_pack_invalid));
@@ -158,7 +162,57 @@ public class MainActivity extends BaseActivity {
                     return;
                 }
 
-                DialogUtil.showErrorDialog(this, "Icon pack contains " + meta.getIcons().length + " icons");
+                if(existingIconPack != null) {
+                    DialogIconPackExistsBinding binding = DialogIconPackExistsBinding.inflate(getLayoutInflater());
+                    binding.iconPackExistsText.setText(getString(R.string.error_icon_pack_exists, meta.getName(), meta.getVersion(), existingIconPack.getMetadata().getName(), existingIconPack.getMetadata().getVersion()));
+                    binding.iconPackExistsChoices.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.error_icon_pack_exists_choices)));
+
+
+                    AlertDialog dialog = new StyledDialogBuilder(this)
+                            .setTitle("Icon pack already exists")
+                            .setView(binding.getRoot())
+                            .setNeutralButton(R.string.cancel, (d, which) -> {})
+                            .create();
+
+                    binding.iconPackExistsChoices.setOnItemClickListener((parent, view, position, id) -> {
+                        switch(position) {
+                            case 0: // Override
+                                try {
+                                    IconUtil.importIconPack(this, doc);
+                                    Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
+                                } catch (IconPackException e) {
+                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                }
+                                break;
+                            case 1: // Rename existing
+                                try {
+                                    IconUtil.renameIconPack(this, existingIconPack, existingIconPack.getMetadata().getName() + " (" + existingIconPack.getMetadata().getVersion() + ")", UUID.randomUUID().toString());
+                                    IconUtil.importIconPack(this, doc);
+                                    Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
+                                } catch (IconPackException e) {
+                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                }
+                                break;
+                            case 2: // Rename imported
+                                try {
+                                    IconUtil.importIconPack(this, doc, meta.getName() + "(" + meta.getVersion() + ")", UUID.randomUUID().toString());
+                                    Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
+                                } catch (IconPackException e) {
+                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                }
+                                break;
+                        }
+
+                        dialog.dismiss();
+                    });
+
+                    dialog.show();
+
+                    return;
+                }
+
+                IconUtil.importIconPack(this, doc);
+                Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
             } catch (IconPackException e) {
                 DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
             }
