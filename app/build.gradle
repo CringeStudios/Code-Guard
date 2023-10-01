@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.cringe_studios.cringe_authenticator'
+    namespace 'com.cringe_studios.code_guard'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.cringe_studios.cringe_authenticator"
+        applicationId "com.cringe_studios.code_guard"
         minSdk 21
         targetSdk 34
         versionCode 1

@@ -15,5 +15,5 @@ dependencyResolutionManagement {
         }
     }
 }
-rootProject.name = "Cringe Authenticator"
+rootProject.name = "Code Guard"
 include ':app'

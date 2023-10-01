@@ -2,7 +2,7 @@
 
 syntax = "proto3";
 
-package com.cringe_studios.cringe_authenticator.proto;
+package com.cringe_studios.code_guard.proto;
 
 message MigrationPayload {
   enum Algorithm {
