@@ -251,6 +251,8 @@ public class SettingsFragment extends NamedFragment {
             });
         });
 
+        binding.settingsLoadIconPack.setOnClickListener(v -> ((MainActivity) requireActivity()).promptPickIconPackLoad());
+
         return binding.getRoot();
     }
 
