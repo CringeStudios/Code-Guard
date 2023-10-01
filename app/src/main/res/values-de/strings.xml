@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">Einstellungen</string>
+    <string name="show_images">Bilder Anzeigen</string>
+    <string name="delete_pack_title">Paket löschen</string>
+    <string name="delete_pack_message">Möchtest du das Symbolpaket wirklich löschen?</string>
+    <string name="no_icon_packs_installed">Aktuell sind keine Symbolpakete installiert!</string>
     <string name="license">Lizenz</string>
     <string name="contact">Kontakt</string>
     <string name="website">Webseite</string>
-    <string name="development">Development</string>
     <string name="action_about">Über</string>
     <string name="edit">Bearbeiten</string>
     <string name="choose_language">Sprachauswahl</string>
@@ -71,6 +74,7 @@
     <string name="unlock_cringe_authenticator">Authenticator entsperren</string>
     <string name="unlock">Entsperren</string>
     <string name="unlock_using_biometrics">Mit Biometrie ensperren</string>
+    <string name="name">Name</string>
     <string name="add_code">Code hinzufügen</string>
     <string name="settings">Einstellungen</string>
     <string name="appearance">Aussehen</string>
@@ -105,8 +109,10 @@
     <string name="otp_add_type">Typ</string>
     <string name="otp_add_algorithm">Algorithmus</string>
     <string name="otp_add_digits">Ziffern</string>
-    <string name="quellcode">Quellcode</string>
+    <string name="appcode">Quellcode</string>
+    <string name="development">Development</string>
     <string name="support">Support</string>
     <string name="changelog">Änderungsprotokoll</string>
     <string name="documentation">Dokumentation</string>
+    <string name="mail_to">Mail: info@code-guard.com</string>
 </resources>
