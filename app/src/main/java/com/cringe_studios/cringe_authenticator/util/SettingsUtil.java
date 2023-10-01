@@ -185,6 +185,15 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("firstLaunch", true);
     }
 
+    public static void setShowImages(Context ctx, boolean showImages) {
+        SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean("showImages", showImages).apply();
+    }
+
+    public static boolean isShowImages(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("showImages", true);
+    }
+
     public static void setTheme(Context ctx, Theme theme) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
         prefs.edit().putString("theme", theme.name()).apply();

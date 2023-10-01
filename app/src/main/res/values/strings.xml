@@ -103,4 +103,5 @@
     <string name="otp_add_type">Type</string>
     <string name="otp_add_algorithm">Algorithm</string>
     <string name="otp_add_digits">Digits</string>
+    <string name="show_images">Show Images</string>
 </resources>

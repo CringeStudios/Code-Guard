@@ -157,6 +157,9 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsHideCodes.setChecked(SettingsUtil.isHideCodes(requireContext()));
         binding.settingsHideCodes.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setHideCodes(requireContext(), checked));
 
+        binding.settingsShowImages.setChecked(SettingsUtil.isShowImages(requireContext()));
+        binding.settingsShowImages.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setShowImages(requireContext(), checked));
+
         String[] themeNames = new String[Theme.values().length];
         for(int i = 0; i < Theme.values().length; i++) {
             themeNames[i] = getResources().getString(Theme.values()[i].getName());

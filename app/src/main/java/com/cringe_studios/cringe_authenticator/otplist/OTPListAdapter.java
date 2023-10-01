@@ -18,6 +18,7 @@ import com.cringe_studios.cringe_authenticator.databinding.OtpCodeBinding;
 import com.cringe_studios.cringe_authenticator.icon.IconUtil;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -71,6 +72,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         } catch (OTPException e) {
             DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
         }
+
+        holder.getBinding().otpCodeIcon.setVisibility(SettingsUtil.isShowImages(context) ? View.VISIBLE : View.GONE);
 
         holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);

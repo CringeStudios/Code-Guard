@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
@@ -27,8 +26,8 @@ import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
 import com.cringe_studios.cringe_authenticator.util.IOUtil;
 import com.cringe_studios.cringe_authenticator.util.NavigationUtil;
+import com.cringe_studios.cringe_authenticator.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
-import com.cringe_studios.cringe_authenticator.util.ThemeUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
@@ -73,11 +72,7 @@ public class EditOTPFragment extends NamedFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentEditOtpBinding.inflate(inflater);
 
-        @DrawableRes int bg = ThemeUtil.getBackground(requireContext());
-        if(bg != 0) {
-            binding.getRoot().setBackgroundResource(bg);
-        }
-
+        binding.inputImage.setVisibility(SettingsUtil.isShowImages(requireContext()) ? View.VISIBLE : View.GONE);
         binding.inputImage.setOnClickListener(v -> {
             new StyledDialogBuilder(requireContext())
                     .setTitle("Choose Image")
