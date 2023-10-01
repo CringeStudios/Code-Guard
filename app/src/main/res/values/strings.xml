@@ -55,7 +55,7 @@
     <string name="password">Password</string>
     <string name="set_password">Set Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="unlock_cringe_authenticator">Unlock Authenticator</string>
+    <string name="unlock_authenticator">Unlock Authenticator</string>
     <string name="unlock">Unlock</string>
     <string name="unlock_using_biometrics">Unlock using biometrics</string>
     <string name="name">Name</string>

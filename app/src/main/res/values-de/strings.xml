@@ -71,7 +71,7 @@
     <string name="password">Passwort</string>
     <string name="set_password">Passwort setzen</string>
     <string name="confirm_password">Passwort bestätigen</string>
-    <string name="unlock_cringe_authenticator">Authenticator entsperren</string>
+    <string name="unlock_authenticator">Authenticator entsperren</string>
     <string name="unlock">Entsperren</string>
     <string name="unlock_using_biometrics">Mit Biometrie ensperren</string>
     <string name="name">Name</string>

@@ -28,7 +28,7 @@ public class BackupUtil {
     private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.ENGLISH);
 
     public static String getBackupName() {
-        return "backup_" + FORMAT.format(new Date()); // TODO: indicate Cringe Authenticator
+        return "code_guard_backup_" + FORMAT.format(new Date());
     }
 
     public static void saveBackup(Context context, Uri backupFile, SecretKey key, CryptoParameters parameters) throws BackupException, CryptoException {
