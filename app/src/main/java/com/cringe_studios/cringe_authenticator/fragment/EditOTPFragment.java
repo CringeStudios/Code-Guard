@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ import androidx.exifinterface.media.ExifInterface;
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentEditOtpBinding;
+import com.cringe_studios.cringe_authenticator.icon.IconPack;
 import com.cringe_studios.cringe_authenticator.icon.IconUtil;
 import com.cringe_studios.cringe_authenticator.model.OTPData;
 import com.cringe_studios.cringe_authenticator.util.DialogUtil;
@@ -36,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
 public class EditOTPFragment extends NamedFragment {
 
@@ -184,7 +187,12 @@ public class EditOTPFragment extends NamedFragment {
     }
 
     private void pickImageFromIconPack() {
-        // TODO: check if icon packs installed
+        List<IconPack> packs = IconUtil.loadAllIconPacks(requireContext());
+        if(packs.isEmpty()) {
+            Toast.makeText(requireContext(), R.string.no_icon_packs_installed, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         new PickIconDrawerFragment(icon -> {
             imageData = Base64.encodeToString(icon.getBytes(), Base64.DEFAULT);
             updateImage();

@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.cringe_studios.cringe_authenticator.MainActivity;
 import com.cringe_studios.cringe_authenticator.R;
@@ -20,7 +22,11 @@ import com.cringe_studios.cringe_authenticator.crypto.BiometricKey;
 import com.cringe_studios.cringe_authenticator.crypto.Crypto;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoException;
 import com.cringe_studios.cringe_authenticator.crypto.CryptoParameters;
+import com.cringe_studios.cringe_authenticator.databinding.DialogManageIconPacksBinding;
 import com.cringe_studios.cringe_authenticator.databinding.FragmentSettingsBinding;
+import com.cringe_studios.cringe_authenticator.icon.IconPack;
+import com.cringe_studios.cringe_authenticator.icon.IconPackListAdapter;
+import com.cringe_studios.cringe_authenticator.icon.IconUtil;
 import com.cringe_studios.cringe_authenticator.util.Appearance;
 import com.cringe_studios.cringe_authenticator.util.BackupException;
 import com.cringe_studios.cringe_authenticator.util.BiometricUtil;
@@ -32,6 +38,7 @@ import com.cringe_studios.cringe_authenticator.util.StyledDialogBuilder;
 import com.cringe_studios.cringe_authenticator.util.Theme;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 import javax.crypto.SecretKey;
@@ -255,6 +262,25 @@ public class SettingsFragment extends NamedFragment {
         });
 
         binding.settingsLoadIconPack.setOnClickListener(v -> ((MainActivity) requireActivity()).promptPickIconPackLoad());
+
+        binding.settingsManageIconPacks.setOnClickListener(v -> {
+            List<IconPack> packs = IconUtil.loadAllIconPacks(requireContext());
+            if(packs.isEmpty()) {
+                Toast.makeText(requireContext(), R.string.no_icon_packs_installed, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            DialogManageIconPacksBinding binding = DialogManageIconPacksBinding.inflate(getLayoutInflater());
+
+            binding.manageIconPacksList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            binding.manageIconPacksList.setAdapter(new IconPackListAdapter(requireContext(), IconUtil.loadAllIconPacks(requireContext())));
+
+            new StyledDialogBuilder(requireContext())
+                    .setTitle("Manage icon packs")
+                    .setView(binding.getRoot())
+                    .setPositiveButton(R.string.ok, (d, which) -> {})
+                    .show();
+        });
 
         return binding.getRoot();
     }

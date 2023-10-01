@@ -104,4 +104,7 @@
     <string name="otp_add_algorithm">Algorithm</string>
     <string name="otp_add_digits">Digits</string>
     <string name="show_images">Show Images</string>
+    <string name="delete_pack_title">Delete pack</string>
+    <string name="delete_pack_message">Do you want to delete the icon pack?</string>
+    <string name="no_icon_packs_installed">No icon packs are currently installed</string>
 </resources>

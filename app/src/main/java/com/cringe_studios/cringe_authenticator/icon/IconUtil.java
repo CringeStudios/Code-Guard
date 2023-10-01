@@ -103,6 +103,12 @@ public class IconUtil {
         return meta;
     }
 
+    public static void removeIconPack(Context context, String uuid) {
+        File packFile = new File(getIconPacksDir(context), uuid);
+        packFile.delete();
+        loadedPacks.remove(uuid);
+    }
+
     private static IconPackMetadata loadPackMetadata(Context context, Uri uri) throws IconPackException {
         try(InputStream in = context.getContentResolver().openInputStream(uri)) {
             if(in == null) throw new IconPackException("Failed to read icon pack");
