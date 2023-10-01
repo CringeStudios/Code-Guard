@@ -16,7 +16,7 @@ import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 public class OTPListItem extends RecyclerView.ViewHolder {
 
-    private OtpCodeBinding binding;
+    private final OtpCodeBinding binding;
 
     private OTPData otpData;
 

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:attr/colorBackground"
     tools:context=".fragment.HomeFragment"
     android:background="?android:attr/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -27,9 +28,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:background="@color/background_light_grey"
             android:layout_height="1dp"
-            android:layout_marginVertical="10dp" />
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_encryption"
@@ -63,9 +64,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:background="@color/background_light_grey"
             android:layout_height="1dp"
-            android:layout_marginVertical="10dp" />
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_intro_video"
@@ -111,38 +112,38 @@
 
         <View
             android:layout_width="match_parent"
-            android:background="@color/background_light_grey"
             android:layout_height="1dp"
-            android:layout_marginVertical="10dp" />
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/backups" />
-        
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_create_backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="?attr/buttonBackground"
             android:text="@string/create_backup"
-            android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_load_backup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="?attr/buttonBackground"
             android:text="@string/load_backup"
-            android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 
         <View
             android:layout_width="match_parent"
-            android:background="@color/background_light_grey"
             android:layout_height="1dp"
-            android:layout_marginVertical="10dp" />
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
 
         <TextView
             android:layout_width="match_parent"
@@ -153,18 +154,18 @@
             android:id="@+id/settings_load_icon_pack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="?attr/buttonBackground"
             android:text="Import icon pack"
-            android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_manage_icon_packs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:background="?attr/buttonBackground"
             android:text="Manage icon packs"
-            android:layout_marginTop="10dp"
             android:textAllCaps="false" />
 
         <Space

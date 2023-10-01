@@ -14,7 +14,7 @@ import com.google.mlkit.vision.common.InputImage;
 
 public class QRScanner {
 
-    private BarcodeScanner scanner;
+    private final BarcodeScanner scanner;
 
     public QRScanner() {
         scanner = BarcodeScanning.getClient();

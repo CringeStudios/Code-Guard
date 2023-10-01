@@ -13,10 +13,10 @@ public enum Appearance {
     ;
 
     @StringRes
-    private int name;
+    private final int name;
 
     @AppCompatDelegate.NightMode
-    private int value;
+    private final int value;
 
     Appearance(@StringRes int name, @AppCompatDelegate.NightMode int value) {
         this.name = name;

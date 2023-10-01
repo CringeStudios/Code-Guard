@@ -22,14 +22,14 @@ import java.util.TreeMap;
 
 public class IconListAdapter extends BaseExpandableListAdapter implements ExpandableListView.OnChildClickListener {
 
-    private Context context;
+    private final Context context;
 
-    private Map<String, List<Icon>> icons;
-    private List<String> categories;
+    private final Map<String, List<Icon>> icons;
+    private final List<String> categories;
 
     private Map<String, List<Icon>> filteredIcons;
 
-    private Consumer<Icon> selected;
+    private final Consumer<Icon> selected;
 
     public IconListAdapter(Context context, Map<String, List<Icon>> icons, Consumer<Icon> selected) {
         this.context = context;

@@ -2,8 +2,8 @@ package com.cringe_studios.cringe_authenticator.crypto;
 
 public class CryptoResult {
 
-    private byte[] encrypted;
-    private byte[] iv;
+    private final byte[] encrypted;
+    private final byte[] iv;
 
     public CryptoResult(byte[] encrypted, byte[] iv) {
         this.encrypted = encrypted;

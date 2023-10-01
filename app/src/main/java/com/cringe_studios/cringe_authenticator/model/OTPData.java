@@ -11,15 +11,15 @@ public class OTPData implements Serializable {
 
     public static final String IMAGE_DATA_NONE = "none";
 
-    private String name;
-    private String issuer;
-    private OTPType type;
-    private String secret;
-    private OTPAlgorithm algorithm;
-    private int digits;
-    private int period;
+    private final String name;
+    private final String issuer;
+    private final OTPType type;
+    private final String secret;
+    private final OTPAlgorithm algorithm;
+    private final int digits;
+    private final int period;
     private long counter;
-    private boolean checksum;
+    private final boolean checksum;
     private String imageData;
 
     // Cached

@@ -12,7 +12,7 @@ import com.cringe_studios.cringe_authenticator.databinding.MenuItemBinding;
 
 public class GroupListItem extends RecyclerView.ViewHolder {
 
-    private MenuItemBinding binding;
+    private final MenuItemBinding binding;
 
     private String groupId;
 

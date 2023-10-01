@@ -2,8 +2,8 @@ package com.cringe_studios.cringe_authenticator.icon;
 
 public class Icon {
 
-    private IconMetadata metadata;
-    private byte[] bytes;
+    private final IconMetadata metadata;
+    private final byte[] bytes;
 
     public Icon(IconMetadata metadata, byte[] bytes) {
         this.metadata = metadata;

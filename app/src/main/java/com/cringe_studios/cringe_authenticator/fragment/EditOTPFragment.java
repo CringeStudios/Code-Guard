@@ -51,13 +51,13 @@ public class EditOTPFragment extends NamedFragment {
 
     private FragmentEditOtpBinding binding;
 
-    private OTPData data;
+    private final OTPData data;
 
     private String imageData;
 
-    private boolean view;
+    private final boolean view;
 
-    private Consumer<OTPData> callback;
+    private final Consumer<OTPData> callback;
 
     public EditOTPFragment(OTPData data, boolean view, Consumer<OTPData> callback) {
         this.data = data;

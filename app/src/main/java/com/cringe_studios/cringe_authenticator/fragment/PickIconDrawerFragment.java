@@ -21,7 +21,7 @@ public class PickIconDrawerFragment extends BottomSheetDialogFragment {
 
     private FragmentPickIconBinding binding;
 
-    private Consumer<Icon> selected;
+    private final Consumer<Icon> selected;
 
     public PickIconDrawerFragment(Consumer<Icon> selected) {
         this.selected = selected;

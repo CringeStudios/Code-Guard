@@ -2,8 +2,8 @@ package com.cringe_studios.cringe_authenticator.icon;
 
 public class IconPack {
 
-    private IconPackMetadata metadata;
-    private Icon[] icons;
+    private final IconPackMetadata metadata;
+    private final Icon[] icons;
 
     public IconPack(IconPackMetadata metadata, Icon[] icons) {
         this.metadata = metadata;

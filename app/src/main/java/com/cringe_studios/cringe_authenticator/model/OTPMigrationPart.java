@@ -2,9 +2,9 @@ package com.cringe_studios.cringe_authenticator.model;
 
 public class OTPMigrationPart {
 
-    private OTPData[] otps;
-    private int batchIndex;
-    private int batchSize;
+    private final OTPData[] otps;
+    private final int batchIndex;
+    private final int batchSize;
 
     public OTPMigrationPart(OTPData[] otps, int batchIndex, int batchSize) {
         this.otps = otps;

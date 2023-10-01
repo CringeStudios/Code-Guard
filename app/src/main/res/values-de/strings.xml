@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cringe Authenticator</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="license">Lizenz</string>
+    <string name="contact">Kontakt</string>
+    <string name="website">Webseite</string>
+    <string name="development">Development</string>
     <string name="action_about">Über</string>
     <string name="edit">Bearbeiten</string>
     <string name="choose_language">Sprachauswahl</string>
@@ -99,4 +102,11 @@
     <string name="disable_encryption_message">Willst du wirklich die Verschlüsselung deaktivieren?</string>
     <string name="load_backup_title">Backup laden</string>
     <string name="backup_load_message">Willst du dieses Backup laden?\n\nDadurch werden ALLE Daten der App gelöscht und mit denen aus dem Backup ersetzt!</string>
+    <string name="otp_add_type">Typ</string>
+    <string name="otp_add_algorithm">Algorithmus</string>
+    <string name="otp_add_digits">Ziffern</string>
+    <string name="quellcode">Quellcode</string>
+    <string name="support">Support</string>
+    <string name="changelog">Änderungsprotokoll</string>
+    <string name="documentation">Dokumentation</string>
 </resources>

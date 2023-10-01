@@ -69,7 +69,7 @@ public class IconUtil {
 //          Color.parseColor("#ffffff")  // White
     ));
 
-    private static Map<String, IconPack> loadedPacks = new HashMap<>();
+    private static final Map<String, IconPack> loadedPacks = new HashMap<>();
 
     private static File getIconPacksDir(Context context) {
         File iconPacksDir = new File(context.getFilesDir(), "iconpacks");

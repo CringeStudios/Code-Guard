@@ -86,7 +86,7 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage, Exception exception) {
-        showErrorDialog(context, errorMessage, stackTraceToString(exception), (Runnable) null);
+        showErrorDialog(context, errorMessage, stackTraceToString(exception), null);
     }
 
     private static String stackTraceToString(Throwable t) {

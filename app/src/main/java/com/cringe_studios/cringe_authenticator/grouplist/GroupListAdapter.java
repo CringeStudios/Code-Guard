@@ -20,21 +20,21 @@ import java.util.List;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
-    private Context context;
+    private final Context context;
 
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
-    private List<String> items;
+    private final List<String> items;
 
-    private Handler handler;
+    private final Handler handler;
 
-    private Consumer<String> navigateToGroup;
+    private final Consumer<String> navigateToGroup;
 
-    private Runnable saveGroups;
+    private final Runnable saveGroups;
 
-    private Runnable updateToolbarOptions;
+    private final Runnable updateToolbarOptions;
 
     private boolean editing;
 

@@ -28,17 +28,17 @@ import java.util.List;
 
 public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
-    private Context context;
+    private final Context context;
 
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
-    private List<OTPData> items;
+    private final List<OTPData> items;
 
-    private Handler handler;
+    private final Handler handler;
 
-    private Runnable saveOTPs;
+    private final Runnable saveOTPs;
 
     private boolean editing;
 
