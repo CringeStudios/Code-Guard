@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity {
 
     private Consumer<Uri> pickBackupFileLoadCallback;
 
-    private ActivityResultLauncher<String[]> pickIconPackFileLoad;
+    private ActivityResultLauncher<String[]> pickIconPackFile;
 
     private ActivityResultLauncher<PickVisualMediaRequest> pickIconImage;
 
@@ -141,12 +141,23 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        pickIconPackFileLoad = registerForActivityResult(new ActivityResultContracts.OpenDocument(), doc -> {
+        pickIconPackFile = registerForActivityResult(new ActivityResultContracts.OpenDocument(), doc -> {
             lockOnStop = true;
 
             try {
                 if(doc == null) return;
-                IconPackMetadata meta = IconUtil.importIconPack(this, doc); // TODO: check if pack contains icons
+                IconPackMetadata meta = IconUtil.importIconPack(this, doc);
+
+                if(!meta.validate()) {
+                    DialogUtil.showErrorDialog(this, getString(R.string.error_icon_pack_invalid));
+                    return;
+                }
+
+                if(meta.getIcons().length == 0) {
+                    DialogUtil.showErrorDialog(this, getString(R.string.error_icon_pack_empty));
+                    return;
+                }
+
                 DialogUtil.showErrorDialog(this, "Icon pack contains " + meta.getIcons().length + " icons");
             } catch (IconPackException e) {
                 DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
@@ -250,7 +261,10 @@ public class MainActivity extends BaseActivity {
 
         if(!(fragment instanceof HomeFragment)) {
             NavigationUtil.navigate(this, HomeFragment.class, null);
+            return;
         }
+
+        finishAffinity();
     }
 
     public void openSettings(MenuItem item) {
@@ -392,9 +406,9 @@ public class MainActivity extends BaseActivity {
         pickBackupFileLoad.launch(new String[]{"application/json", "*/*"});
     }
 
-    public void promptPickIconPackLoad() {
+    public void promptPickIconPackFile() {
         this.lockOnStop = false;
-        pickIconPackFileLoad.launch(new String[]{"application/zip", "*/*"});
+        pickIconPackFile.launch(new String[]{"application/zip", "*/*"});
     }
 
     public void promptPickIconImage(Consumer<Uri> callback) {

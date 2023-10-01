@@ -30,4 +30,9 @@ public class IconMetadata {
     public String[] getIssuer() {
         return issuer;
     }
+
+    public boolean validate() {
+        return filename != null && category != null && issuer != null;
+    }
+
 }

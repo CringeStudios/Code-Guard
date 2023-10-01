@@ -121,4 +121,6 @@
     <string name="changelog_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="documentation_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="patreon_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
+    <string name="error_icon_pack_empty">The icon pack doesn\'t contain any icons</string>
+    <string name="error_icon_pack_invalid">Pack contains invalid metadata. Make sure you selected the correct file</string>
 </resources>

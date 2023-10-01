@@ -24,4 +24,15 @@ public class IconPackMetadata {
     public IconMetadata[] getIcons() {
         return icons;
     }
+
+    public boolean validate() {
+        if(uuid == null || name == null || icons == null) return false;
+
+        for(IconMetadata i : icons) {
+            if(!i.validate()) return false;
+        }
+
+        return true;
+    }
+
 }
