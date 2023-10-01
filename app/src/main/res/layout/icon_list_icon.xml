@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="5dp"
+    android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft">
+    <com.caverock.androidsvg.SVGImageView
+        android:id="@+id/icon_list_icon_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_edit_24"
+        android:layout_marginEnd="10dp"/>
+    <TextView
+        android:id="@+id/icon_list_icon_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="start|center"
+        tools:text="This is an icon">
+    </TextView>
+</LinearLayout>

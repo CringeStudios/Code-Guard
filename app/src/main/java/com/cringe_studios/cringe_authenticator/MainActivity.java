@@ -146,7 +146,7 @@ public class MainActivity extends BaseActivity {
 
             try {
                 if(doc == null) return;
-                IconPackMetadata meta = IconUtil.importIconPack(this, doc);
+                IconPackMetadata meta = IconUtil.importIconPack(this, doc); // TODO: check if pack contains icons
                 DialogUtil.showErrorDialog(this, "Icon pack contains " + meta.getIcons().length + " icons");
             } catch (IconPackException e) {
                 DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);

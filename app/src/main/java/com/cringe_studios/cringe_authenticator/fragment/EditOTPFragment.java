@@ -78,14 +78,13 @@ public class EditOTPFragment extends NamedFragment {
             binding.getRoot().setBackgroundResource(bg);
         }
 
-        IconUtil.loadEffectiveImage(requireContext(), data, binding.inputImage, null);
         binding.inputImage.setOnClickListener(v -> {
             new StyledDialogBuilder(requireContext())
                     .setTitle("Choose Image")
                     .setItems(new String[]{"Image from icon pack", "Image from gallery", "No image", "Reset to default image"}, (d, which) -> {
                         switch(which) {
                             case 0:
-                                // TODO: pick from icon pack
+                                pickImageFromIconPack();
                                 break;
                             case 1:
                                 pickGalleryImage();
@@ -143,6 +142,7 @@ public class EditOTPFragment extends NamedFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(imageData != null && !imageData.equals(OTPData.IMAGE_DATA_NONE)) return;
                 updateImage();
             }
         };
@@ -179,12 +179,21 @@ public class EditOTPFragment extends NamedFragment {
             }
         }
 
+        updateImage();
+
         return binding.getRoot();
     }
 
     private void updateImage() {
-        if(imageData != null && !imageData.equals(OTPData.IMAGE_DATA_NONE)) return;
         IconUtil.loadEffectiveImage(requireContext(), imageData, binding.inputIssuer.getText().toString(), binding.inputName.getText().toString(), binding.inputImage, null);
+    }
+
+    private void pickImageFromIconPack() {
+        // TODO: check if icon packs installed
+        new PickIconDrawerFragment(icon -> {
+            imageData = Base64.encodeToString(icon.getBytes(), Base64.DEFAULT);
+            updateImage();
+        }).show(requireActivity().getSupportFragmentManager(), null);
     }
 
     private void pickGalleryImage() {

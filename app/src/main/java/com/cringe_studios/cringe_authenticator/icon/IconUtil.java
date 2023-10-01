@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -119,6 +120,26 @@ public class IconUtil {
         }
 
         throw new IconPackException("No pack.json");
+    }
+
+    public static Map<String, List<Icon>> loadAllIcons(Context context) {
+        List<IconPack> packs = loadAllIconPacks(context);
+
+        Map<String, List<Icon>> icons = new TreeMap<>();
+        for(IconPack pack : packs) {
+            for(Icon i : pack.getIcons()) {
+                String category = i.getMetadata().getCategory();
+                if(icons.containsKey(category)) {
+                    icons.get(category).add(i);
+                }else {
+                    List<Icon> is = new ArrayList<>();
+                    is.add(i);
+                    icons.put(category, is);
+                }
+            }
+        }
+
+        return icons;
     }
 
     public static List<IconPack> loadAllIconPacks(Context context) {
@@ -250,19 +271,24 @@ public class IconUtil {
             }
         }
 
+        loadImage(view, imageBytes, v -> v.setImageBitmap(IconUtil.generateCodeImage(issuer, name)));
+    }
+
+    public static void loadImage(SVGImageView view, byte[] imageBytes, Consumer<SVGImageView> fallback) {
         if(imageBytes == null) {
-            view.setImageBitmap(IconUtil.generateCodeImage(issuer, name));
+            if(fallback != null) fallback.accept(view);
+            return;
+        }
+
+        Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+        if(bm != null) {
+            view.setImageBitmap(bm);
         }else {
-            Bitmap bm = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
-            if(bm != null) {
-                view.setImageBitmap(bm);
-            }else {
-                try {
-                    SVG svg = SVG.getFromInputStream(new ByteArrayInputStream(imageBytes));
-                    view.setSVG(svg);
-                }catch(SVGParseException e) {
-                    view.setImageBitmap(IconUtil.generateCodeImage(issuer, name));
-                }
+            try {
+                SVG svg = SVG.getFromInputStream(new ByteArrayInputStream(imageBytes));
+                view.setSVG(svg);
+            }catch(SVGParseException e) {
+                if(fallback != null) fallback.accept(view);
             }
         }
     }

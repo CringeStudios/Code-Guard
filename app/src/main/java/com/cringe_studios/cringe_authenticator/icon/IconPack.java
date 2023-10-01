@@ -21,7 +21,7 @@ public class IconPack {
     public Icon findIconForIssuer(String issuer) {
         for(Icon icon : icons) {
             for(String i : icon.getMetadata().getIssuer()) {
-                if(issuer.equals(i)) {
+                if(issuer.equalsIgnoreCase(i)) {
                     return icon;
                 }
             }
