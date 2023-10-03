@@ -22,20 +22,29 @@
         android:layout_width="0dp"
         android:layout_height="19dp"
         android:text="@string/password"
-        app:layout_constraintBottom_toTopOf="@+id/unlock_password"
+        app:layout_constraintBottom_toTopOf="@+id/unlock_password_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/unlock_password"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:ems="10"
-        android:inputType="textPassword"
+    
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/unlock_password_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:passwordToggleEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/unlock_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="@string/password" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/unlock_button"
@@ -47,7 +56,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/unlock_password" />
+        app:layout_constraintTop_toBottomOf="@+id/unlock_password_layout" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/unlock_biometrics"
