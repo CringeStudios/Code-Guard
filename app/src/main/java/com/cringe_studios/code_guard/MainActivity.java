@@ -225,11 +225,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
-            SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
-            SettingsUtil.setFirstLaunch(this, false);
-        }
-
         OTPDatabase.promptLoadDatabase(this, this::launchApp, this::finishAffinity);
     }
 
@@ -257,6 +252,12 @@ public class MainActivity extends BaseActivity {
             if(bar != null) bar.setTitle(((NamedFragment) fragment).getName());
         }else {
             NavigationUtil.navigate(this, HomeFragment.class, null);
+        }
+
+        if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
+            SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
+            DialogUtil.showYesNo(this, R.string.enable_encryption_title, R.string.enable_encryption_message, () -> NavigationUtil.navigate(this, SettingsFragment.class, null), null);
+            SettingsUtil.setFirstLaunch(this, false);
         }
     }
 

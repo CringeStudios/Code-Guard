@@ -127,6 +127,8 @@
     <string name="broken_icon_packs_title">Broken icon packs</string>
     <string name="broken_icon_packs_message">Some icon packs failed to load.\n\nDo you want to delete the broken icon packs?</string>
     <string name="icon_pack_imported">Icon pack with %d icon(s) imported</string>
+    <string name="enable_encryption_message">It is recommended enable encryption to improve the security of the application.\n\nDo you want to go to the settings now to enable encryption?</string>
+    <string name="enable_encryption_title">Enable encryption</string>
     <string-array name="error_icon_pack_exists_choices">
         <item>Override</item>
         <item>Rename existing</item>
