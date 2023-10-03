@@ -24,7 +24,6 @@ import com.cringe_studios.code_guard.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.code_guard.fragment.AboutFragment;
 import com.cringe_studios.code_guard.fragment.EditOTPFragment;
 import com.cringe_studios.code_guard.fragment.GroupFragment;
-import com.cringe_studios.code_guard.fragment.HomeFragment;
 import com.cringe_studios.code_guard.fragment.NamedFragment;
 import com.cringe_studios.code_guard.fragment.SettingsFragment;
 import com.cringe_studios.code_guard.icon.IconPack;
@@ -47,6 +46,8 @@ import java.io.IOException;
 import java.util.UUID;
 
 public class MainActivity extends BaseActivity {
+
+    private static final long BACK_BUTTON_DELAY = 500;
 
     private ActivityMainBinding binding;
 
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity {
     private boolean fullyLaunched;
 
     private boolean lockOnStop = true;
+
+    private long backLastPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,7 +254,9 @@ public class MainActivity extends BaseActivity {
             ActionBar bar = getSupportActionBar();
             if(bar != null) bar.setTitle(((NamedFragment) fragment).getName());
         }else {
-            NavigationUtil.navigate(this, HomeFragment.class, null);
+            Bundle bundle = new Bundle();
+            bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
+            NavigationUtil.navigate(this, GroupFragment.class, bundle);
         }
 
         if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
@@ -314,12 +319,11 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        if(!(fragment instanceof HomeFragment)) {
-            NavigationUtil.navigate(this, HomeFragment.class, null);
-            return;
+        if(System.currentTimeMillis() - backLastPressed < BACK_BUTTON_DELAY) {
+            finishAffinity();
+        }else {
+            backLastPressed = System.currentTimeMillis();
         }
-
-        finishAffinity();
     }
 
     public void openSettings(MenuItem item) {
