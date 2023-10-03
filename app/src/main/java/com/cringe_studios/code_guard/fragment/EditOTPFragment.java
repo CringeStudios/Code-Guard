@@ -78,8 +78,8 @@ public class EditOTPFragment extends NamedFragment {
         binding.inputImage.setVisibility(SettingsUtil.isShowImages(requireContext()) ? View.VISIBLE : View.GONE);
         binding.inputImage.setOnClickListener(v -> {
             new StyledDialogBuilder(requireContext())
-                    .setTitle("Choose Image")
-                    .setItems(new String[]{"Image from icon pack", "Image from gallery", "No image", "Reset to default image"}, (d, which) -> {
+                    .setTitle(R.string.edit_otp_choose_image)
+                    .setItems(R.array.edit_otp_choose_image_options, (d, which) -> {
                         switch(which) {
                             case 0:
                                 pickImageFromIconPack();
@@ -231,7 +231,7 @@ public class EditOTPFragment extends NamedFragment {
 
                 binding.inputImage.setImageBitmap(bm);
             }catch(IOException e) {
-                DialogUtil.showErrorDialog(requireContext(), "Failed to open image", e);
+                DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_edit_otp_image), e);
             }
         });
     }

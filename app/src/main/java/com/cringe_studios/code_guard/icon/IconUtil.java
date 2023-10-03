@@ -207,10 +207,11 @@ public class IconUtil {
         for(IconPack pack : packs) {
             for(Icon i : pack.getIcons()) {
                 String category = i.getMetadata().getCategory();
-                if(icons.containsKey(category)) {
-                    icons.get(category).add(i);
+                List<Icon> is = icons.get(category);
+                if(is != null) {
+                    is.add(i);
                 }else {
-                    List<Icon> is = new ArrayList<>();
+                    is = new ArrayList<>();
                     is.add(i);
                     icons.put(category, is);
                 }

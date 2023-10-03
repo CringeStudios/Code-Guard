@@ -128,6 +128,33 @@
     <string name="icon_pack_imported">Icon pack with %d icon(s) imported</string>
     <string name="enable_encryption_message">It is recommended to enable encryption to improve the security of the application.\n\nDo you want to go to the settings now to enable encryption?</string>
     <string name="enable_encryption_title">Enable encryption</string>
+    <string name="back_pressed">Press back again to exit</string>
+    <string name="error_backup_database_not_encrypted">Database must be encrypted for this option</string>
+    <string name="manage_icon_packs_title">Manage icon packs</string>
+    <string name="error_backup_load_crypto">Failed to load backup. Make sure the password is valid</string>
+    <string name="error_backup_load_other">Failed to load backup</string>
+    <string name="error_biometric_encryption_enable">Failed to enable biometric encryption</string>
+    <string name="error_biometric_encryption_disable">Failed to enable biometric encryption</string>
+    <string name="edit_otp_choose_image">Choose Image</string>
+    <string name="error_edit_otp_image">Failed to open image</string>
+    <string name="error_database_save">Failed to save database</string>
+    <string name="error_otp_refresh">An error occurred while refreshing the code</string>
+    <string name="error_enable_encryption">Failed to enable encryption</string>
+    <string name="error_disable_encryption">Failed to disable encryption</string>
+    <string name="error_unlock_no_password">You need to enter a password</string>
+    <string name="error_unlock_crypto">Failed to load database: Invalid password or database corrupted</string>
+    <string name="error_unlock_other">Failed to load database</string>
+    <string name="error_qr_scan_not_detected">No codes were detected in the provided image</string>
+    <string name="error_qr_scan_failed">"Failed to detect code: "</string>
+    <string name="error_qr_scan_image_failed">"Failed to read image: "</string>
+    <string name="icon_pack_exists_title">Icon pack already exists</string>
+    <string name="error_import_icon_pack">Failed to import icon pack</string>
+    <string-array name="edit_otp_choose_image_options">
+        <item>Image from icon pack</item>
+        <item>Image from gallery</item>
+        <item>No image</item>
+        <item>Reset to default image</item>
+    </string-array>
     <string-array name="error_icon_pack_exists_choices">
         <item>Override</item>
         <item>Rename existing</item>

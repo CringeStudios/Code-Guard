@@ -13,8 +13,6 @@ import com.cringe_studios.code_guard.fragment.NamedFragment;
 
 public class NavigationUtil {
 
-    // TODO: check if this still works after changes
-
     private static void updateActivity(AppCompatActivity activity, NamedFragment newFragment) {
         ActionBar bar = activity.getSupportActionBar();
         if(newFragment == null) newFragment = (NamedFragment) getCurrentFragment(activity.getSupportFragmentManager());

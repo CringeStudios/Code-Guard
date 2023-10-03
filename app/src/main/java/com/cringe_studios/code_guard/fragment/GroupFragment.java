@@ -100,7 +100,7 @@ public class GroupFragment extends NamedFragment {
                 OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
                 for(OTPData d : data) otpListAdapter.add(d);
             } catch (OTPDatabaseException | CryptoException e) {
-                DialogUtil.showErrorDialog(requireContext(), "Failed to save database: " + e);
+                DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_database_save), e);
             }
         }, null);
     }
@@ -112,7 +112,7 @@ public class GroupFragment extends NamedFragment {
             try {
                 vh.refresh();
             } catch (Exception e) {
-                DialogUtil.showErrorDialog(requireContext(), e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
+                DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_otp_refresh), e);
             }
         }
     }

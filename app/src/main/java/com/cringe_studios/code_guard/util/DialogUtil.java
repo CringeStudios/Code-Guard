@@ -78,11 +78,15 @@ public class DialogUtil {
     }
 
     public static void showErrorDialog(Context context, String errorMessage, Runnable closed) {
-        showErrorDialog(context, errorMessage, null, closed);
+        showErrorDialog(context, errorMessage, (String) null, closed);
     }
 
     public static void showErrorDialog(Context context, String errorMessage) {
         showErrorDialog(context, errorMessage, (Runnable) null);
+    }
+
+    public static void showErrorDialog(Context context, String errorMessage, Exception exception, Runnable closed) {
+        showErrorDialog(context, errorMessage, stackTraceToString(exception), closed);
     }
 
     public static void showErrorDialog(Context context, String errorMessage, Exception exception) {

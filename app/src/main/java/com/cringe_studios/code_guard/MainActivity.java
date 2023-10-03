@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
                 InputImage image = InputImage.fromFilePath(this, img);
                 qrScanner.scan(image, code -> {
                     if(code == null) {
-                        DialogUtil.showErrorDialog(this, "No codes were detected in the provided image");
+                        DialogUtil.showErrorDialog(this, getString(R.string.error_qr_scan_not_detected));
                         return;
                     }
 
@@ -126,9 +126,9 @@ public class MainActivity extends BaseActivity {
                             for (OTPData dt : code.getOTPs()) frag.addOTP(dt);
                         }
                     }
-                }, error -> DialogUtil.showErrorDialog(this, "Failed to detect code: " + error));
+                }, error -> DialogUtil.showErrorDialog(this, getString(R.string.error_qr_scan_failed), error, null));
             } catch (IOException e) {
-                DialogUtil.showErrorDialog(this, "Failed to read image: " + e);
+                DialogUtil.showErrorDialog(this, getString(R.string.error_qr_scan_image_failed), e);
             }
         });
 
@@ -172,7 +172,7 @@ public class MainActivity extends BaseActivity {
 
 
                     AlertDialog dialog = new StyledDialogBuilder(this)
-                            .setTitle("Icon pack already exists")
+                            .setTitle(R.string.icon_pack_exists_title)
                             .setView(binding.getRoot())
                             .setNeutralButton(R.string.cancel, (d, which) -> {})
                             .create();
@@ -184,7 +184,7 @@ public class MainActivity extends BaseActivity {
                                     IconUtil.importIconPack(this, doc);
                                     Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
                                 } catch (IconPackException e) {
-                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                    DialogUtil.showErrorDialog(this, getString(R.string.error_import_icon_pack), e);
                                 }
                                 break;
                             case 1: // Rename existing
@@ -193,7 +193,7 @@ public class MainActivity extends BaseActivity {
                                     IconUtil.importIconPack(this, doc);
                                     Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
                                 } catch (IconPackException e) {
-                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                    DialogUtil.showErrorDialog(this, getString(R.string.error_import_icon_pack), e);
                                 }
                                 break;
                             case 2: // Rename imported
@@ -201,7 +201,7 @@ public class MainActivity extends BaseActivity {
                                     IconUtil.importIconPack(this, doc, meta.getName() + " (" + meta.getVersion() + ")", UUID.randomUUID().toString());
                                     Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
                                 } catch (IconPackException e) {
-                                    DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                                    DialogUtil.showErrorDialog(this, getString(R.string.error_import_icon_pack), e);
                                 }
                                 break;
                         }
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity {
                 IconUtil.importIconPack(this, doc);
                 Toast.makeText(this, getString(R.string.icon_pack_imported, meta.getIcons().length), Toast.LENGTH_LONG).show();
             } catch (IconPackException e) {
-                DialogUtil.showErrorDialog(this, "Failed to import icon pack", e);
+                DialogUtil.showErrorDialog(this, getString(R.string.error_import_icon_pack), e);
             }
         });
 
@@ -323,6 +323,7 @@ public class MainActivity extends BaseActivity {
             finishAffinity();
         }else {
             backLastPressed = System.currentTimeMillis();
+            Toast.makeText(this, R.string.back_pressed, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -103,7 +103,7 @@ public class SettingsFragment extends NamedFragment {
                             binding.settingsBiometricLock.setEnabled(true);
                         }
                     } catch (CryptoException | OTPDatabaseException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to enable encryption", e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_enable_encryption), e);
                     }
                 }, () -> view.setChecked(false));
             }else {
@@ -118,7 +118,7 @@ public class SettingsFragment extends NamedFragment {
                         binding.settingsBiometricLock.setChecked(false);
                         binding.settingsBiometricLock.setEnabled(false);
                     } catch (OTPDatabaseException | CryptoException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to disable encryption", e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_disable_encryption), e);
                     }
                 }, () -> view.setChecked(true));
             }
@@ -135,7 +135,7 @@ public class SettingsFragment extends NamedFragment {
                                 BiometricKey biometricKey = Crypto.createBiometricKey(SettingsUtil.getCryptoParameters(requireContext()));
                                 SettingsUtil.enableBiometricEncryption(requireContext(), biometricKey);
                             } catch (CryptoException e) {
-                                DialogUtil.showErrorDialog(requireContext(), "Failed to enable: " + e);
+                                DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_biometric_encryption_enable), e);
                             }
                         }, () -> view.setChecked(false));
                     }, null);
@@ -144,7 +144,7 @@ public class SettingsFragment extends NamedFragment {
                         BiometricKey key = SettingsUtil.getBiometricKey(requireContext());
                         if(key != null) Crypto.deleteBiometricKey(key);
                     } catch (CryptoException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to delete key: " + e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_biometric_encryption_disable), e);
                     }
 
                     SettingsUtil.disableBiometricEncryption(requireContext());
@@ -231,6 +231,11 @@ public class SettingsFragment extends NamedFragment {
                     .setItems(R.array.backup_create, (d, which) -> {
                         switch(which) {
                             case 0:
+                                if(!SettingsUtil.isDatabaseEncrypted(requireContext())) {
+                                    DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_backup_database_not_encrypted));
+                                    return;
+                                }
+
                                 OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
                                     SecretKey key = OTPDatabase.getLoadedKey();
                                     CryptoParameters parameters = SettingsUtil.getCryptoParameters(requireContext());
@@ -287,7 +292,7 @@ public class SettingsFragment extends NamedFragment {
             binding.manageIconPacksList.setAdapter(new IconPackListAdapter(requireContext(), IconUtil.loadAllIconPacks(requireContext())));
 
             new StyledDialogBuilder(requireContext())
-                    .setTitle("Manage icon packs")
+                    .setTitle(R.string.manage_icon_packs_title)
                     .setView(binding.getRoot())
                     .setPositiveButton(R.string.ok, (d, which) -> {})
                     .show();
@@ -319,7 +324,7 @@ public class SettingsFragment extends NamedFragment {
                         return;
                     } catch (CryptoException ignored) { // Load with password
                     } catch (BackupException | OTPDatabaseException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_backup_load_other), e);
                         return;
                     }
                 }
@@ -330,9 +335,9 @@ public class SettingsFragment extends NamedFragment {
                         SecretKey key = Crypto.generateKey(parameters, password);
                         loadBackup(uri, key, parameters);
                     } catch (CryptoException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup. Make sure the password is valid", e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_backup_load_crypto), e);
                     } catch (BackupException | OTPDatabaseException e) {
-                        DialogUtil.showErrorDialog(requireContext(), "Failed to load backup", e);
+                        DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_backup_load_other), e);
                     }
                 }, null);
             }, null);

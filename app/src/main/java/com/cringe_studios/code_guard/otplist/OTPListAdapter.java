@@ -190,7 +190,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
                 try {
                     h.refresh();
                 } catch (OTPException e) {
-                    DialogUtil.showErrorDialog(context, e.getMessage() == null ? "An error occurred while refreshing the code" : e.getMessage());
+                    DialogUtil.showErrorDialog(context, context.getString(R.string.error_otp_refresh), e);
                 }
             }
         }

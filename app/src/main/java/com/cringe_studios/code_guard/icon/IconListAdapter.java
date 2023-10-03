@@ -93,7 +93,7 @@ public class IconListAdapter extends BaseExpandableListAdapter implements Expand
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         IconListCategoryBinding binding = IconListCategoryBinding.inflate(LayoutInflater.from(context));
-        binding.getRoot().setText((String) getGroup(groupPosition));
+        binding.getRoot().setText(getGroup(groupPosition));
         return binding.getRoot();
     }
 

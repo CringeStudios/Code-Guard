@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import com.cringe_studios.code_guard.BaseActivity;
 import com.cringe_studios.code_guard.MainActivity;
+import com.cringe_studios.code_guard.R;
 import com.cringe_studios.code_guard.crypto.BiometricKey;
 import com.cringe_studios.code_guard.crypto.Crypto;
 import com.cringe_studios.code_guard.crypto.CryptoException;
@@ -49,7 +50,7 @@ public class UnlockActivity extends BaseActivity {
                     OTPDatabase.loadDatabase(this, key);
                     success();
                 } catch (CryptoException | OTPDatabaseException e) {
-                    DialogUtil.showErrorDialog(this, "Failed to load database: " + e);
+                    DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_other), e);
                 }
             };
 
@@ -61,7 +62,7 @@ public class UnlockActivity extends BaseActivity {
 
         binding.unlockButton.setOnClickListener(view -> {
             if(binding.unlockPassword.getText().length() == 0) {
-                DialogUtil.showErrorDialog(this, "You need to enter a password");
+                DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_no_password));
                 return;
             }
 
@@ -72,9 +73,9 @@ public class UnlockActivity extends BaseActivity {
                 OTPDatabase.loadDatabase(this, key);
                 success();
             }catch(CryptoException e) {
-                DialogUtil.showErrorDialog(this, "Failed to load database: Invalid password or database corrupted", this::failure);
+                DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_crypto), this::failure);
             } catch (OTPDatabaseException e) {
-                DialogUtil.showErrorDialog(this, "Failed to load database: " + e, this::failure);
+                DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_other), e, this::failure);
             }
         });
     }

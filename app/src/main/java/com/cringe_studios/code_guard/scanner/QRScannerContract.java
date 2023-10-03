@@ -28,7 +28,10 @@ public class QRScannerContract extends ActivityResultContract<Void, ScannerResul
             return null;
         }
 
-        return new ScannerResult((OTPData[]) intent.getSerializableExtra("data"));
+        OTPData[] data = (OTPData[]) intent.getSerializableExtra("data");
+        if(data == null) return null;
+
+        return new ScannerResult(data);
     }
 
 }
