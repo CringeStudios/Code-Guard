@@ -121,6 +121,6 @@
     <string name="broken_icon_packs_title">Beschädigte Symbolpakete</string>
     <string name="broken_icon_packs_message">Einige Symbolpakete konnten nicht geladen werden.\n\nWillst du die beschädigten Symbolpakete entfernen?</string>
     <string name="icon_pack_imported">Symbolpaket mit %s Symbol(en) importiert</string>
-    <string name="enable_encryption_message">Es ist empfehlenswert, Verschlüsselung zu aktivieren, um die Sicherheit der App zu erhpöhen.\n\nMöchtest du zu den Einstellungen wechseln, um Verschlüsselung zu aktivieren?</string>
+    <string name="enable_encryption_message">Es ist empfehlenswert, Verschlüsselung zu aktivieren, um die Sicherheit der App zu erhöhen.\n\nMöchtest du zu den Einstellungen wechseln, um Verschlüsselung zu aktivieren?</string>
     <string name="enable_encryption_title">Verschlüsselung aktivieren</string>
 </resources>
