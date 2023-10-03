@@ -149,6 +149,7 @@
     <string name="error_qr_scan_image_failed">"Failed to read image: "</string>
     <string name="icon_pack_exists_title">Icon pack already exists</string>
     <string name="error_import_icon_pack">Failed to import icon pack</string>
+    <string name="error_no_camera_permission">No camera permission</string>
     <string-array name="edit_otp_choose_image_options">
         <item>Image from icon pack</item>
         <item>Image from gallery</item>
