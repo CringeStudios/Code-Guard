@@ -28,8 +28,7 @@ public class AboutFragment extends NamedFragment {
         binding = FragmentAboutBinding.inflate(inflater);
         try {
             PackageManager manager = requireContext().getPackageManager();
-            PackageInfo info = null;
-            info = manager.getPackageInfo(requireContext().getPackageName(), 0);
+            PackageInfo info = manager.getPackageInfo(requireContext().getPackageName(), 0);
             String version = info.versionName;
             binding.appVersion.setText(version);
         } catch (PackageManager.NameNotFoundException ignored) {}
