@@ -117,8 +117,8 @@
     <string name="documentation">Documentation</string>
     <string name="app_license" translatable="false">GNU General Public License, version 3.0</string>
     <string name="mail_to">Mail: info@code-guard.com</string>
-    <string name="github" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
-    <string name="changelog_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
+    <string name="appcode_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
+    <string name="changelog_link" translatable="false">https://code-guard.com/#4</string>
     <string name="documentation_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="patreon_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="error_icon_pack_empty">The icon pack doesn\'t contain any icons</string>

@@ -91,6 +91,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
+            android:autoLink="email"
             android:text="@string/mail_to" />
 
         <View
@@ -113,14 +114,15 @@
             android:textSize="18sp"/>
 
         <TextView
-            android:id="@+id/github"
+            android:id="@+id/appcode_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
-            android:text="@string/github" />
+            android:autoLink="web"
+            android:text="@string/appcode_link" />
 
         <View
             android:id="@+id/divider4"
@@ -149,6 +151,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
+            android:autoLink="web"
             android:text="@string/changelog_link" />
 
         <View
@@ -178,6 +181,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
+            android:autoLink="web"
             android:text="@string/documentation_link" />
 
         <View
@@ -265,6 +269,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:textAlignment="center"
+            android:autoLink="web"
             android:text="@string/patreon_link" />
 
         <Space
