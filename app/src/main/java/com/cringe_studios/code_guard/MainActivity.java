@@ -272,6 +272,11 @@ public class MainActivity extends BaseActivity {
         if(fragment instanceof GroupFragment) {
             GroupFragment frag = (GroupFragment) fragment;
             getMenuInflater().inflate(frag.isEditing() ? R.menu.menu_otps_edit : R.menu.menu_otps, menu);
+
+            if(!SettingsUtil.isDatabaseEncrypted(this)) {
+                menu.removeItem(R.id.action_lock);
+            }
+
             if(frag.isEditing() && frag.hasSelectedMultipleItems()) {
                 menu.removeItem(R.id.action_view_otp);
                 menu.removeItem(R.id.action_edit_otp);
@@ -285,6 +290,11 @@ public class MainActivity extends BaseActivity {
         }
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        if(!SettingsUtil.isDatabaseEncrypted(this)) {
+            menu.removeItem(R.id.action_lock);
+        }
+
         return true;
     }
 
