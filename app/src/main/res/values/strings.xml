@@ -134,7 +134,7 @@
     <string name="error_backup_load_crypto">Failed to load backup. Make sure the password is valid</string>
     <string name="error_backup_load_other">Failed to load backup</string>
     <string name="error_biometric_encryption_enable">Failed to enable biometric encryption</string>
-    <string name="error_biometric_encryption_disable">Failed to enable biometric encryption</string>
+    <string name="error_biometric_encryption_disable">Failed to disable biometric encryption</string>
     <string name="edit_otp_choose_image">Choose Image</string>
     <string name="error_edit_otp_image">Failed to open image</string>
     <string name="error_database_save">Failed to save database</string>
