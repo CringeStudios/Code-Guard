@@ -167,6 +167,8 @@
     <string name="otp_move">Move OTP</string>
     <string name="otp_delete">Delete OTP</string>
     <string name="close">Close</string>
+    <string name="security">Security</string>
+    <string name="localization">Localization</string>
     <string-array name="edit_otp_choose_image_options">
         <item>Image from icon pack</item>
         <item>Image from gallery</item>

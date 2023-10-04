@@ -161,4 +161,6 @@
     <string name="otp_move">OTP verschieben</string>
     <string name="otp_delete">OTP löschen</string>
     <string name="close">Schließen</string>
+    <string name="security">Sicherheit</string>
+    <string name="localization">Lokalisierung</string>
 </resources>

@@ -16,6 +16,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/localization"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/language" />
 
         <Spinner
@@ -30,6 +38,14 @@
             android:layout_height="1dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/theme_gradient" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/security"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_encryption"
@@ -66,6 +82,14 @@
             android:layout_height="1dp"
             android:layout_marginVertical="10dp"
             android:background="@drawable/theme_gradient" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/appearance"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_enable_intro_video"
@@ -118,7 +142,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/backups" />
+            android:gravity="center"
+            android:text="@string/backups"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_create_backup"
@@ -147,7 +174,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_icon_packs" />
+            android:text="@string/settings_icon_packs"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_load_icon_pack"
