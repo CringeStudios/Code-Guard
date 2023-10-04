@@ -145,8 +145,8 @@
     <string name="error_unlock_crypto">Failed to load database: Invalid password or database corrupted</string>
     <string name="error_unlock_other">Failed to load database</string>
     <string name="error_qr_scan_not_detected">No codes were detected in the provided image</string>
-    <string name="error_qr_scan_failed">"Failed to detect code: "</string>
-    <string name="error_qr_scan_image_failed">"Failed to read image: "</string>
+    <string name="error_qr_scan_failed">Failed to detect code</string>
+    <string name="error_qr_scan_image_failed">Failed to read image</string>
     <string name="icon_pack_exists_title">Icon pack already exists</string>
     <string name="error_import_icon_pack">Failed to import icon pack</string>
     <string name="error_no_camera_permission">No camera permission</string>
