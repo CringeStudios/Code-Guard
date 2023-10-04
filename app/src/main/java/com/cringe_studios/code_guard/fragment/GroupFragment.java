@@ -124,7 +124,8 @@ public class GroupFragment extends NamedFragment {
         if(items.size() != 1) return;
 
         OTPData data = items.get(0).getOTPData();
-        DialogUtil.showViewCodeDialog(getLayoutInflater(), data);
+        //DialogUtil.showViewCodeDialog(getLayoutInflater(), data);
+        NavigationUtil.openOverlay(this, new EditOTPFragment(data, true, null));
     }
 
     public void editOTP() {

@@ -77,6 +77,8 @@ public class EditOTPFragment extends NamedFragment {
 
         binding.inputImage.setVisibility(SettingsUtil.isShowImages(requireContext()) ? View.VISIBLE : View.GONE);
         binding.inputImage.setOnClickListener(v -> {
+            if(view) return;
+
             new StyledDialogBuilder(requireContext())
                     .setTitle(R.string.edit_otp_choose_image)
                     .setItems(R.array.edit_otp_choose_image_options, (d, which) -> {

@@ -42,14 +42,18 @@ public class NavigationUtil {
         navigate((AppCompatActivity) currentFragment.requireActivity(), fragmentClass, args);
     }
 
-    public static void openOverlay(Fragment currentFragment, NamedFragment overlay) {
-        AppCompatActivity activity = (AppCompatActivity) currentFragment.requireActivity();
+    public static void openOverlay(AppCompatActivity activity, NamedFragment overlay) {
         FragmentManager manager = activity.getSupportFragmentManager();
         manager.beginTransaction()
                 .setReorderingAllowed(true)
                 .add(R.id.nav_host_fragment_content_main, overlay)
                 .runOnCommit(() -> updateActivity(activity, overlay))
                 .commit();
+    }
+
+    public static void openOverlay(Fragment currentFragment, NamedFragment overlay) {
+        AppCompatActivity activity = (AppCompatActivity) currentFragment.requireActivity();
+        openOverlay(activity, overlay);
     }
 
     public static void closeOverlay(Fragment currentFragment) {

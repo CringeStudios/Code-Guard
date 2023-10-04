@@ -4,8 +4,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -20,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.cringe_studios.code_guard.databinding.ActivityMainBinding;
 import com.cringe_studios.code_guard.databinding.DialogIconPackExistsBinding;
-import com.cringe_studios.code_guard.databinding.DialogInputCodeChoiceBinding;
 import com.cringe_studios.code_guard.fragment.AboutFragment;
 import com.cringe_studios.code_guard.fragment.EditOTPFragment;
 import com.cringe_studios.code_guard.fragment.GroupFragment;
@@ -39,7 +36,6 @@ import com.cringe_studios.code_guard.util.OTPDatabase;
 import com.cringe_studios.code_guard.util.SettingsUtil;
 import com.cringe_studios.code_guard.util.StyledDialogBuilder;
 import com.cringe_studios.code_guard.util.ThemeUtil;
-import com.cringe_studios.cringe_authenticator_library.OTPType;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.io.IOException;
@@ -357,51 +353,14 @@ public class MainActivity extends BaseActivity {
     }
 
     public void inputCode(MenuItem item) {
-        DialogInputCodeChoiceBinding binding = DialogInputCodeChoiceBinding.inflate(getLayoutInflater());
+        Fragment fragment = NavigationUtil.getCurrentFragment(this);
+        if(!(fragment instanceof GroupFragment)) return;
 
-        String[] options = new String[2];
-        options[0] = OTPType.TOTP.getFriendlyName() + " (TOTP)";
-        options[1] = OTPType.HOTP.getFriendlyName() + " (HOTP)";
+        GroupFragment f = (GroupFragment) fragment;
 
-        AlertDialog dialog = new StyledDialogBuilder(this)
-                .setTitle(R.string.create_totp_title)
-                .setView(binding.getRoot())
-                .setNegativeButton(R.string.cancel, (view, which) -> {})
-                .create();
-
-        binding.codeTypes.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, options));
-        binding.codeTypes.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-            switch(position) {
-                case 0:
-                    showTOTPDialog();
-                    break;
-                case 1:
-                    showHOTPDialog();
-                    break;
-            }
-
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-
-    private void showTOTPDialog() {
-        DialogUtil.showTOTPDialog(getLayoutInflater(), null, data -> {
-            Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof GroupFragment)) return;
-
-            ((GroupFragment) fragment).addOTP(data);
-        }, false);
-    }
-
-    private void showHOTPDialog() {
-        DialogUtil.showHOTPDialog(getLayoutInflater(), null, data -> {
-            Fragment fragment = NavigationUtil.getCurrentFragment(this);
-            if(!(fragment instanceof GroupFragment)) return;
-
-            ((GroupFragment) fragment).addOTP(data);
-        }, false);
+        NavigationUtil.openOverlay(this, new EditOTPFragment(null, false, data -> {
+            f.addOTP(data);
+        }));
     }
 
     public void addOTP(MenuItem item) {
