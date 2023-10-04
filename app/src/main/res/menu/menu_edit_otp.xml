@@ -4,13 +4,13 @@
     <item
         android:id="@+id/action_cancel"
         android:orderInCategory="100"
-        android:title="Cancel"
+        android:title="@string/cancel"
         android:onClick="cancelEditingOTP"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_save"
         android:orderInCategory="100"
-        android:title="Save"
+        android:title="@string/save"
         android:onClick="saveOTP"
         app:showAsAction="always" />
 </menu>

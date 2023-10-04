@@ -1,8 +1,6 @@
 package com.cringe_studios.code_guard.grouplist;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -28,8 +26,6 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
 
     private final List<String> items;
 
-    private final Handler handler;
-
     private final Consumer<String> navigateToGroup;
 
     private final Runnable saveGroups;
@@ -46,7 +42,6 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListItem> {
         this.updateToolbarOptions = updateToolbarOptions;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
-        this.handler = new Handler(Looper.getMainLooper());
 
         attachTouchHelper(recyclerView);
     }

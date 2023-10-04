@@ -45,8 +45,6 @@ public class MainActivity extends BaseActivity {
 
     private static final long BACK_BUTTON_DELAY = 500;
 
-    private ActivityMainBinding binding;
-
     private ActivityResultLauncher<Void> startQRCodeScan;
 
     private ActivityResultLauncher<PickVisualMediaRequest> pickQRCodeImage;
@@ -237,7 +235,7 @@ public class MainActivity extends BaseActivity {
         fullyLaunched = true;
         lockOnStop = true;
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         ThemeUtil.loadBackground(this);
 
@@ -281,7 +279,8 @@ public class MainActivity extends BaseActivity {
         }
 
         if(fragment instanceof EditOTPFragment) {
-            getMenuInflater().inflate(R.menu.menu_edit_otp, menu);
+            EditOTPFragment frag = (EditOTPFragment) fragment;
+            getMenuInflater().inflate(frag.isView() ? R.menu.menu_view_otp : R.menu.menu_edit_otp, menu);
             return true;
         }
 

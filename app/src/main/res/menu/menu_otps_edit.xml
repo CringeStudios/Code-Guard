@@ -5,34 +5,34 @@
         android:id="@+id/action_view_otp"
         android:orderInCategory="100"
         android:icon="@drawable/baseline_visibility_24"
-        android:title="View OTP"
+        android:title="@string/otp_view"
         android:onClick="viewOTP"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_edit_otp"
         android:orderInCategory="100"
         android:icon="@drawable/baseline_edit_24"
-        android:title="Edit OTP"
+        android:title="@string/otp_edit"
         android:onClick="editOTP"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_move_otp"
         android:orderInCategory="100"
         android:icon="@drawable/baseline_drive_file_move_24"
-        android:title="Move OTP"
+        android:title="@string/otp_move"
         android:onClick="moveOTP"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_delete_otp"
         android:orderInCategory="100"
         android:icon="@drawable/baseline_delete_24"
-        android:title="Delete OTP"
+        android:title="@string/otp_delete"
         android:onClick="deleteOTP"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_lock"
         android:orderInCategory="100"
-        android:title="Lock"
+        android:title="@string/lock"
         app:showAsAction="never"
         android:onClick="lockApp" />
     <item

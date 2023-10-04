@@ -37,7 +37,7 @@ public class Crypto {
 
     private static final String KEY_STORE = "AndroidKeyStore";
 
-    public static byte[] generateHash(CryptoParameters parameters, String password) throws CryptoException {
+    public static byte[] generateHash(CryptoParameters parameters, String password) {
         Argon2Parameters params = new Argon2Parameters.Builder()
                 .withVersion(parameters.getArgon2Version())
                 .withIterations(parameters.getArgon2Iterations())

@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class SettingsUtil {
 
-    public static String
+    public static final String
             GROUPS_PREFS_NAME = "groups",
             GENERAL_PREFS_NAME = "general";
 

@@ -19,8 +19,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class PickIconDrawerFragment extends BottomSheetDialogFragment {
 
-    private FragmentPickIconBinding binding;
-
     private final Consumer<Icon> selected;
 
     public PickIconDrawerFragment(Consumer<Icon> selected) {
@@ -30,7 +28,7 @@ public class PickIconDrawerFragment extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentPickIconBinding.inflate(inflater);
+        FragmentPickIconBinding binding = FragmentPickIconBinding.inflate(inflater);
 
         IconListAdapter adapter = new IconListAdapter(requireContext(), IconUtil.loadAllIcons(requireContext()), icon -> {
             selected.accept(icon);

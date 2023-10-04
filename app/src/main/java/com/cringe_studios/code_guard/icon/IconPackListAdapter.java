@@ -15,11 +15,11 @@ import java.util.List;
 
 public class IconPackListAdapter extends RecyclerView.Adapter<IconPackItem> {
 
-    private Context context;
+    private final Context context;
 
-    private LayoutInflater inflater;
+    private final LayoutInflater inflater;
 
-    private List<IconPack> packs;
+    private final List<IconPack> packs;
 
     public IconPackListAdapter(Context context, List<IconPack> packs) {
         this.context = context;

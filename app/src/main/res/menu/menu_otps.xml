@@ -12,21 +12,21 @@
                 android:id="@+id/action_otp_input"
                 android:orderInCategory="100"
                 android:icon="@drawable/baseline_edit_24"
-                android:title="Input manually"
+                android:title="@string/otp_input"
                 android:onClick="inputCode"
                 app:showAsAction="never"/>
             <item
                 android:id="@+id/action_otp_scan"
                 android:orderInCategory="100"
                 android:icon="@drawable/baseline_qr_code_scanner_24"
-                android:title="Scan QR code"
+                android:title="@string/otp_scan"
                 android:onClick="scanCode"
                 app:showAsAction="never"/>
             <item
                 android:id="@+id/action_otp_scan_image"
                 android:orderInCategory="100"
                 android:icon="@drawable/baseline_compare_24"
-                android:title="Scan image"
+                android:title="@string/otp_scan_image"
                 android:onClick="scanCodeFromImage"
                 app:showAsAction="never"/>
         </menu>
@@ -34,7 +34,7 @@
     <item
         android:id="@+id/action_lock"
         android:orderInCategory="100"
-        android:title="Lock"
+        android:title="@string/lock"
         app:showAsAction="never"
         android:onClick="lockApp" />
     <item

@@ -7,7 +7,7 @@ import com.cringe_studios.code_guard.databinding.DialogManageIconPacksItemBindin
 
 public class IconPackItem extends RecyclerView.ViewHolder {
 
-    private DialogManageIconPacksItemBinding binding;
+    private final DialogManageIconPacksItemBinding binding;
 
     private IconPack pack;
 

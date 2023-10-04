@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_lock"
         android:orderInCategory="100"
-        android:title="Lock"
+        android:title="@string/lock"
         app:showAsAction="never"
         android:onClick="lockApp" />
     <item

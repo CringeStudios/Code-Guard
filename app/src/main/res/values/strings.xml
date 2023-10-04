@@ -150,6 +150,23 @@
     <string name="icon_pack_exists_title">Icon pack already exists</string>
     <string name="error_import_icon_pack">Failed to import icon pack</string>
     <string name="error_no_camera_permission">No camera permission</string>
+    <string name="details">Details</string>
+    <string name="search">Search</string>
+    <string name="settings_enable_themed_background">Use themed background</string>
+    <string name="settings_enable_minimalist_theme">Use minimalist theme</string>
+    <string name="settings_icon_packs">Icon Packs</string>
+    <string name="settings_icon_packs_import">Import icon pack</string>
+    <string name="settings_icon_packs_manage">Manage icon packs</string>
+    <string name="save">Save</string>
+    <string name="lock">Lock</string>
+    <string name="otp_input">Input manually</string>
+    <string name="otp_scan">Scan QR code</string>
+    <string name="otp_scan_image">Scan image</string>
+    <string name="otp_view">View OTP</string>
+    <string name="otp_edit">Edit OTP</string>
+    <string name="otp_move">Move OTP</string>
+    <string name="otp_delete">Delete OTP</string>
+    <string name="close">Close</string>
     <string-array name="edit_otp_choose_image_options">
         <item>Image from icon pack</item>
         <item>Image from gallery</item>

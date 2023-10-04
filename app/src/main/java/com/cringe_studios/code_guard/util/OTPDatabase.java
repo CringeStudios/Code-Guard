@@ -79,7 +79,7 @@ public class OTPDatabase {
         ((BaseActivity) ctx).promptUnlock(success, failure);
     }
 
-    public static OTPDatabase loadDatabase(Context context, SecretKey key) throws OTPDatabaseException, CryptoException {
+    public static void loadDatabase(Context context, SecretKey key) throws OTPDatabaseException, CryptoException {
         File file = new File(context.getFilesDir(), DB_FILE_NAME);
         if(!file.exists()) {
             try {
@@ -94,7 +94,6 @@ public class OTPDatabase {
 
             loadedDatabase = loadFromEncryptedBytes(bytes, key, SettingsUtil.getCryptoParameters(context));
             loadedKey = key;
-            return loadedDatabase;
         }catch(IOException e) {
             throw new OTPDatabaseException(e);
         }

@@ -15,8 +15,6 @@ import com.cringe_studios.code_guard.databinding.FragmentAboutBinding;
 
 public class AboutFragment extends NamedFragment {
 
-    private FragmentAboutBinding binding;
-
     @Override
     public String getName() {
         return requireActivity().getString(R.string.fragment_about);
@@ -25,7 +23,7 @@ public class AboutFragment extends NamedFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentAboutBinding.inflate(inflater);
+        FragmentAboutBinding binding = FragmentAboutBinding.inflate(inflater);
         try {
             PackageManager manager = requireContext().getPackageManager();
             PackageInfo info = manager.getPackageInfo(requireContext().getPackageName(), 0);

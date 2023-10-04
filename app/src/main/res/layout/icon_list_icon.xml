@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingVertical="5dp"
-    android:paddingStart="?android:attr/expandableListPreferredChildPaddingLeft">
+    android:paddingLeft="?android:attr/expandableListPreferredChildPaddingLeft">
     <com.caverock.androidsvg.SVGImageView
         android:id="@+id/icon_list_icon_image"
         android:layout_width="50dp"
