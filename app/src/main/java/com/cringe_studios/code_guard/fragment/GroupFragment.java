@@ -95,13 +95,14 @@ public class GroupFragment extends NamedFragment {
 
     public void addOTP(OTPData... data) {
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-            try {
-                for(OTPData d : data) OTPDatabase.getLoadedDatabase().addOTP(groupID, d);
-                OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
-                for(OTPData d : data) otpListAdapter.add(d);
-            } catch (OTPDatabaseException | CryptoException e) {
-                DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_database_save), e);
-            }
+            OTPDatabase.getLoadedDatabase().promptAddOTPs(requireContext(), groupID, () -> {
+                try {
+                    OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                    for(OTPData d : data) otpListAdapter.add(d);
+                } catch (OTPDatabaseException | CryptoException e) {
+                    DialogUtil.showErrorDialog(requireContext(), getString(R.string.error_database_save), e);
+                }
+            }, data);
         }, null);
     }
 
@@ -149,19 +150,22 @@ public class GroupFragment extends NamedFragment {
 
         DialogUtil.showChooseGroupDialog(requireContext(), group -> {
             OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
-                try {
-                    for(OTPListItem item : items) {
-                        OTPData data = item.getOTPData();
-                        OTPDatabase.getLoadedDatabase().addOTP(group, data);
-                        otpListAdapter.remove(data);
-                    }
-
-                    OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
-                    saveOTPs();
-                    otpListAdapter.finishEditing();
-                } catch (OTPDatabaseException | CryptoException e) {
-                    DialogUtil.showErrorDialog(requireContext(), e.toString());
+                OTPData[] otps = new OTPData[items.size()];
+                for(int i = 0; i < otps.length; i++) {
+                    OTPData data = items.get(i).getOTPData();
+                    otps[i] = data;
                 }
+
+                OTPDatabase.getLoadedDatabase().promptAddOTPs(requireContext(), group, () -> {
+                    try {
+                        OTPDatabase.saveDatabase(requireContext(), SettingsUtil.getCryptoParameters(requireContext()));
+                        for(OTPData data : otps) otpListAdapter.remove(data);
+                        saveOTPs();
+                        otpListAdapter.finishEditing();
+                    } catch (OTPDatabaseException | CryptoException e) {
+                        DialogUtil.showErrorDialog(requireContext(), e.toString());
+                    }
+                }, otps);
             }, null);
             saveOTPs();
         }, null);

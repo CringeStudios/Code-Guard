@@ -169,6 +169,8 @@
     <string name="close">Close</string>
     <string name="security">Security</string>
     <string name="localization">Localization</string>
+    <string name="error_duplicate_otp_message">An OTP with the name of the OTP you\'re trying to add already exists.\n\nDo you want to automatically rename the new OTP to distinguish them from each other?</string>
+    <string name="error_duplicate_otp_title">Duplicate OTP</string>
     <string-array name="edit_otp_choose_image_options">
         <item>Image from icon pack</item>
         <item>Image from gallery</item>

@@ -2,8 +2,10 @@ package com.cringe_studios.code_guard.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import com.cringe_studios.code_guard.BaseActivity;
+import com.cringe_studios.code_guard.R;
 import com.cringe_studios.code_guard.crypto.Crypto;
 import com.cringe_studios.code_guard.crypto.CryptoException;
 import com.cringe_studios.code_guard.crypto.CryptoParameters;
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.crypto.SecretKey;
 
@@ -45,11 +48,61 @@ public class OTPDatabase {
         return o;
     }
 
-    public void addOTP(String groupId, OTPData o) {
-        // TODO: check for code with same name
+    public void promptAddOTPs(Context context, String groupId, Runnable done, OTPData... data) {
         List<OTPData> os = new ArrayList<>(getOTPs(groupId));
-        os.add(o);
+
+        boolean anyDuplicates = false;
+        boolean[] duplicates = new boolean[data.length];
+        for(int i = 0; i < data.length; i++) {
+            OTPData o = data[i];
+
+            for (OTPData o2 : os) {
+                if (Objects.equals(o.getName(), o2.getName()) && Objects.equals(o.getIssuer(), o2.getIssuer())) {
+                    anyDuplicates = true;
+                    duplicates[i] = true;
+                    break;
+                }
+            }
+        }
+
+        Log.d("ADD", "Any dupes?" + anyDuplicates);
+
+        if (anyDuplicates) {
+            DialogUtil.showYesNoCancel(context, R.string.error_duplicate_otp_title, R.string.error_duplicate_otp_message, () -> {
+                for(int i = 0; i < data.length; i++) {
+                    OTPData o = data[i];
+                    if(duplicates[i]) {
+                        String oldName = o.getName();
+                        int count = 1;
+                        boolean hasDuplicates;
+                        do {
+                            o.setName(oldName + " - " + (count++));
+                            hasDuplicates = false;
+                            for(OTPData o2 : os) {
+                                if(Objects.equals(o.getName(), o2.getName()) && Objects.equals(o.getIssuer(), o2.getIssuer())) {
+                                    hasDuplicates = true;
+                                    break;
+                                }
+                            }
+                        }while(hasDuplicates);
+                    }
+                }
+
+                os.addAll(Arrays.asList(data));
+                updateOTPs(groupId, os);
+                if (done != null) done.run();
+            }, () -> {
+                os.addAll(Arrays.asList(data));
+                updateOTPs(groupId, os);
+                if (done != null) done.run();
+            }, null);
+
+            return;
+        }
+
+        os.addAll(Arrays.asList(data));
         updateOTPs(groupId, os);
+        if(done != null) done.run();
     }
 
     public void updateOTPs(String groupId, List<OTPData> o) {

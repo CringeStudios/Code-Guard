@@ -163,4 +163,6 @@
     <string name="close">Schließen</string>
     <string name="security">Sicherheit</string>
     <string name="localization">Lokalisierung</string>
+    <string name="error_duplicate_otp_message">Ein OTP mit dem Namen des OTPs, das du hinzufügen willst, existiert bereits.\n\nWillst du das neue OTP umbenennen lassen, um sie voneinander zu unterscheiden?</string>
+    <string name="error_duplicate_otp_title">Doppeltes OTP</string>
 </resources>

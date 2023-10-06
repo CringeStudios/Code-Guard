@@ -11,7 +11,7 @@ public class OTPData implements Serializable {
 
     public static final String IMAGE_DATA_NONE = "none";
 
-    private final String name;
+    private String name;
     private final String issuer;
     private final OTPType type;
     private final String secret;
@@ -39,6 +39,10 @@ public class OTPData implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getIssuer() {

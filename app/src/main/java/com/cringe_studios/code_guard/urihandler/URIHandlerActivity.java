@@ -63,12 +63,13 @@ public class URIHandlerActivity extends BaseActivity {
         OTPDatabase.promptLoadDatabase(this, () -> {
             DialogUtil.showChooseGroupDialog(this, group -> {
                 for(OTPData d : data) {
-                    OTPDatabase.getLoadedDatabase().addOTP(group, d);
-                    try {
-                        OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
-                    } catch (OTPDatabaseException | CryptoException e) {
-                        DialogUtil.showErrorDialog(this, e.toString());
-                    }
+                    OTPDatabase.getLoadedDatabase().promptAddOTPs(this, group, () -> {
+                        try {
+                            OTPDatabase.saveDatabase(this, SettingsUtil.getCryptoParameters(this));
+                        } catch (OTPDatabaseException | CryptoException e) {
+                            DialogUtil.showErrorDialog(this, e.toString());
+                        }
+                    }, d);
                 }
                 Toast.makeText(this, R.string.uri_handler_code_added, Toast.LENGTH_SHORT).show();
             }, this::finishAndRemoveTask);
