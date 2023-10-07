@@ -102,7 +102,7 @@ public class IconListAdapter extends BaseExpandableListAdapter implements Expand
         IconListIconBinding binding = IconListIconBinding.inflate(LayoutInflater.from(context));
 
         Icon icon = getChild(groupPosition, childPosition);
-        binding.iconListIconImage.setImageResource(R.drawable.cringeauth_white);
+        binding.iconListIconImage.setImageResource(R.drawable.codeguard_white);
         IconUtil.loadImage(binding.iconListIconImage, icon.getBytes(), v -> v.setImageDrawable(new ColorDrawable(Color.TRANSPARENT)));
         binding.iconListIconText.setText(icon.getMetadata().getName());
         return binding.getRoot();
