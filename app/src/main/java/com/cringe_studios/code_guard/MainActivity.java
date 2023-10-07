@@ -39,6 +39,7 @@ import com.cringe_studios.code_guard.util.ThemeUtil;
 import com.google.mlkit.vision.common.InputImage;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends BaseActivity {
@@ -243,20 +244,23 @@ public class MainActivity extends BaseActivity {
 
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.openMenu(this, null));
 
+        if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
+            SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
+            DialogUtil.showYesNo(this, R.string.enable_encryption_title, R.string.enable_encryption_message, () -> NavigationUtil.navigate(this, SettingsFragment.class, null), null);
+            SettingsUtil.setFirstLaunch(this, false);
+        }
+
         Fragment fragment = NavigationUtil.getCurrentFragment(this);
         if(fragment instanceof NamedFragment) {
             ActionBar bar = getSupportActionBar();
             if(bar != null) bar.setTitle(((NamedFragment) fragment).getName());
         }else {
-            Bundle bundle = new Bundle();
-            bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
-            NavigationUtil.navigate(this, GroupFragment.class, bundle);
-        }
-
-        if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
-            SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
-            DialogUtil.showYesNo(this, R.string.enable_encryption_title, R.string.enable_encryption_message, () -> NavigationUtil.navigate(this, SettingsFragment.class, null), null);
-            SettingsUtil.setFirstLaunch(this, false);
+            List<String> groups = SettingsUtil.getGroups(this);
+            if(!groups.isEmpty()) {
+                Bundle bundle = new Bundle();
+                bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
+                NavigationUtil.navigate(this, GroupFragment.class, bundle);
+            }
         }
     }
 

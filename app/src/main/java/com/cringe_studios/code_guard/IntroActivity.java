@@ -28,7 +28,7 @@ public class IntroActivity extends BaseActivity {
 
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
 
-        Uri uri = Uri.parse(String.format("android.resource://%s/%s", getPackageName(), R.raw.intro));
+        Uri uri = Uri.parse(String.format("android.resource://%s/%s", getPackageName(), R.raw.intro_vp9));
         binding.videoView.setVideoURI(uri);
         binding.videoView.start();
 
