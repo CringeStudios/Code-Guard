@@ -73,7 +73,7 @@ public class UnlockActivity extends BaseActivity {
                 OTPDatabase.loadDatabase(this, key);
                 success();
             }catch(CryptoException e) {
-                DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_crypto), this::failure);
+                DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_crypto), (Runnable) null);
             } catch (OTPDatabaseException e) {
                 DialogUtil.showErrorDialog(this, getString(R.string.error_unlock_other), e, this::failure);
             }
