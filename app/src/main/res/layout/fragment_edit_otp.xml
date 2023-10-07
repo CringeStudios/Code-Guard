@@ -33,50 +33,51 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/otp_add_name" />
+            android:layout_marginTop="10dp">
 
-        <EditText
-            android:id="@+id/input_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="@string/otp_add_name"
-            android:autofillHints="" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/otp_add_name"
+                android:inputType="text" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/otp_add_issuer" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_issuer"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="@string/otp_add_issuer"
-            android:autofillHints="" />
+            android:layout_marginTop="10dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/otp_add_secret" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_issuer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/otp_add_issuer"
+                android:inputType="text" />
 
-        <EditText
-            android:id="@+id/input_secret"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="@string/otp_add_secret"
-            android:autofillHints="" />
+            app:passwordToggleEnabled="true"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_secret"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/otp_add_secret"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -110,37 +111,37 @@
             android:layout_height="wrap_content"
             android:text="@string/otp_add_checksum" />
 
-        <TextView
-            android:id="@+id/text_period"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_period"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/otp_add_period" />
+            android:layout_marginTop="10dp">
 
-        <EditText
-            android:id="@+id/input_period"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:hint="@string/otp_add_period"
-            android:autofillHints="" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/otp_add_period"
+                android:inputType="number" />
 
-        <TextView
-            android:id="@+id/text_counter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/otp_add_counter" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/input_counter"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_counter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:hint="@string/otp_add_counter"
-            android:autofillHints="" />
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_counter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/otp_add_counter"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Space
             android:layout_width="match_parent"

@@ -100,6 +100,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
             if(!editing) {
+                if(!SettingsUtil.isHideCodes(context)) return;
+
                 if(!holder.isCodeShown()) {
                     showCode(holder);
                 }else {

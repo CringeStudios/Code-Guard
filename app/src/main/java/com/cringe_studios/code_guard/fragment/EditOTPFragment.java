@@ -107,16 +107,12 @@ public class EditOTPFragment extends NamedFragment {
                 OTPType newType = OTPType.values()[position];
                 switch(newType) {
                     case HOTP:
-                        binding.textPeriod.setVisibility(View.GONE);
-                        binding.inputPeriod.setVisibility(View.GONE);
-                        binding.textCounter.setVisibility(View.VISIBLE);
-                        binding.inputCounter.setVisibility(View.VISIBLE);
+                        binding.layoutPeriod.setVisibility(View.GONE);
+                        binding.layoutCounter.setVisibility(View.VISIBLE);
                         break;
                     case TOTP:
-                        binding.textCounter.setVisibility(View.GONE);
-                        binding.inputCounter.setVisibility(View.GONE);
-                        binding.textPeriod.setVisibility(View.VISIBLE);
-                        binding.inputPeriod.setVisibility(View.VISIBLE);
+                        binding.layoutPeriod.setVisibility(View.VISIBLE);
+                        binding.layoutCounter.setVisibility(View.GONE);
                         break;
                 }
             }

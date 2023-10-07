@@ -16,6 +16,8 @@
         <item name="buttonBackground">@drawable/button_themed</item>
 
         <item name="actionMenuTextAppearance">@style/ActionMenuTextAppearance</item>
+
+        <item name="textInputStyle">@style/TextInputStyle</item>
     </style>
 
     <style name="Theme.CringeAuthenticator" parent="Base.Theme.CringeAuthenticator" />
@@ -58,5 +60,12 @@
 
     <style name="ActionMenuTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
         <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextInputStyle" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">25dp</item>
+        <item name="boxCornerRadiusTopEnd">25dp</item>
+        <item name="boxCornerRadiusBottomStart">25dp</item>
+        <item name="boxCornerRadiusBottomEnd">25dp</item>
     </style>
 </resources>
