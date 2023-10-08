@@ -11,9 +11,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url "https://maven.graphite-official.com/releases"
-        }
-        maven {
             url 'https://jitpack.io'
         }
     }
