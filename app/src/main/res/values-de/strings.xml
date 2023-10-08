@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="action_settings">Einstellungen</string>
-    <string name="show_images">Bilder Anzeigen</string>
+    <string name="show_images">Bilder anzeigen</string>
     <string name="delete_pack_title">Paket löschen</string>
     <string name="delete_pack_message">Möchtest du das Symbolpaket wirklich löschen?</string>
     <string name="no_icon_packs_installed">Aktuell sind keine Symbolpakete installiert!</string>
@@ -165,4 +165,5 @@
     <string name="localization">Lokalisierung</string>
     <string name="error_duplicate_otp_message">Ein OTP mit dem Namen des OTPs, das du hinzufügen willst, existiert bereits.\n\nWillst du das neue OTP umbenennen lassen, um sie voneinander zu unterscheiden?</string>
     <string name="error_duplicate_otp_title">Doppeltes OTP</string>
+    <string name="biometric_encryption_unavailable">Biometrische Authentifizierung ist deaktiviert, da sie auf deinem Gerät nicht eingerichtet oder nicht verfügbar ist</string>
 </resources>

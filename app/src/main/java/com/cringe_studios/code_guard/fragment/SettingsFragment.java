@@ -125,8 +125,15 @@ public class SettingsFragment extends NamedFragment {
         });
 
         boolean biometricSupported = BiometricUtil.isSupported(requireContext());
-        if(SettingsUtil.isDatabaseEncrypted(requireContext()) && biometricSupported) {
-            binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricEncryption(requireContext()));
+        binding.settingsBiometricLock.setEnabled(SettingsUtil.isDatabaseEncrypted(requireContext()) && biometricSupported);
+        binding.settingsBiometricLock.setChecked(SettingsUtil.isBiometricEncryption(requireContext()));
+
+        if(!biometricSupported) {
+            binding.settingsBiometricLockInfo.setVisibility(View.VISIBLE);
+            binding.settingsBiometricLockInfo.setText(R.string.biometric_encryption_unavailable);
+        }
+
+        if(biometricSupported) {
             binding.settingsBiometricLock.setOnCheckedChangeListener((view, checked) -> {
                 if(checked) {
                     OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
@@ -150,10 +157,6 @@ public class SettingsFragment extends NamedFragment {
                     SettingsUtil.disableBiometricEncryption(requireContext());
                 }
             });
-        }else {
-            binding.settingsBiometricLock.setChecked(false);
-            binding.settingsBiometricLock.setEnabled(false);
-            // TODO: inform user
         }
 
         binding.settingsScreenSecurity.setChecked(SettingsUtil.isScreenSecurity(requireContext()));
