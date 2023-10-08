@@ -36,6 +36,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     private final List<OTPData> items;
 
+    private List<OTPData> filteredItems;
+
     private final Handler handler;
 
     private final Runnable saveOTPs;
@@ -47,6 +49,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
         this.items = new ArrayList<>();
+        this.filteredItems = items;
         this.handler = new Handler(Looper.getMainLooper());
         this.saveOTPs = saveOTPs;
 
@@ -62,7 +65,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     @Override
     public void onBindViewHolder(@NonNull OTPListItem holder, int position) {
-        OTPData data = items.get(position);
+        OTPData data = filteredItems.get(position);
 
         holder.setOTPData(data);
         holder.setSelected(false);
@@ -132,7 +135,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return filteredItems.size();
     }
 
     public List<OTPData> getItems() {
@@ -200,7 +203,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         item.setCodeShown(true);
     }
 
-    private List<OTPListItem> getCodes() {
+    public List<OTPListItem> getCodes() {
         List<OTPListItem> is = new ArrayList<>();
         for(int i = 0; i < items.size(); i++) {
             OTPListItem vh = (OTPListItem) recyclerView.findViewHolderForAdapterPosition(i);
@@ -208,6 +211,27 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
             is.add(vh);
         }
         return is;
+    }
+
+    public void filter(String query) {
+        if(isEditing()) return;
+
+        if(query == null || query.isEmpty()) {
+            filteredItems = items;
+            notifyDataSetChanged();
+            return;
+        }
+
+        query = query.toLowerCase();
+
+        List<OTPData> filtered = new ArrayList<>();
+        for(OTPData d : items) {
+            if(d.getName().toLowerCase().contains(query)
+                || d.getIssuer().toLowerCase().contains(query)) filtered.add(d);
+        }
+
+        filteredItems = filtered;
+        notifyDataSetChanged();
     }
 
     private void attachTouchHelper(RecyclerView view) {

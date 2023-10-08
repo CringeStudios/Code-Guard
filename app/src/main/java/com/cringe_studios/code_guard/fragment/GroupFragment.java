@@ -186,6 +186,10 @@ public class GroupFragment extends NamedFragment {
         }, null, null);
     }
 
+    public void filter(String newText) {
+        otpListAdapter.filter(newText);
+    }
+
     public boolean isEditing() {
         return otpListAdapter.isEditing();
     }

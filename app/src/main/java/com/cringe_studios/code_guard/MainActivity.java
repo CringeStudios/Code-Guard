@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 
@@ -255,12 +256,16 @@ public class MainActivity extends BaseActivity {
             ActionBar bar = getSupportActionBar();
             if(bar != null) bar.setTitle(((NamedFragment) fragment).getName());
         }else {
-            List<String> groups = SettingsUtil.getGroups(this);
-            if(!groups.isEmpty()) {
-                Bundle bundle = new Bundle();
-                bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
-                NavigationUtil.navigate(this, GroupFragment.class, bundle);
-            }
+            navigateToMainGroup();
+        }
+    }
+
+    private void navigateToMainGroup() {
+        List<String> groups = SettingsUtil.getGroups(this);
+        if(!groups.isEmpty()) {
+            Bundle bundle = new Bundle();
+            bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
+            NavigationUtil.navigate(this, GroupFragment.class, bundle);
         }
     }
 
@@ -278,6 +283,23 @@ public class MainActivity extends BaseActivity {
             if(frag.isEditing() && frag.hasSelectedMultipleItems()) {
                 menu.removeItem(R.id.action_view_otp);
                 menu.removeItem(R.id.action_edit_otp);
+            }
+
+            if(!frag.isEditing()) {
+                MenuItem search = menu.findItem(R.id.action_search);
+                SearchView v = (SearchView) search.getActionView();
+                v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        frag.filter(newText);
+                        return true;
+                    }
+                });
             }
             return true;
         }
@@ -325,6 +347,11 @@ public class MainActivity extends BaseActivity {
 
         if(fragment instanceof EditOTPFragment) {
             ((EditOTPFragment) fragment).cancel();
+            return;
+        }
+
+        if(!(fragment instanceof GroupFragment)) {
+            navigateToMainGroup();
             return;
         }
 
