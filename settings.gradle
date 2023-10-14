@@ -13,6 +13,9 @@ dependencyResolutionManagement {
         maven {
             url 'https://jitpack.io'
         }
+        maven {
+            url 'https://maven.graphite-official.com/releases'
+        }
     }
 }
 rootProject.name = "Code Guard"
