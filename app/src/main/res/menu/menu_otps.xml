@@ -12,7 +12,7 @@
         android:orderInCategory="100"
         android:icon="@drawable/baseline_add_24"
         android:title="@string/action_new_group"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/action_otp_input"

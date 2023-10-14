@@ -85,6 +85,7 @@
     <string name="appearance_dark">Dark</string>
     <string name="appearance_light">Light</string>
     <string name="appearance_follow_system">System default</string>
+    <string name="locale_system_default">System default</string>
     <string name="backup_create_title">Create backup</string>
     <string-array name="backup_create">
         <item>Create with current password</item>

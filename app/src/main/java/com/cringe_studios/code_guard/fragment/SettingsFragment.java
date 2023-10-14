@@ -27,6 +27,7 @@ import com.cringe_studios.code_guard.databinding.FragmentSettingsBinding;
 import com.cringe_studios.code_guard.icon.IconPack;
 import com.cringe_studios.code_guard.icon.IconPackListAdapter;
 import com.cringe_studios.code_guard.icon.IconUtil;
+import com.cringe_studios.code_guard.util.AppLocale;
 import com.cringe_studios.code_guard.util.Appearance;
 import com.cringe_studios.code_guard.util.BackupException;
 import com.cringe_studios.code_guard.util.BiometricUtil;
@@ -40,7 +41,6 @@ import com.cringe_studios.code_guard.util.Theme;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import javax.crypto.SecretKey;
 
@@ -58,19 +58,18 @@ public class SettingsFragment extends NamedFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentSettingsBinding.inflate(inflater);
 
-        Locale[] locales = new Locale[] {Locale.ENGLISH, Locale.GERMAN};
 
-        String[] localeNames = new String[locales.length];
-        for(int i = 0; i < locales.length; i++) {
-            localeNames[i] = locales[i].getDisplayName(locales[i]);
+        String[] localeNames = new String[AppLocale.values().length];
+        for(int i = 0; i < localeNames.length;  i++) {
+            localeNames[i] = AppLocale.values()[i].getName(requireContext());
         }
 
         binding.settingsLanguage.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, localeNames));
-        binding.settingsLanguage.setSelection(Arrays.asList(locales).indexOf(SettingsUtil.getLocale(requireContext())));
+        binding.settingsLanguage.setSelection(Arrays.asList(AppLocale.values()).indexOf(SettingsUtil.getLocale(requireContext())));
         binding.settingsLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Locale locale = locales[position];
+                AppLocale locale = AppLocale.values()[position];
                 if(locale.equals(SettingsUtil.getLocale(requireContext()))) return;
 
                 SettingsUtil.setLocale(requireContext(), locale);

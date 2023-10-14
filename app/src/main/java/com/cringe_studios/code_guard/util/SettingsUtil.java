@@ -11,7 +11,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class SettingsUtil {
 
@@ -222,13 +221,18 @@ public class SettingsUtil {
         }
     }
 
-    public static void setLocale(Context ctx, Locale locale) {
+    public static void setLocale(Context ctx, AppLocale locale) {
         SharedPreferences prefs = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString("locale", locale.getLanguage()).apply();
+        prefs.edit().putString("locale", locale.name()).apply();
     }
 
-    public static Locale getLocale(Context ctx) {
-        return new Locale(ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("locale", Locale.ENGLISH.getLanguage()));
+    public static AppLocale getLocale(Context ctx) {
+        String lang = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("locale", AppLocale.ENGLISH.name());
+        try {
+            return AppLocale.valueOf(lang);
+        }catch(IllegalArgumentException e) {
+            return AppLocale.SYSTEM_DEFAULT;
+        }
     }
 
     public static void enableSuperSecretHamburgers(Context ctx) {

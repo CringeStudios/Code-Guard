@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cringe_studios.code_guard.unlock.UnlockContract;
+import com.cringe_studios.code_guard.util.AppLocale;
 import com.cringe_studios.code_guard.util.SettingsUtil;
 import com.cringe_studios.code_guard.util.ThemeUtil;
 
@@ -46,10 +47,9 @@ public class BaseActivity extends AppCompatActivity {
         startUnlockActivity.launch(null);
     }
 
-    public void setLocale(Locale locale) {
-        Locale.setDefault(locale);
+    public void setLocale(AppLocale locale) {
         Configuration config = new Configuration();
-        config.setLocale(locale);
+        config.setLocale(locale == AppLocale.SYSTEM_DEFAULT ? Locale.getDefault() : locale.getLocale());
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
