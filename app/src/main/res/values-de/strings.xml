@@ -82,6 +82,7 @@
     <string name="fragment_settings">Einstellungen</string>
     <string name="fragment_about">Über</string>
     <string name="fragment_edit_otp">OTP bearbeiten</string>
+    <string name="fragment_no_groups">Keine Gruppen</string>
     <string name="theme_blue_green">Blau/Grün</string>
     <string name="theme_red_blue">Rot/Blau</string>
     <string name="theme_pink_green">Pink/Grün</string>
@@ -167,4 +168,5 @@
     <string name="error_duplicate_otp_title">Doppeltes OTP</string>
     <string name="biometric_encryption_unavailable">Biometrische Authentifizierung ist deaktiviert, da sie auf deinem Gerät nicht eingerichtet oder nicht verfügbar ist</string>
     <string name="locale_system_default">Systemstandard</string>
+    <string name="no_groups">Es existieren momentan keine Gruppen. Öffne das Menü und drücke auf das \'+\'-Symbol, um eine Gruppe zu erstellen</string>
 </resources>

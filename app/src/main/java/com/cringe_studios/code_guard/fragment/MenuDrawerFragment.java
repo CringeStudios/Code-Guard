@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
+import com.cringe_studios.code_guard.MainActivity;
 import com.cringe_studios.code_guard.R;
 import com.cringe_studios.code_guard.crypto.CryptoException;
 import com.cringe_studios.code_guard.databinding.FragmentMenuDrawerBinding;
@@ -70,6 +72,13 @@ public class MenuDrawerFragment extends BottomSheetDialogFragment {
             String id = UUID.randomUUID().toString();
             SettingsUtil.addGroup(requireContext(), id, groupName);
             groupListAdapter.add(id);
+
+            Fragment fragment = NavigationUtil.getCurrentFragment(getParentFragmentManager());
+            if(fragment instanceof NoGroupsFragment) {
+                Bundle bundle = new Bundle();
+                bundle.putString(GroupFragment.BUNDLE_GROUP, id);
+                NavigationUtil.navigate(this, GroupFragment.class, bundle);
+            }
         }, null);
     }
 
@@ -93,6 +102,15 @@ public class MenuDrawerFragment extends BottomSheetDialogFragment {
         DialogUtil.showYesNo(requireContext(), R.string.group_delete_title, R.string.group_delete_message, () -> {
             for(GroupListItem item : groupListAdapter.getSelectedGroups()) {
                 removeGroup(item.getGroupId());
+            }
+
+            Fragment fragment = NavigationUtil.getCurrentFragment(getParentFragmentManager());
+            if(fragment instanceof GroupFragment) {
+                GroupFragment groupFragment = (GroupFragment) fragment;
+                if(!SettingsUtil.getGroups(requireContext()).contains(groupFragment.getGroupID())) {
+                    // Currently selected group was deleted, navigate to main group
+                    ((MainActivity) requireActivity()).navigateToMainGroup();
+                }
             }
 
             groupListAdapter.finishEditing();

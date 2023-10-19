@@ -23,6 +23,7 @@ import com.cringe_studios.code_guard.fragment.AboutFragment;
 import com.cringe_studios.code_guard.fragment.EditOTPFragment;
 import com.cringe_studios.code_guard.fragment.GroupFragment;
 import com.cringe_studios.code_guard.fragment.NamedFragment;
+import com.cringe_studios.code_guard.fragment.NoGroupsFragment;
 import com.cringe_studios.code_guard.fragment.SettingsFragment;
 import com.cringe_studios.code_guard.icon.IconPack;
 import com.cringe_studios.code_guard.icon.IconPackException;
@@ -260,12 +261,16 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private void navigateToMainGroup() {
+    public void navigateToMainGroup() {
         List<String> groups = SettingsUtil.getGroups(this);
         if(!groups.isEmpty()) {
             Bundle bundle = new Bundle();
             bundle.putString(GroupFragment.BUNDLE_GROUP, SettingsUtil.getGroups(this).get(0));
             NavigationUtil.navigate(this, GroupFragment.class, bundle);
+        }else {
+            ActionBar bar = getSupportActionBar();
+            if(bar != null) bar.setTitle(R.string.app_name);
+            NavigationUtil.navigate(this, NoGroupsFragment.class, null);
         }
     }
 

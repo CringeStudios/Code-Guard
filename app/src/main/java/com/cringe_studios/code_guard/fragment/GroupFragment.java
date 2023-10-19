@@ -71,6 +71,10 @@ public class GroupFragment extends NamedFragment {
         return binding.getRoot();
     }
 
+    public String getGroupID() {
+        return groupID;
+    }
+
     private void saveOTPs() {
         OTPDatabase.promptLoadDatabase(requireActivity(), () -> {
             try {
