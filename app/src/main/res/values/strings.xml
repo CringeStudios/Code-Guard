@@ -13,7 +13,6 @@
     <string name="haptic_feedback">Haptic Feedback</string>
     <string name="reset_app">Reset App</string>
     <string name="import_export">Import / Export</string>
-    <string name="language">Language</string>
     <string name="biometric_lock_subtitle">Unlock the authenticator</string>
     <string name="create_totp_title">Select Code Type</string>
     <string name="action_new_group">New Group</string>
@@ -22,7 +21,7 @@
     <string name="intro_video_failed">Failed to play video</string>
     <string name="edit_otp_title">Edit OTP</string>
     <string name="group_delete_title">Delete Groups</string>
-    <string name="group_delete_message">Do you want to delete the groups?\n\nNote: This will delete all of the contained OTPs!</string>
+    <string name="group_delete_message">Do you want to delete the groups?  Note: This will delete all of the contained OTPs!</string>
     <string name="hotp_generated_new_code">Generated new code</string>
     <string name="uri_handler_failed_title">Failed to add code</string>
     <string name="code_input_title">Input Code</string>
@@ -100,7 +99,7 @@
     <string name="disable_encryption_title">Disable encryption</string>
     <string name="disable_encryption_message">Do you really want to disable encryption?</string>
     <string name="load_backup_title">Load backup</string>
-    <string name="backup_load_message">Do you want to load this backup?\n\nThis will delete ALL of the current data in the app and replace it with the data from the backup!</string>
+    <string name="backup_load_message">Do you want to load this backup?  This will delete ALL of the current data in the app and replace it with the data from the backup!</string>
     <string name="otp_add_type">Type</string>
     <string name="otp_add_algorithm">Algorithm</string>
     <string name="otp_add_digits">Digits</string>
@@ -124,11 +123,11 @@
     <string name="patreon_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="error_icon_pack_empty">The icon pack doesn\'t contain any icons</string>
     <string name="error_icon_pack_invalid">Pack contains invalid metadata. Make sure you selected the correct file</string>
-    <string name="error_icon_pack_exists">The icon pack you\'re trying to import already exists.\n\nImported: %s (version %d)\nExisting: %s (version %d)\n\nWhat do you want to do?</string>
+    <string name="error_icon_pack_exists">The icon pack you\'re trying to import already exists.  Imported: %s (version %d) Existing: %s (version %d)  What do you want to do?</string>
     <string name="broken_icon_packs_title">Broken icon packs</string>
-    <string name="broken_icon_packs_message">Some icon packs failed to load.\n\nDo you want to delete the broken icon packs?</string>
+    <string name="broken_icon_packs_message">Some icon packs failed to load.  Do you want to delete the broken icon packs?</string>
     <string name="icon_pack_imported">Icon pack with %d icon(s) imported</string>
-    <string name="enable_encryption_message">It is recommended to enable encryption to improve the security of the application.\n\nDo you want to go to the settings now to enable encryption?</string>
+    <string name="enable_encryption_message">It is recommended to enable encryption to improve the security of the application.  Do you want to go to the settings now to enable encryption?</string>
     <string name="enable_encryption_title">Enable encryption</string>
     <string name="back_pressed">Press back again to exit</string>
     <string name="error_backup_database_not_encrypted">Database must be encrypted for this option</string>
@@ -171,7 +170,7 @@
     <string name="close">Close</string>
     <string name="security">Security</string>
     <string name="localization">Localization</string>
-    <string name="error_duplicate_otp_message">An OTP with the name of the OTP you\'re trying to add already exists.\n\nDo you want to automatically rename the new OTP to distinguish them from each other?</string>
+    <string name="error_duplicate_otp_message">An OTP with the name of the OTP you\'re trying to add already exists.  Do you want to automatically rename the new OTP to distinguish them from each other?</string>
     <string name="error_duplicate_otp_title">Duplicate OTP</string>
     <string name="biometric_encryption_unavailable">Biometric authentication is disabled because it is not set up or not available on your device</string>
     <string name="no_groups">No groups exist yet. Open the menu and press the \'+\' button to create one</string>
@@ -186,4 +185,5 @@
         <item>Rename existing</item>
         <item>Rename imported</item>
     </string-array>
+    <string name="language">Language</string>
 </resources>

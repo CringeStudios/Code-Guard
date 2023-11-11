@@ -13,6 +13,10 @@ public enum AppLocale {
     SYSTEM_DEFAULT(R.string.locale_system_default),
     ENGLISH(Locale.ENGLISH),
     GERMAN(Locale.GERMAN),
+    FRENCH(Locale.FRENCH),
+    POLISH(new Locale("pl")),
+
+    UKRAINIAN(new Locale("uk")),
     ;
 
     @StringRes
