@@ -45,12 +45,14 @@ public class BiometricUtil {
             }
         });
 
-        BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
+        BiometricPrompt.PromptInfo.Builder infoBuilder = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle(context.getString(R.string.app_name))
                 .setSubtitle(context.getString(R.string.biometric_lock_subtitle))
-                .setNegativeButtonText(context.getString(R.string.cancel))
-                .setAllowedAuthenticators(getAuthenticationMethod())
-                .build();
+                .setAllowedAuthenticators(getAuthenticationMethod());
+
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) infoBuilder.setNegativeButtonText(context.getString(R.string.cancel));
+
+        BiometricPrompt.PromptInfo info = infoBuilder.build();
 
         prompt.authenticate(info);
     }
