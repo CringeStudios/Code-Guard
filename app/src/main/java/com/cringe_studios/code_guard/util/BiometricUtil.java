@@ -18,8 +18,12 @@ import java.util.concurrent.Executor;
 
 public class BiometricUtil {
 
+    private static int getAuthenticationMethod() {
+        return Build.VERSION.SDK_INT <= Build.VERSION_CODES.P ? BIOMETRIC_STRONG : BIOMETRIC_STRONG | DEVICE_CREDENTIAL;
+    }
+
     public static boolean isSupported(Context context) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.from(context).canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS;
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && BiometricManager.from(context).canAuthenticate(getAuthenticationMethod()) == BiometricManager.BIOMETRIC_SUCCESS;
     }
 
     public static void promptBiometricAuth(FragmentActivity context, Runnable success, Runnable failure) {
@@ -44,7 +48,8 @@ public class BiometricUtil {
         BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle(context.getString(R.string.app_name))
                 .setSubtitle(context.getString(R.string.biometric_lock_subtitle))
-                .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                .setNegativeButtonText(context.getString(R.string.cancel))
+                .setAllowedAuthenticators(getAuthenticationMethod())
                 .build();
 
         prompt.authenticate(info);

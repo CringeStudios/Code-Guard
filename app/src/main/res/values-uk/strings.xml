@@ -106,7 +106,7 @@
     <string name="error_icon_pack_exists">Набір іконок, який ви намагаєтеся імпортувати, вже існує.  Імпортовано: %s (версія %d) Існуючий: %s (версія %d) Що ви хочете зробити?</string>
     <string name="broken_icon_packs_title">Пошкоджені пакети іконок</string>
     <string name="broken_icon_packs_message">Деякі пакунки іконок не вдалося завантажити.  Ви хочете видалити непрацюючі пакунки піктограм?</string>
-    <string name="icon_pack_imported">Пакет іконок з імпортованими піктограмами %dПакет іконок з імпортованими піктограмами %d</string>
+    <string name="icon_pack_imported">Пакет іконок з імпортованими піктограмами %d</string>
     <string name="enable_encryption_message">Рекомендується ввімкнути шифрування, щоб підвищити безпеку програми.  Ви хочете перейти до налаштувань, щоб увімкнути шифрування?</string>
     <string name="enable_encryption_title">Увімкнути шифрування</string>
     <string name="back_pressed">Натисніть ще раз, щоб вийти</string>

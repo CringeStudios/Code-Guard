@@ -249,6 +249,7 @@ public class MainActivity extends BaseActivity {
         if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
             SettingsUtil.addGroup(this, UUID.randomUUID().toString(), "My Codes");
             DialogUtil.showYesNo(this, R.string.enable_encryption_title, R.string.enable_encryption_message, () -> NavigationUtil.navigate(this, SettingsFragment.class, null), null);
+            SettingsUtil.setEnableIntroVideo(this, false);
             SettingsUtil.setFirstLaunch(this, false);
         }
 
