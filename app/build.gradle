@@ -11,8 +11,8 @@ android {
         applicationId "com.cringe_studios.code_guard"
         minSdk 21
         targetSdk 34
-        versionCode 5
-        versionName "1.0.0_beta1"
+        versionCode 6
+        versionName "1.0.0_beta2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
