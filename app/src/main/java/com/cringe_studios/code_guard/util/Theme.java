@@ -14,7 +14,7 @@ public enum Theme {
     BLUE_YELLOW(R.string.theme_blue_yellow, R.style.Theme_CringeAuthenticator_Blue_Yellow, R.drawable.background_blue_yellow_light, R.drawable.background_blue_yellow),
     GREEN_YELLOW(R.string.theme_green_yellow, R.style.Theme_CringeAuthenticator_Green_Yellow, R.drawable.background_green_yellow_light, R.drawable.background_green_yellow),
     ORANGE_TURQUOISE(R.string.theme_orange_turquoise, R.style.Theme_CringeAuthenticator_Orange_Turquoise, R.drawable.background_orange_turquoise_light, R.drawable.background_orange_turquoise),
-    KETCHUP_MUSTARD(R.string.theme_ketchup_mustard, R.style.Theme_CringeAuthenticator_Ketchup_Mustard, R.drawable.background_red_blue_light, R.drawable.background_red_blue),
+    KETCHUP_MUSTARD(R.string.theme_ketchup_mustard, R.style.Theme_CringeAuthenticator_Ketchup_Mustard, R.drawable.background_red_yellow_light, R.drawable.background_red_yellow_dark),
     ;
 
     @StringRes
