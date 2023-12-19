@@ -155,4 +155,9 @@
     <string name="biometric_encryption_unavailable">Uwierzytelnianie biometryczne jest wyłączone, ponieważ nie zostało skonfigurowane lub nie jest dostępne na urządzeniu.Uwierzytelnianie biometryczne jest wyłączone, ponieważ nie zostało skonfigurowane lub nie jest dostępne na urządzeniu.</string>
     <string name="locale_system_default">Domyślne ustawienia systemu</string>
     <string name="no_groups">Nie istnieją jeszcze żadne grupy. Otwórz menu i naciśnij przycisk \"+\", aby ją utworzyć.</string>
+    <string name="theme_ketchup_mustard">Ketchup/Musztarda</string>
+    <string name="super_secret_settings_unlocked">Super tajne ustawienia zostały odblokowane</string>
+    <string name="settings_super_secret_settings">Super tajne ustawienia</string>
+    <string name="settings_hamburger_mode">Lubię hamburgery 🍔</string>
+    <string name="settings_cringe_icon">Użyj dodatkowej ikony cringe</string>
 </resources>

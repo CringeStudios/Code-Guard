@@ -235,12 +235,28 @@ public class SettingsUtil {
         }
     }
 
-    public static void enableSuperSecretHamburgers(Context ctx) {
-        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("iLikeHamburgers", true).apply();
+    public static void setEnableSuperSecretSettings(Context ctx, boolean enable) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("superSecretSettings", enable).apply();
     }
 
-    public static boolean isSuperSecretHamburgersEnabled(Context ctx) {
-        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("iLikeHamburgers", false);
+    public static boolean isSuperSecretSettingsEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("superSecretSettings", false);
+    }
+
+    public static void setEnableHamburgerMode(Context ctx, boolean enable) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("hamburgerMode", enable).apply();
+    }
+
+    public static boolean isHamburgerModeEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("hamburgerMode", false);
+    }
+
+    public static void setEnableCringeIcon(Context ctx, boolean enable) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("cringeIcon", enable).apply();
+    }
+
+    public static boolean isCringeIconEnabled(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("cringeIcon", false);
     }
 
 }

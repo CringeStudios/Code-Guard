@@ -1,13 +1,28 @@
 package com.cringe_studios.code_guard.model;
 
+import android.util.Log;
+
 import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class OTPData implements Serializable {
+
+    private static final OTPData SECRET_OTP = new OTPData(
+        "Cringe Studios",
+            "JG-Cody",
+            OTPType.HOTP,
+            "IFGU6TSHKVJQ",
+            OTPAlgorithm.SHA384,
+            7,
+            0,
+            69,
+            true
+    );
 
     public static final String IMAGE_DATA_NONE = "none";
 
@@ -114,6 +129,34 @@ public class OTPData implements Serializable {
         } catch (OTPException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "OTPData{" +
+                "name='" + name + '\'' +
+                ", issuer='" + issuer + '\'' +
+                ", type=" + type +
+                ", secret='" + secret + '\'' +
+                ", algorithm=" + algorithm +
+                ", digits=" + digits +
+                ", period=" + period +
+                ", counter=" + counter +
+                ", checksum=" + checksum +
+                ", imageData='" + imageData + '\'' +
+                ", otp=" + otp +
+                '}';
+    }
+
+    public static boolean isSecretOTP(OTPData data) {
+        return data.digits == SECRET_OTP.digits
+                && data.counter == SECRET_OTP.counter
+                && data.checksum == SECRET_OTP.checksum
+                && Objects.equals(data.name, SECRET_OTP.name)
+                && Objects.equals(data.issuer, SECRET_OTP.issuer)
+                && data.type == SECRET_OTP.type
+                && Objects.equals(data.secret, SECRET_OTP.secret)
+                && data.algorithm == SECRET_OTP.algorithm;
     }
 
 }

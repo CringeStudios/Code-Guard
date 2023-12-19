@@ -206,6 +206,40 @@
             android:text="@string/settings_icon_packs_manage"
             android:textAllCaps="false" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
+
+        <LinearLayout
+            android:id="@+id/settings_super_secret_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_super_secret_settings"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_hamburger_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_hamburger_mode" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_use_cringe_icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_cringe_icon" />
+
+        </LinearLayout>
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="76dp" />

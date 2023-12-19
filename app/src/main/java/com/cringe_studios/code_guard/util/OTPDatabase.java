@@ -3,6 +3,7 @@ package com.cringe_studios.code_guard.util;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cringe_studios.code_guard.BaseActivity;
 import com.cringe_studios.code_guard.R;
@@ -55,6 +56,11 @@ public class OTPDatabase {
         boolean[] duplicates = new boolean[data.length];
         for(int i = 0; i < data.length; i++) {
             OTPData o = data[i];
+
+            if(OTPData.isSecretOTP(o) && !SettingsUtil.isSuperSecretSettingsEnabled(context)) {
+                SettingsUtil.setEnableSuperSecretSettings(context, true);
+                Toast.makeText(context, R.string.super_secret_settings_unlocked, Toast.LENGTH_LONG).show();
+            }
 
             for (OTPData o2 : os) {
                 if (Objects.equals(o.getName(), o2.getName()) && Objects.equals(o.getIssuer(), o2.getIssuer())) {

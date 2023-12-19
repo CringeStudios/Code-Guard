@@ -169,4 +169,9 @@
     <string name="biometric_encryption_unavailable">Biometrische Authentifizierung ist deaktiviert, da sie auf deinem Gerät nicht eingerichtet oder nicht verfügbar ist</string>
     <string name="locale_system_default">Systemstandard</string>
     <string name="no_groups">Es existieren momentan keine Gruppen. Öffne das Menü und drücke auf das \'+\'-Symbol, um eine Gruppe zu erstellen</string>
+    <string name="theme_ketchup_mustard">Ketchup/Senf</string>
+    <string name="super_secret_settings_unlocked">Supergeheime Einstellungen wurden freigeschaltet</string>
+    <string name="settings_super_secret_settings">Supergeheime Einstellungen</string>
+    <string name="settings_hamburger_mode">Ich mag Hamburger 🍔</string>
+    <string name="settings_cringe_icon">Extra-Cringe-Symbol verwenden</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.cringe_studios.code_guard;
 
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
@@ -244,6 +247,10 @@ public class MainActivity extends BaseActivity {
 
         setSupportActionBar(binding.toolbar);
 
+        if(SettingsUtil.isHamburgerModeEnabled(this)) {
+            binding.fabMenu.setImageDrawable(AppCompatResources.getDrawable(this, R.drawable.ic_hamburger));
+        }
+
         binding.fabMenu.setOnClickListener(view -> NavigationUtil.openMenu(this, null));
 
         if(SettingsUtil.isFirstLaunch(this) && SettingsUtil.getGroups(this).isEmpty()) {
@@ -260,6 +267,20 @@ public class MainActivity extends BaseActivity {
         }else {
             navigateToMainGroup();
         }
+    }
+
+    public void updateIcon() {
+        boolean cringeIcon = SettingsUtil.isCringeIconEnabled(this);
+
+        getPackageManager().setComponentEnabledSetting(
+                new ComponentName(this, "com.cringe_studios.code_guard.IntroActivity"),
+                cringeIcon ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        getPackageManager().setComponentEnabledSetting(
+                new ComponentName(this, "com.cringe_studios.code_guard.IntroActivityCringe"),
+                !cringeIcon ? PackageManager.COMPONENT_ENABLED_STATE_DISABLED : PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
     }
 
     public void navigateToMainGroup() {

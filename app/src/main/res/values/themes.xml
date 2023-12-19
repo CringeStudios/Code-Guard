@@ -50,6 +50,10 @@
         <item name="colorTheme1">@color/color_orange</item>
         <item name="colorTheme2">@color/color_turquoise</item>
     </style>
+    <style name="Theme.CringeAuthenticator.Ketchup_Mustard">
+        <item name="colorTheme1">@color/color_pure_red</item>
+        <item name="colorTheme2">@color/color_pure_yellow</item>
+    </style>
     <style name="Theme.CringeAuthenticator.Minimalist" parent="">
         <item name="dialogBackground">?android:attr/colorBackground</item>
         <item name="menuBackground">?android:attr/colorBackground</item>

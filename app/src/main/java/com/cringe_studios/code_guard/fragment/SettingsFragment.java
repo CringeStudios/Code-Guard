@@ -170,11 +170,6 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsShowImages.setChecked(SettingsUtil.isShowImages(requireContext()));
         binding.settingsShowImages.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setShowImages(requireContext(), checked));
 
-        String[] themeNames = new String[Theme.values().length];
-        for(int i = 0; i < Theme.values().length; i++) {
-            themeNames[i] = getResources().getString(Theme.values()[i].getName());
-        }
-
         binding.settingsEnableIntroVideo.setChecked(SettingsUtil.isIntroVideoEnabled(requireContext()));
         binding.settingsEnableIntroVideo.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setEnableIntroVideo(requireContext(), checked));
 
@@ -184,12 +179,21 @@ public class SettingsFragment extends NamedFragment {
             requireActivity().recreate();
         });
 
+        List<Theme> themes = new ArrayList<>(Arrays.asList(Theme.values()));
+        if(!SettingsUtil.isSuperSecretSettingsEnabled(requireContext())) themes.remove(Theme.KETCHUP_MUSTARD);
+        int selectedIndex = themes.indexOf(SettingsUtil.getTheme(requireContext()));
+
+        String[] themeNames = new String[themes.size()];
+        for(int i = 0; i < themes.size(); i++) {
+            themeNames[i] = getResources().getString(themes.get(i).getName());
+        }
+
         binding.settingsTheme.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, themeNames));
-        binding.settingsTheme.setSelection(SettingsUtil.getTheme(requireContext()).ordinal());
+        binding.settingsTheme.setSelection(selectedIndex == -1 ? 0 : selectedIndex);
         binding.settingsTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Theme theme = Theme.values()[position];
+                Theme theme = themes.get(position);
                 if(theme == SettingsUtil.getTheme(requireContext())) return;
 
                 SettingsUtil.setTheme(requireContext(), theme);
@@ -298,6 +302,20 @@ public class SettingsFragment extends NamedFragment {
                     .setView(binding.getRoot())
                     .setPositiveButton(R.string.ok, (d, which) -> {})
                     .show();
+        });
+
+        binding.settingsSuperSecretSettings.setVisibility(SettingsUtil.isSuperSecretSettingsEnabled(requireContext()) ? View.VISIBLE : View.GONE);
+
+        binding.settingsHamburgerMode.setChecked(SettingsUtil.isHamburgerModeEnabled(requireContext()));
+        binding.settingsHamburgerMode.setOnCheckedChangeListener((view, checked) -> {
+            SettingsUtil.setEnableHamburgerMode(requireContext(), checked);
+            requireActivity().recreate();
+        });
+
+        binding.settingsUseCringeIcon.setChecked(SettingsUtil.isCringeIconEnabled(requireContext()));
+        binding.settingsUseCringeIcon.setOnCheckedChangeListener((view, checked) -> {
+            SettingsUtil.setEnableCringeIcon(requireContext(), checked);
+            ((MainActivity) requireActivity()).updateIcon();
         });
 
         return binding.getRoot();

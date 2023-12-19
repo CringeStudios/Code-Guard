@@ -16,4 +16,6 @@
     <color name="color_yellow">#FFE500</color>
     <color name="color_turquoise">#00FFF7</color>
     <color name="color_green">#00FF0A</color>
+    <color name="color_pure_red">#FF0000</color>
+    <color name="color_pure_yellow">#FFFF00</color>
 </resources>

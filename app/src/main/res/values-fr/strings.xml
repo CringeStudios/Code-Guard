@@ -155,4 +155,9 @@
     <string name="biometric_encryption_unavailable">L\'authentification biométrique est désactivée car elle n\'est pas configurée ou n\'est pas disponible sur votre appareil.</string>
     <string name="locale_system_default">Défaut du système</string>
     <string name="no_groups">Il n\'existe pas encore de groupe. Ouvrez le menu et appuyez sur le bouton \"+\" pour en créer un.</string>
+    <string name="theme_ketchup_mustard">Ketchup/Moutarde</string>
+    <string name="super_secret_settings_unlocked">Les paramètres super secrets ont été débloqués</string>
+    <string name="settings_super_secret_settings">Paramètres super secrets</string>
+    <string name="settings_hamburger_mode">J\'aime les hamburgers 🍔</string>
+    <string name="settings_cringe_icon">Utiliser l\'icône de l\'humour supplémentaire</string>
 </resources>
