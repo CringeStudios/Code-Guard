@@ -160,4 +160,6 @@
     <string name="settings_super_secret_settings">Super tajne ustawienia</string>
     <string name="settings_hamburger_mode">Lubię hamburgery 🍔</string>
     <string name="settings_cringe_icon">Użyj dodatkowej ikony cringe</string>
+    <string name="otp_copy_error">Nie udało się skopiować OTP do schowka</string>
+    <string name="otp_copied">OTP skopiowany do schowka</string>
 </resources>

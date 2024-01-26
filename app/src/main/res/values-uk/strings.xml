@@ -160,4 +160,6 @@
     <string name="settings_super_secret_settings">Суперсекретні налаштування</string>
     <string name="settings_hamburger_mode">Я люблю гамбургери 🍔</string>
     <string name="settings_cringe_icon">Використовуйте додаткову піктограму обтиснення</string>
+    <string name="otp_copy_error">Не вдалося скопіювати OTP до буфера обміну</string>
+    <string name="otp_copied">OTP скопійовано в буфер обміну</string>
 </resources>

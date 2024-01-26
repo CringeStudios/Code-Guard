@@ -160,4 +160,6 @@
     <string name="settings_super_secret_settings">Paramètres super secrets</string>
     <string name="settings_hamburger_mode">J\'aime les hamburgers 🍔</string>
     <string name="settings_cringe_icon">Utiliser l\'icône de l\'humour supplémentaire</string>
+    <string name="otp_copy_error">Échec de la copie de l\'OTP dans le presse-papiers</string>
+    <string name="otp_copied">OTP copié dans le presse-papiers</string>
 </resources>

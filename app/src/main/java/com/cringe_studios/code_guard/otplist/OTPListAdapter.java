@@ -1,5 +1,7 @@
 package com.cringe_studios.code_guard.otplist;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -73,7 +75,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         try {
             holder.refresh();
         } catch (OTPException e) {
-            DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
+            DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error), e);
         }
 
         holder.getBinding().otpCodeIcon.setVisibility(SettingsUtil.isShowImages(context) ? View.VISIBLE : View.GONE);
@@ -103,18 +105,24 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         holder.getBinding().getRoot().setOnClickListener(view -> {
             if(!editing) {
-                if(!SettingsUtil.isHideCodes(context)) return;
-
-                if(!holder.isCodeShown()) {
-                    showCode(holder);
-                }else {
-                    holder.setCodeShown(false);
+                if(!SettingsUtil.isHideCodes(context) || holder.isCodeShown()) {
+                    try {
+                        ClipboardManager manager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText(null, holder.getOTPData().getPin());
+                        manager.setPrimaryClip(clip);
+                        Toast.makeText(context, R.string.otp_copied, Toast.LENGTH_SHORT).show();
+                    } catch (OTPException e) {
+                        DialogUtil.showErrorDialog(context, context.getString(R.string.otp_copy_error), e);
+                    }
+                    return;
                 }
+
+                showCode(holder);
 
                 try {
                     holder.refresh();
                 } catch (OTPException e) {
-                    DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error, e.getMessage() != null ? e.getMessage() : e.toString()));
+                    DialogUtil.showErrorDialog(context, context.getString(R.string.otp_add_error), e);
                 }
             }else {
                 holder.setSelected(!holder.isSelected());

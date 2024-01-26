@@ -42,7 +42,8 @@
     <string name="otp_add_secret">Secret</string>
     <string name="otp_add_name">Name</string>
     <string name="otp_add_period">Period</string>
-    <string name="otp_add_error">Failed to update OTP: %s</string>
+    <string name="otp_add_error">Failed to update OTP</string>
+    <string name="otp_copy_error">Failed to copy OTP to clipboard</string>
     <string name="otp_add_issuer">Issuer (optional)</string>
     <string name="otp_add_missing_name">Missing name</string>
     <string name="qr_scanner_migration_title">OTP Migration</string>
@@ -191,4 +192,5 @@
     <string name="settings_super_secret_settings">Super Secret Settings</string>
     <string name="settings_hamburger_mode">I like hamburgers 🍔</string>
     <string name="settings_cringe_icon">Use extra cringe icon</string>
+    <string name="otp_copied">OTP copied to clipboard</string>
 </resources>

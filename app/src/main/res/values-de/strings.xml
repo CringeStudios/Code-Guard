@@ -174,4 +174,6 @@
     <string name="settings_super_secret_settings">Supergeheime Einstellungen</string>
     <string name="settings_hamburger_mode">Ich mag Hamburger 🍔</string>
     <string name="settings_cringe_icon">Extra-Cringe-Symbol verwenden</string>
+    <string name="otp_copy_error">Kopieren des OTP-Codes fehlgeschlagen</string>
+    <string name="otp_copied">OTP-Code in die Zwischenablage kopiert</string>
 </resources>
