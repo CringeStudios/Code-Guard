@@ -162,4 +162,10 @@
     <string name="settings_cringe_icon">Utiliser l\'icône de l\'humour supplémentaire</string>
     <string name="otp_copy_error">Échec de la copie de l\'OTP dans le presse-papiers</string>
     <string name="otp_copied">OTP copié dans le presse-papiers</string>
+    <string name="settings_icon_packs_download">Télécharger les packs d\'icônes</string>
+    <string name="download_icon_packs_title">Télécharger les packs d\'icônes</string>
+    <string name="icon_pack_not_installed">Non installé</string>
+    <string name="icon_pack_version">Installé (version %d)</string>
+    <string name="icon_pack_downloading_title">Téléchargement du pack d\'icônes</string>
+    <string name="icon_pack_downloading_message">Veuillez patienter un instant…</string>
 </resources>

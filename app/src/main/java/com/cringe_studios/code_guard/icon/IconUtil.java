@@ -82,7 +82,16 @@ public class IconUtil {
         return iconPacksDir;
     }
 
-    public static void importIconPack(Context context, Uri uri) throws IconPackException {
+    public static List<String> getIconPackIds(Context context) {
+        File iconPacksDir = getIconPacksDir(context);
+
+        String[] packIDs = iconPacksDir.list();
+        if(packIDs == null) return Collections.emptyList();
+
+        return Arrays.asList(packIDs);
+    }
+
+    public static IconPackMetadata importIconPack(Context context, Uri uri) throws IconPackException {
         IconPackMetadata meta = loadPackMetadata(context, uri);
 
         File iconPackFile = new File(getIconPacksDir(context), meta.getUuid());
@@ -98,6 +107,8 @@ public class IconUtil {
                 byte[] bytes = IOUtil.readBytes(in);
                 out.write(bytes);
             }
+
+            return meta;
         }catch(IOException e) {
             throw new IconPackException("Failed to import icon pack", e);
         }

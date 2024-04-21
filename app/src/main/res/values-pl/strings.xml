@@ -162,4 +162,10 @@
     <string name="settings_cringe_icon">Użyj dodatkowej ikony cringe</string>
     <string name="otp_copy_error">Nie udało się skopiować OTP do schowka</string>
     <string name="otp_copied">OTP skopiowany do schowka</string>
+    <string name="settings_icon_packs_download">Pobierz pakiety ikon</string>
+    <string name="download_icon_packs_title">Pobierz pakiety ikon</string>
+    <string name="icon_pack_not_installed">Nie zainstalowano</string>
+    <string name="icon_pack_version">Zainstalowano (wersja %d)</string>
+    <string name="icon_pack_downloading_title">Pobieranie pakietu ikon</string>
+    <string name="icon_pack_downloading_message">Poczekaj chwilę…</string>
 </resources>

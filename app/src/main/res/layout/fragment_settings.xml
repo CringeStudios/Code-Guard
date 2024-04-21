@@ -198,6 +198,15 @@
             android:textAllCaps="false" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/settings_download_icon_packs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="?attr/buttonBackground"
+            android:text="@string/settings_icon_packs_download"
+            android:textAllCaps="false" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/settings_manage_icon_packs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

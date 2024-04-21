@@ -22,8 +22,11 @@ import com.cringe_studios.code_guard.crypto.BiometricKey;
 import com.cringe_studios.code_guard.crypto.Crypto;
 import com.cringe_studios.code_guard.crypto.CryptoException;
 import com.cringe_studios.code_guard.crypto.CryptoParameters;
+import com.cringe_studios.code_guard.databinding.DialogDownloadIconPacksBinding;
 import com.cringe_studios.code_guard.databinding.DialogManageIconPacksBinding;
 import com.cringe_studios.code_guard.databinding.FragmentSettingsBinding;
+import com.cringe_studios.code_guard.icon.DownloadIconPackListAdapter;
+import com.cringe_studios.code_guard.icon.DownloadableIconPack;
 import com.cringe_studios.code_guard.icon.IconPack;
 import com.cringe_studios.code_guard.icon.IconPackListAdapter;
 import com.cringe_studios.code_guard.icon.IconUtil;
@@ -274,6 +277,19 @@ public class SettingsFragment extends NamedFragment {
         });
 
         binding.settingsLoadIconPack.setOnClickListener(v -> ((MainActivity) requireActivity()).promptPickIconPackFile());
+
+        binding.settingsDownloadIconPacks.setOnClickListener(v -> {
+            DialogDownloadIconPacksBinding binding = DialogDownloadIconPacksBinding.inflate(getLayoutInflater());
+
+            binding.downloadIconPacksList.setLayoutManager(new LinearLayoutManager(requireContext()));
+            binding.downloadIconPacksList.setAdapter(new DownloadIconPackListAdapter(requireContext(), Arrays.asList(DownloadableIconPack.values())));
+
+            new StyledDialogBuilder(requireContext())
+                    .setTitle(R.string.download_icon_packs_title)
+                    .setView(binding.getRoot())
+                    .setPositiveButton(R.string.ok, (d, which) -> {})
+                    .show();
+        });
 
         binding.settingsManageIconPacks.setOnClickListener(v -> {
             List<String> brokenPacks = new ArrayList<>();

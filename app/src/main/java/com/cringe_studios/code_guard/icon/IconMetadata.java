@@ -24,7 +24,7 @@ public class IconMetadata {
     }
 
     public String getCategory() {
-        return category;
+        return category == null ? "No category" : category;
     }
 
     public String[] getIssuer() {
@@ -32,7 +32,7 @@ public class IconMetadata {
     }
 
     public boolean validate() {
-        return filename != null && category != null && issuer != null;
+        return filename != null && issuer != null;
     }
 
 }

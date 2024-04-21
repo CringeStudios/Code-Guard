@@ -176,4 +176,10 @@
     <string name="settings_cringe_icon">Extra-Cringe-Symbol verwenden</string>
     <string name="otp_copy_error">Kopieren des OTP-Codes fehlgeschlagen</string>
     <string name="otp_copied">OTP-Code in die Zwischenablage kopiert</string>
+    <string name="settings_icon_packs_download">Symbolpakete herunterladen</string>
+    <string name="download_icon_packs_title">Symbolpakete herunterladen</string>
+    <string name="icon_pack_not_installed">Nicht installiert</string>
+    <string name="icon_pack_version">Installiert (version %d)</string>
+    <string name="icon_pack_downloading_title">Symbolpaket wird heruntergeladen</string>
+    <string name="icon_pack_downloading_message">Bitte habe einen Moment Geduld…</string>
 </resources>

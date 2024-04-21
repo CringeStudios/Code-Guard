@@ -162,4 +162,10 @@
     <string name="settings_cringe_icon">Використовуйте додаткову піктограму обтиснення</string>
     <string name="otp_copy_error">Не вдалося скопіювати OTP до буфера обміну</string>
     <string name="otp_copied">OTP скопійовано в буфер обміну</string>
+    <string name="settings_icon_packs_download">Завантажити пакети іконок</string>
+    <string name="download_icon_packs_title">Завантажити пакети іконок</string>
+    <string name="icon_pack_not_installed">Не встановлено</string>
+    <string name="icon_pack_version">Встановлено (версія %d)</string>
+    <string name="icon_pack_downloading_title">Завантаження пакета іконок</string>
+    <string name="icon_pack_downloading_message">Будь ласка, зачекайте хвилинку…</string>
 </resources>

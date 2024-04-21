@@ -125,7 +125,7 @@
     <string name="patreon_link" translatable="false">https://git.cringe-studios.com/CringeStudios/Code-Guard</string>
     <string name="error_icon_pack_empty">The icon pack doesn\'t contain any icons</string>
     <string name="error_icon_pack_invalid">Pack contains invalid metadata. Make sure you selected the correct file</string>
-    <string name="error_icon_pack_exists">The icon pack you\'re trying to import already exists.\n\nImported: %s (version %d)\nExisting: %s (version %d)  What do you want to do?</string>
+    <string name="error_icon_pack_exists">The icon pack you\'re trying to import already exists.\n\nImported: %s (version %d)\nExisting: %s (version %d)\n\nWhat do you want to do?</string>
     <string name="broken_icon_packs_title">Broken icon packs</string>
     <string name="broken_icon_packs_message">Some icon packs failed to load.\n\nDo you want to delete the broken icon packs?</string>
     <string name="icon_pack_imported">Icon pack with %d icon(s) imported</string>
@@ -183,7 +183,7 @@
         <item>Reset to default image</item>
     </string-array>
     <string-array name="error_icon_pack_exists_choices">
-        <item>Override</item>
+        <item>Overwrite</item>
         <item>Rename existing</item>
         <item>Rename imported</item>
     </string-array>
@@ -193,4 +193,10 @@
     <string name="settings_hamburger_mode">I like hamburgers 🍔</string>
     <string name="settings_cringe_icon">Use extra cringe icon</string>
     <string name="otp_copied">OTP copied to clipboard</string>
+    <string name="settings_icon_packs_download">Download icon packs</string>
+    <string name="download_icon_packs_title">Download icon packs</string>
+    <string name="icon_pack_not_installed">Not installed</string>
+    <string name="icon_pack_version">Installed (version %d)</string>
+    <string name="icon_pack_downloading_title">Downloading icon pack</string>
+    <string name="icon_pack_downloading_message">Please wait a moment…</string>
 </resources>
