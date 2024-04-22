@@ -60,7 +60,7 @@ public class QRScannerActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234); // TODO: handle denied
+            requestPermissions(new String[] {Manifest.permission.CAMERA}, 1234);
         }
 
         binding = ActivityQrScannerBinding.inflate(getLayoutInflater());
