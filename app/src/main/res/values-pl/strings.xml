@@ -168,4 +168,10 @@
     <string name="icon_pack_version">Zainstalowano (wersja %d)</string>
     <string name="icon_pack_downloading_title">Pobieranie pakietu ikon</string>
     <string name="icon_pack_downloading_message">Poczekaj chwilę…</string>
+    <string name="settings_customization">Personalizacja</string>
+    <string name="settings_search_everywhere">Search searches in all groups</string>
+    <string name="settings_hidden_style">Wyszukiwanie we wszystkich grupach</string>
+    <string name="style_stars">Gwiazdy</string>
+    <string name="style_dots">Kropki</string>
+    <string name="settings_group_size">Wielkość grupy cyfr</string>
 </resources>

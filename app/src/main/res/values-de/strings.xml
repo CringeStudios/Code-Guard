@@ -182,4 +182,10 @@
     <string name="icon_pack_version">Installiert (version %d)</string>
     <string name="icon_pack_downloading_title">Symbolpaket wird heruntergeladen</string>
     <string name="icon_pack_downloading_message">Bitte habe einen Moment Geduld…</string>
+    <string name="settings_customization">Personalisierung</string>
+    <string name="settings_search_everywhere">Suche sucht überall</string>
+    <string name="settings_hidden_style">Symbol für versteckte Zeichen</string>
+    <string name="style_stars">Sterne</string>
+    <string name="style_dots">Punkte</string>
+    <string name="settings_group_size">Gruppengröße für Ziffern</string>
 </resources>

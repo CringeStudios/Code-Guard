@@ -20,6 +20,7 @@ import com.cringe_studios.code_guard.databinding.OtpCodeBinding;
 import com.cringe_studios.code_guard.icon.IconUtil;
 import com.cringe_studios.code_guard.model.OTPData;
 import com.cringe_studios.code_guard.util.DialogUtil;
+import com.cringe_studios.code_guard.util.OTPDatabase;
 import com.cringe_studios.code_guard.util.SettingsUtil;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
 import com.cringe_studios.cringe_authenticator_library.OTPType;
@@ -232,8 +233,13 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         query = query.toLowerCase();
 
+        List<OTPData> allOTPs = new ArrayList<>();
+        for(String group : SettingsUtil.getGroups(context)) {
+            allOTPs.addAll(OTPDatabase.getLoadedDatabase().getOTPs(group));
+        }
+
         List<OTPData> filtered = new ArrayList<>();
-        for(OTPData d : items) {
+        for(OTPData d : allOTPs) {
             if(d.getName().toLowerCase().contains(query)
                 || d.getIssuer().toLowerCase().contains(query)) filtered.add(d);
         }

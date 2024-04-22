@@ -1,5 +1,6 @@
 package com.cringe_studios.code_guard.otplist;
 
+import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -55,16 +56,20 @@ public class OTPListItem extends RecyclerView.ViewHolder {
 
         if(otpData.getType() == OTPType.TOTP) {
             long timeDiff = otpData.getNextDueTime() - System.currentTimeMillis() / 1000;
-            double progress = 1 - ((double) timeDiff / otpData.getPeriod());
-            binding.progress.setImageLevel((int) (progress * 10_000));
+            double progress = ((double) timeDiff / otpData.getPeriod());
+            binding.progress.setImageLevel((int) (-progress * 10_000));
         }
     }
 
     private String formatCode(String code) {
-        // TODO: add setting for group size (and enable/disable grouping)
+        Context ctx = itemView.getContext();
+
+        int groupSize = SettingsUtil.getDigitGroupSize(ctx);
+        HiddenStyle hiddenStyle = SettingsUtil.getHiddenStyle(ctx);
+
         StringBuilder b = new StringBuilder();
         for(int i = 0; i < code.length(); i++) {
-            if(i != 0 && i % 3 == 0) {
+            if(groupSize > 1 && i != 0 && i % groupSize == 0) {
                 b.append(' ');
             }
 
@@ -72,7 +77,7 @@ public class OTPListItem extends RecyclerView.ViewHolder {
             if(codeShown) {
                 c = code.charAt(i);
             }else {
-                c = '\u2731';
+                c = hiddenStyle.getHiddenChar();
             }
             b.append(c);
         }

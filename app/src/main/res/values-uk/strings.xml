@@ -168,4 +168,10 @@
     <string name="icon_pack_version">Встановлено (версія %d)</string>
     <string name="icon_pack_downloading_title">Завантаження пакета іконок</string>
     <string name="icon_pack_downloading_message">Будь ласка, зачекайте хвилинку…</string>
+    <string name="settings_customization">Налаштування</string>
+    <string name="settings_search_everywhere">Пошук у всіх групах</string>
+    <string name="settings_hidden_style">Символ для прихованих кодів</string>
+    <string name="style_stars">Зірки</string>
+    <string name="style_dots">Крапки</string>
+    <string name="settings_group_size">Розмір групи цифр</string>
 </resources>

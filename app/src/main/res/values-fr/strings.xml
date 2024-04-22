@@ -168,4 +168,10 @@
     <string name="icon_pack_version">Installé (version %d)</string>
     <string name="icon_pack_downloading_title">Téléchargement du pack d\'icônes</string>
     <string name="icon_pack_downloading_message">Veuillez patienter un instant…</string>
+    <string name="settings_customization">Personnalisation</string>
+    <string name="settings_search_everywhere">Recherche dans tous les groupes</string>
+    <string name="settings_hidden_style">Symbole des codes cachés</string>
+    <string name="style_stars">Étoiles</string>
+    <string name="style_dots">Points</string>
+    <string name="settings_group_size">Taille du groupe de chiffres</string>
 </resources>

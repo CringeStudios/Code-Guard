@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.cringe_studios.code_guard.backup.BackupGroup;
 import com.cringe_studios.code_guard.crypto.BiometricKey;
 import com.cringe_studios.code_guard.crypto.CryptoParameters;
+import com.cringe_studios.code_guard.otplist.HiddenStyle;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -227,7 +228,7 @@ public class SettingsUtil {
     }
 
     public static AppLocale getLocale(Context ctx) {
-        String lang = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("locale", AppLocale.ENGLISH.name());
+        String lang = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("locale", AppLocale.SYSTEM_DEFAULT.name());
         try {
             return AppLocale.valueOf(lang);
         }catch(IllegalArgumentException e) {
@@ -257,6 +258,35 @@ public class SettingsUtil {
 
     public static boolean isCringeIconEnabled(Context ctx) {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("cringeIcon", false);
+    }
+
+    public static void setSearchEverywhere(Context ctx, boolean enable) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("searchEverywhere", enable).apply();
+    }
+
+    public static boolean isSearchEverywhere(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("searchEverywhere", true);
+    }
+
+    public static void setHiddenStyle(Context ctx, HiddenStyle style) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putString("hiddenStyle", style.name()).apply();
+    }
+
+    public static HiddenStyle getHiddenStyle(Context ctx) {
+        String dir = ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getString("hiddenStyle", HiddenStyle.STARS.name());
+        try {
+            return HiddenStyle.valueOf(dir);
+        }catch(IllegalArgumentException e) {
+            return HiddenStyle.STARS;
+        }
+    }
+
+    public static void setDigitGroupSize(Context ctx, int digitGroupSize) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putInt("digitGroupSize", digitGroupSize).apply();
+    }
+
+    public static int getDigitGroupSize(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getInt("digitGroupSize", 3);
     }
 
 }

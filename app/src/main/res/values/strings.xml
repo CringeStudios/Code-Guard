@@ -199,4 +199,10 @@
     <string name="icon_pack_version">Installed (version %d)</string>
     <string name="icon_pack_downloading_title">Downloading icon pack</string>
     <string name="icon_pack_downloading_message">Please wait a moment…</string>
+    <string name="settings_customization">Customization</string>
+    <string name="settings_search_everywhere">Search searches in all groups</string>
+    <string name="settings_hidden_style">Symbol for hidden codes</string>
+    <string name="style_stars">Stars</string>
+    <string name="style_dots">Dots</string>
+    <string name="settings_group_size">Digit group size</string>
 </resources>

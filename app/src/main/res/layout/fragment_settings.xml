@@ -80,6 +80,18 @@
             android:layout_height="wrap_content"
             android:text="@string/hide_codes" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_hidden_style" />
+
+        <Spinner
+            android:id="@+id/settings_hidden_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/settings_show_images"
             android:layout_width="match_parent"
@@ -141,6 +153,47 @@
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/theme_gradient" />
+
+        <LinearLayout
+            android:id="@+id/settings_customization"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_customization"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_search_everywhere"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_search_everywhere" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_group_size" />
+            
+            <com.google.android.material.slider.Slider
+                android:id="@+id/settings_group_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:valueFrom="1"
+                android:valueTo="6"
+                android:stepSize="1" />
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

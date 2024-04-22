@@ -30,6 +30,7 @@ import com.cringe_studios.code_guard.icon.DownloadableIconPack;
 import com.cringe_studios.code_guard.icon.IconPack;
 import com.cringe_studios.code_guard.icon.IconPackListAdapter;
 import com.cringe_studios.code_guard.icon.IconUtil;
+import com.cringe_studios.code_guard.otplist.HiddenStyle;
 import com.cringe_studios.code_guard.util.AppLocale;
 import com.cringe_studios.code_guard.util.Appearance;
 import com.cringe_studios.code_guard.util.BackupException;
@@ -170,6 +171,27 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsHideCodes.setChecked(SettingsUtil.isHideCodes(requireContext()));
         binding.settingsHideCodes.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setHideCodes(requireContext(), checked));
 
+        String[] styleNames = new String[HiddenStyle.values().length];
+        for(int i = 0; i < HiddenStyle.values().length; i++) {
+            styleNames[i] = getResources().getString(HiddenStyle.values()[i].getName());
+        }
+
+        binding.settingsHiddenStyle.setAdapter(new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, styleNames));
+        binding.settingsHiddenStyle.setSelection(SettingsUtil.getHiddenStyle(requireContext()).ordinal());
+        binding.settingsHiddenStyle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                HiddenStyle style = HiddenStyle.values()[position];
+                if(style == SettingsUtil.getHiddenStyle(requireContext())) return;
+
+                SettingsUtil.setHiddenStyle(requireContext(), style);
+                //requireActivity().recreate();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
         binding.settingsShowImages.setChecked(SettingsUtil.isShowImages(requireContext()));
         binding.settingsShowImages.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setShowImages(requireContext(), checked));
 
@@ -233,6 +255,12 @@ public class SettingsFragment extends NamedFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+
+        binding.settingsSearchEverywhere.setChecked(SettingsUtil.isSearchEverywhere(requireContext()));
+        binding.settingsSearchEverywhere.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setSearchEverywhere(requireContext(), checked));
+
+        binding.settingsGroupSize.setValue(SettingsUtil.getDigitGroupSize(requireContext()));
+        binding.settingsGroupSize.addOnChangeListener((view, value, fromUser) -> SettingsUtil.setDigitGroupSize(requireContext(), (int) value));
 
         binding.settingsCreateBackup.setOnClickListener(view -> {
             new StyledDialogBuilder(requireContext())
