@@ -83,6 +83,7 @@
     <string name="appearance_light">Lumière</string>
     <string name="appearance_dark">Sombre</string>
     <string name="backup_create_title">Créer une sauvegarde</string>
+    <string name="backup_create_current_password">Créer avec le mot de passe actuel</string>
     <string name="backup_load_title">Sauvegarde de la charge</string>
     <string name="backups">Sauvegardes</string>
     <string name="create_backup">Créer une sauvegarde</string>
@@ -174,4 +175,5 @@
     <string name="style_stars">Étoiles</string>
     <string name="style_dots">Points</string>
     <string name="settings_group_size">Taille du groupe de chiffres</string>
+    <string name="backup_create_new_password">Créer avec un nouveau mot de passe</string>
 </resources>

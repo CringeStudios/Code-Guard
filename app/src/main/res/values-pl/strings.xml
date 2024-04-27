@@ -83,6 +83,7 @@
     <string name="appearance_light">Światło</string>
     <string name="appearance_dark">Ciemny</string>
     <string name="backup_create_title">Tworzenie kopii zapasowej</string>
+    <string name="backup_create_current_password">Utwórz z bieżącym hasłem</string>
     <string name="backup_load_title">Ładowanie kopii zapasowej</string>
     <string name="backups">Kopie zapasowe</string>
     <string name="create_backup">Tworzenie kopii zapasowej</string>
@@ -174,4 +175,5 @@
     <string name="style_stars">Gwiazdy</string>
     <string name="style_dots">Kropki</string>
     <string name="settings_group_size">Wielkość grupy cyfr</string>
+    <string name="backup_create_new_password">Utwórz z nowym hasłem</string>
 </resources>

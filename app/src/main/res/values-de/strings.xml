@@ -55,16 +55,6 @@
     <string name="qr_scanner_migration_title">OTP migrieren</string>
     <string name="qr_scanner_migration_message">Du scheinst zu versuchen, Codes aus einer anderen App zu importieren. Willst du alle Codes in diese Gruppe importieren?</string>
     <string name="qr_scanner_migration_part">Code %d von %d gescannt</string>
-    <string-array name="view_edit_move_delete">
-        <item>Anzeigen</item>
-        <item>Bearbeiten</item>
-        <item>In andere Gruppe verschieben</item>
-        <item>Löschen</item>
-    </string-array>
-    <string-array name="rename_delete">
-        <item>Umbenennen</item>
-        <item>Löschen</item>
-    </string-array>
     <string name="screen_security">Bildschirmsicherheit</string>
     <string name="hide_codes">Codes verstecken</string>
     <string name="enable_encryption">Verschlüsselung aktivieren</string>
@@ -93,10 +83,8 @@
     <string name="appearance_light">Hell</string>
     <string name="appearance_dark">Dunkel</string>
     <string name="backup_create_title">Backup erstellen</string>
-    <string-array name="backup_create">
-        <item>Mit aktuellem Passwort erstellen</item>
-        <item>Mit neuem Passwort erstellen</item>
-    </string-array>
+    <string name="backup_create_current_password">Mit aktuellem Passwort erstellen</string>
+    <string name="backup_create_new_password">Mit neuem Passwort erstellen</string>
     <string name="backup_load_title">Backup laden</string>
     <string name="backups">Backups</string>
     <string name="create_backup">Backup erstellen</string>

@@ -83,6 +83,7 @@
     <string name="appearance_light">Світло</string>
     <string name="appearance_dark">Темнота.</string>
     <string name="backup_create_title">Створити резервну копію</string>
+    <string name="backup_create_current_password">Створити з поточним паролем</string>
     <string name="backup_load_title">Завантажити резервну копію</string>
     <string name="backups">Резервні копії</string>
     <string name="create_backup">Створити резервну копію</string>
@@ -174,4 +175,5 @@
     <string name="style_stars">Зірки</string>
     <string name="style_dots">Крапки</string>
     <string name="settings_group_size">Розмір групи цифр</string>
+    <string name="backup_create_new_password">Створити з новим паролем</string>
 </resources>
