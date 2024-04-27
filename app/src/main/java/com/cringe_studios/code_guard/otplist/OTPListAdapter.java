@@ -233,9 +233,14 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         query = query.toLowerCase();
 
-        List<OTPData> allOTPs = new ArrayList<>();
-        for(String group : SettingsUtil.getGroups(context)) {
-            allOTPs.addAll(OTPDatabase.getLoadedDatabase().getOTPs(group));
+        List<OTPData> allOTPs;
+        if(!SettingsUtil.isSearchEverywhere(context)) {
+            allOTPs = items;
+        }else {
+            allOTPs = new ArrayList<>();
+            for(String group : SettingsUtil.getGroups(context)) {
+                allOTPs.addAll(OTPDatabase.getLoadedDatabase().getOTPs(group));
+            }
         }
 
         List<OTPData> filtered = new ArrayList<>();
