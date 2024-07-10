@@ -245,8 +245,8 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
 
         List<OTPData> filtered = new ArrayList<>();
         for(OTPData d : allOTPs) {
-            if(d.getName().toLowerCase().contains(query)
-                || d.getIssuer().toLowerCase().contains(query)) filtered.add(d);
+            if((d.getName() != null && d.getName().toLowerCase().contains(query))
+                || (d.getIssuer() != null && d.getIssuer().toLowerCase().contains(query))) filtered.add(d);
         }
 
         filteredItems = filtered;
