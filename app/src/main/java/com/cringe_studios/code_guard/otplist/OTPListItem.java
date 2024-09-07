@@ -53,6 +53,7 @@ public class OTPListItem extends RecyclerView.ViewHolder {
 
     public void refresh() throws OTPException {
         binding.otpCode.setText(formatCode(otpData.getPin()));
+        binding.nextOtpCode.setText(formatCode(otpData.getNextPin()));
 
         if(otpData.getType() == OTPType.TOTP) {
             long timeDiff = otpData.getNextDueTime() - System.currentTimeMillis() / 1000;

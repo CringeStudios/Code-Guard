@@ -262,6 +262,9 @@ public class SettingsFragment extends NamedFragment {
         binding.settingsGroupSize.setValue(SettingsUtil.getDigitGroupSize(requireContext()));
         binding.settingsGroupSize.addOnChangeListener((view, value, fromUser) -> SettingsUtil.setDigitGroupSize(requireContext(), (int) value));
 
+        binding.settingsShowNextCode.setChecked(SettingsUtil.isShowNextCode(requireContext()));
+        binding.settingsShowNextCode.setOnCheckedChangeListener((view, checked) -> SettingsUtil.setShowNextCode(requireContext(), checked));
+
         binding.settingsCreateBackup.setOnClickListener(view -> {
             new StyledDialogBuilder(requireContext())
                     .setTitle(R.string.create_backup)

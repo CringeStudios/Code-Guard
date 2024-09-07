@@ -80,6 +80,7 @@ public class OTPListAdapter extends RecyclerView.Adapter<OTPListItem> {
         }
 
         holder.getBinding().otpCodeIcon.setVisibility(SettingsUtil.isShowImages(context) ? View.VISIBLE : View.GONE);
+        holder.getBinding().nextOtpCode.setVisibility(SettingsUtil.isShowNextCode(context) ? View.VISIBLE : View.GONE);
 
         holder.getBinding().label.setText(String.format("%s%s", data.getIssuer() == null || data.getIssuer().isEmpty() ? "" : data.getIssuer() + ": ", data.getName()));
         holder.getBinding().progress.setVisibility(data.getType() == OTPType.TOTP ? View.VISIBLE : View.GONE);

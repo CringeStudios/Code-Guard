@@ -176,4 +176,5 @@
     <string name="style_dots">Крапки</string>
     <string name="settings_group_size">Розмір групи цифр</string>
     <string name="backup_create_new_password">Створити з новим паролем</string>
+    <string name="settings_show_next_code">Показати наступний код</string>
 </resources>

@@ -193,6 +193,12 @@
                 android:valueTo="6"
                 android:stepSize="1" />
 
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_show_next_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_show_next_code" />
+
         </LinearLayout>
 
         <View

@@ -1,7 +1,5 @@
 package com.cringe_studios.code_guard.model;
 
-import android.util.Log;
-
 import com.cringe_studios.cringe_authenticator_library.OTP;
 import com.cringe_studios.cringe_authenticator_library.OTPAlgorithm;
 import com.cringe_studios.cringe_authenticator_library.OTPException;
@@ -102,6 +100,10 @@ public class OTPData implements Serializable {
 
     public String getPin() throws OTPException {
         return getOTP().getPin();
+    }
+
+    public String getNextPin() throws OTPException {
+        return getOTP().getNextPin();
     }
 
     public void incrementCounter() {

@@ -268,6 +268,14 @@ public class SettingsUtil {
         return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("searchEverywhere", true);
     }
 
+    public static void setShowNextCode(Context ctx, boolean enable) {
+        ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putBoolean("showNextCode", enable).apply();
+    }
+
+    public static boolean isShowNextCode(Context ctx) {
+        return ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).getBoolean("showNextCode", false);
+    }
+
     public static void setHiddenStyle(Context ctx, HiddenStyle style) {
         ctx.getSharedPreferences(GENERAL_PREFS_NAME, Context.MODE_PRIVATE).edit().putString("hiddenStyle", style.name()).apply();
     }

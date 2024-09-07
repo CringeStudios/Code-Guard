@@ -176,4 +176,5 @@
     <string name="style_stars">Sterne</string>
     <string name="style_dots">Punkte</string>
     <string name="settings_group_size">Gruppengröße für Ziffern</string>
+    <string name="settings_show_next_code">Nächsten Code anzeigen</string>
 </resources>
